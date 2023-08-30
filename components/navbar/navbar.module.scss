@@ -1,0 +1,25 @@
+#navbar{
+    width: 100%;
+    padding: 60px;
+    display: flex;
+    justify-content: space-between;
+    position:fixed; z-index: 4;
+    // mix-blend-mode: difference;
+
+    .menuBTN{
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+    }
+    .logo{
+        width: auto;
+        transition: 0.4s;
+        &.white{
+            filter: none;
+          }
+          &.dark{
+            filter: brightness(0); /* Rend l'élément complètement noir */
+          }
+    }
+}

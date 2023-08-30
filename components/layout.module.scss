@@ -1,0 +1,99 @@
+.container {
+    max-width: 1920px;
+    margin: 0 auto;
+    /* display: flex;
+    flex-direction: column;
+    height: 100vh; */
+}
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+
+    .headimg{
+        position: absolute;
+        z-index: 0;
+        width: 100%;
+        height: 134%;
+        inset: 0;
+        top: -34%
+    }
+    .mainTitle{
+        font-size: clamp(40px, 10vw, 123px);
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        position: absolute;
+        z-index:1;
+        letter-spacing: -2.62PX;
+        font-family: HelveticaRegular;
+        line-height: 123px;
+        max-width: 1250px;
+        margin: 0 auto;
+        font-style: normal;
+        text-transform: uppercase;
+        text-align: center;
+        font-weight: lighter;
+        // opacity: 0;
+        // overflow: hidden;
+        
+        span{
+            font-family: Migra;
+            text-transform: capitalize;
+        }
+        div:last-child{
+            width: calc(100% + 16px);
+        }
+    }
+
+    .currentInfoContainer{
+        position: absolute;
+        right: calc(60px + 37px);
+        top: 50%;
+        z-index: 1;
+        transform: translateY(-50%);;
+        font-weight: lighter;
+        font-size: 13.7px;
+        text-transform: uppercase;
+        height: 357px;
+        width: 18px;
+        font-family: HelveticaRegular;
+        
+        >div{
+            position: absolute;
+            transform: rotate(-90deg);
+            transform-origin: top left;
+            bottom: 0;
+            width: max-content;
+        }
+
+    }
+}
+
+#main{
+    flex: 1;
+}
+
+
+@media screen and (max-width: 1440px) {
+    .header{
+        .currentInfoContainer{
+            bottom: 25%;
+            left : 50%;
+            top: auto;
+            transform: translateX(-50%);
+            height: 18px;
+            width:  357px;
+    
+            >div{
+                position: relative;
+                transform: none;
+                margin: 0 auto;
+            }
+        }
+    }
+
+}
