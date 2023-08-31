@@ -69,13 +69,13 @@ export function Projects({projects}){
   const [animImg, setAnimImg] = useState(false)
   const [idProject, setIdProject] = useState(1)
   const [dotClick, setDotClick] = useState(null);
+  const [ProjectsData, setProjectsData] = useState(projects.data)
 
   const handleChildButtonClick = (data) => {
     if (data) {
       setDotClick(data);
     }
   };
-  const ProjectsData = projects.data
   const ImgURL = 'http://localhost:1337'
   
   // Fonction pour gérer l'animation des textes
@@ -122,6 +122,7 @@ export function Projects({projects}){
     };
 
   useEffect(() => {
+    console.log(ProjectsData)
     let intervalAnim
     if(dotClick){
       anim(dotClick);
@@ -139,7 +140,7 @@ export function Projects({projects}){
   return (
   <div className={`${home.container} ${home.containerProjects}`}>
               <section className={`${home.projects} intersectLogo`}>
-                <Link href="/project" className={animImg === true ?  `${home.containerImg} anim` : `${home.containerImg}`} ref={containerImg}>
+                <Link href={`/project/${ProjectsData[idProject - 1].attributes.slug}`} className={animImg === true ?  `${home.containerImg} anim` : `${home.containerImg}`} ref={containerImg}>
                   <Image
                       src={`${ImgURL}${ProjectsData[idProject -1].attributes.Cover.data.attributes.url}`}
                       alt="Footbal Cover Design"
@@ -262,7 +263,6 @@ export default function Home({projects}) {
 }
 export async function getServerSideProps() {
   const ProjectsData = await fetcher(`${process.env.NEXT_PUBLIC_STRAPI_URL}/projects?populate=*`)
-  console.log(ProjectsData)
   return {
     props: {
       projects: ProjectsData
