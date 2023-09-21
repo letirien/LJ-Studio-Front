@@ -183,6 +183,28 @@
             }
         }
     }
+    .projectTitle{
+        pointer-events: none;
+        z-index: 1;
+        font-size: 147px;
+        position: absolute;
+        top: calc(60% - 113px);
+        right: 43%;
+        font-family: Helvetica;
+        font-weight: 400;
+        text-decoration: none;
+        color: white;
+        line-height: 121px;
+        overflow: hidden;
+        p{
+            overflow: hidden;
+        }
+        p>span{
+            font-family: Migra;
+            text-transform: lowercase;
+            
+        }
+    }
 
 }
 

@@ -34,7 +34,7 @@ export default function Layout({ children, home }) {
                     <>
                         <Navbar/>
                         <h1 className={styles.mainTitle}>
-                            <AnimateText>
+                            <AnimateText once={true}>
                                 <div className="reveal-container">
                                     <p>Turning <span>Sports</span> </p>
                                 </div>
