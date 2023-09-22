@@ -1,222 +1,232 @@
 .container {
-    max-width: 1920px;
-    margin: 0 auto;
-    /* display: flex;
+  max-width: 1920px;
+  margin: 0 auto;
+  /* display: flex;
     flex-direction: column;
     height: 100vh; */
 }
-.introSection{
+.introSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: relative;
+  height: 871px;
+  background: white;
+
+  > div {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    position: relative;
-    height: 871px;
-    background: white;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 50%;
 
-    >div{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        width: 50%;
-    
-    
-    &.black{
-        font-size: 24px;
-        font-weight: 400;
-        background: black;
-        div.introtxtContainer{
-            padding: 0 24px;
-            max-width: 597px;
-            .introPresetations{
-                p:not(:last-child){
-                    margin-bottom: 60px;
-                }
-            }
-            p > span{
-                font-family: Migra;
-                text-transform: capitalize;
-                font-weight: 400;
-            }
-        .introInfo{
-            margin-top: 100px;
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            flex-wrap: wrap;
-
-            p:first-child{
-                font-weight: bold;
-            }
-            
-            >:not(:first-child){
-                font-family: Migra;
-                text-transform: capitalize;
-                font-weight: 400;
-            }
-            >:last-child{
-                border: 1px solid white;
-                padding: 8px 12px;
-                border-radius: 32px;
-            }
+    &.black {
+      font-size: 24px;
+      font-weight: 400;
+      background: black;
+      div.introtxtContainer {
+        padding: 0 24px;
+        max-width: 597px;
+        .introPresetations {
+          p:not(:last-child) {
+            margin-bottom: 60px;
+          }
         }
+        p > span {
+          font-family: Migra;
+          text-transform: capitalize;
+          font-weight: 400;
         }
+        .introInfo {
+          margin-top: 100px;
+          display: flex;
+          gap: 16px;
+          align-items: center;
+          flex-wrap: wrap;
 
-    }
-    &.white{
-        background: white;
-        color: black;
-        height: 1116px;
+          p:first-child {
+            font-weight: bold;
+          }
 
-
-        > div p{
-
-            max-width: 344px;
-            margin: 0 auto;
-            font-size: clamp(32px, 8vw, 96px);
-            font-weight: 700;
-            line-height: clamp(32px, 8vw, 96px);
-
-            span{
-                font-family: Migra;
-                text-transform: capitalize;
-                font-weight: 400;
-            }
-        }
-        }
-    }   
-}
-.purpleBg{
-    background: #7357ff;
-    height: 953px;
-}
-.containerProjects{
-    position: relative;
-    width: 100%;
-    height: 100%;
-    .projects{
-        display: grid;
-        width: 1600px;
-        height: auto;
-        position: absolute;
-        top: 60%;
-        right: 0;
-        background: black;
-        grid-template-columns: 80% 20%;
-        .containerImg{
-            position: relative;
-            width: 100%;
-            height: 715px;
-            overflow: hidden;
-            &::after{
-                position: absolute;
-                display: block;
-                content: '';
-                min-height: 0%;
-                width: 100%;
-                background-color: black;
-            }
-            img{
-                width: 100%;
-            }
-        }
-        .projectFooter{
-            width: 100%;
-            margin-top: 32px;
-            display: flex;
-            justify-content: space-between;
-            .footerInfo:not(:last-child){
-                font-size: 19px;
-                font-family: HelveticaBold;
-                flex: 1;
-
-                .subInfo{
-                    font-family: Migra;
-                    color: rgba(255, 255, 255, 0.497);
-                }
-            }
-            .slideCount{
-                font-size: 19px;
-                font-family: HelveticaBold;
-                color: #7357ff;
-                text-align: end;
-                >span{
-                    font-family: HelveticaBold!important;
-                }
-            }
-        }
-        .slideBlock{
-            display: flex;
-            align-items: end;
-            justify-content: center;
-            .containerSlideInfo{
-                width: 31px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                font-size: 25px;
-                gap: 24px;
-                .cercleContainer{
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    gap: 12px;
-                    .cercle{
-                        width: 8px;
-                        height: 8px;
-                        background-color: white;
-                        border-radius: 999px;
-                        &.current {
-                            background-color: #7357ff;
-                        }
-                    }
-                }
-                .verticalText {
-                    color: white;
-                    text-decoration: none;
-                    height: 31px;
-                    width: 149px;
-                    transform: rotate(-90deg);
-                    transform-origin: top left;
-                }
-
-            }
-        }
-    }
-    .projectTitle{
-        pointer-events: none;
-        z-index: 1;
-        font-size: 147px;
-        position: absolute;
-        top: calc(60% - 113px);
-        right: 43%;
-        font-family: Helvetica;
-        font-weight: 400;
-        text-decoration: none;
-        color: white;
-        line-height: 121px;
-        overflow: hidden;
-        p{
-            overflow: hidden;
-        }
-        p>span{
+          > :not(:first-child) {
             font-family: Migra;
-            text-transform: lowercase;
-            
+            text-transform: capitalize;
+            font-weight: 400;
+          }
+          > :last-child {
+            border: 1px solid white;
+            padding: 8px 12px;
+            border-radius: 32px;
+          }
         }
+      }
     }
+    &.white {
+      background: white;
+      color: black;
+      height: 1116px;
 
+      > div p {
+        max-width: 344px;
+        margin: 0 auto;
+        font-size: clamp(32px, 8vw, 96px);
+        font-weight: 700;
+        line-height: clamp(32px, 8vw, 96px);
+
+        span {
+          font-family: Migra;
+          text-transform: capitalize;
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}
+.purpleBg {
+  background: #7357ff;
+  height: 953px;
+}
+.containerProjects {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  .projects {
+    display: grid;
+    width: 1600px;
+    height: auto;
+    position: absolute;
+    top: 60%;
+    right: 0;
+    background: black;
+    grid-template-columns: 80% 20%;
+    .containerImg {
+      position: relative;
+      width: 100%;
+      height: 715px;
+      overflow: hidden;
+      &::after {
+        position: absolute;
+        display: block;
+        content: "";
+        min-height: 0%;
+        width: 100%;
+        background-color: black;
+      }
+      img {
+        width: 100%;
+      }
+    }
+    .projectFooter {
+      width: 100%;
+      margin-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      .footerInfo:not(:last-child) {
+        font-size: 19px;
+        font-family: HelveticaBold;
+        flex: 1;
+
+        .subInfo {
+          font-family: Migra;
+          color: rgba(255, 255, 255, 0.497);
+        }
+      }
+      .slideCount {
+        font-size: 19px;
+        font-family: HelveticaBold;
+        color: #7357ff;
+        text-align: end;
+        > span {
+          font-family: HelveticaBold !important;
+        }
+      }
+    }
+    .slideBlock {
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      .containerSlideInfo {
+        width: 31px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 25px;
+        gap: 24px;
+        .cercleContainer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          .cercle {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+            border-radius: 999px;
+            &.current {
+              background-color: #7357ff;
+            }
+          }
+        }
+        .verticalText {
+          color: white;
+          text-decoration: none;
+          height: 31px;
+          width: 149px;
+          transform: rotate(-90deg);
+          transform-origin: top left;
+        }
+      }
+    }
+  }
+  .projectTitle {
+    pointer-events: none;
+    z-index: 1;
+    font-size: clamp(40px, 10vw, 147px);
+    position: absolute;
+    top: calc(60% - 113px);
+    right: 43%;
+    font-family: Helvetica;
+    font-weight: 400;
+    text-decoration: none;
+    color: white;
+    line-height: clamp(40px, 10vw, 121px);
+    overflow: hidden;
+
+    p {
+      overflow: hidden;
+    }
+    p > span {
+      font-family: Migra;
+      text-transform: lowercase;
+    }
+  }
 }
 
 @media screen and (max-width: 720px) {
-    .introSection{
-        flex-direction: column;
-        >div{
-            width: 100%;
+  .introSection {
+    flex-direction: column;
+    > div {
+      width: 100%;
 
-            &.white, &.black{
-                padding: 60px 0;
-            }
-        }
+      &.white,
+      &.black {
+        padding: 60px 0;
+      }
     }
+  }
+}
+@media screen and (max-width: 1750px) {
+  .projects {
+    width: 100vw !important;
+    margin: 0 auto;
+    right: inherit !important;
+    left: 50%;
+    transform: translateX(-50%);
+    grid-template-columns: 80% 10%;
+    padding-left: 10%;
+
+    > img {
+      aspect-ratio: 16/9;
+    }
+  }
 }
