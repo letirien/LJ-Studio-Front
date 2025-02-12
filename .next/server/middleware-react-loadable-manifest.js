@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST="{\"_app.js -> ../components/Cursor\":{\"id\":\"_app.js -> ../components/Cursor\",\"files\":[\"static/chunks/components_Cursor_js.js\"]}}"
