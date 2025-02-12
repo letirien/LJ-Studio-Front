@@ -7,6 +7,7 @@ import {
   useScroll,
   useTransform,
   useAnimation,
+  useSpring,
   delay,
 } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
@@ -19,7 +20,7 @@ import {
   animationContainer,
 } from "../lib/animation/variant";
 import Link from "next/link";
-// import {ProjectsData} from '../lib/projects'
+
 import { fetcher } from "../lib/api.Js";
 export const variants = {
   show: {
@@ -79,7 +80,7 @@ export function Projects({ projects }) {
   const [animImg, setAnimImg] = useState(false);
   const [idProject, setIdProject] = useState(1);
   const [dotClick, setDotClick] = useState(null);
-  const [ProjectsData, setProjectsData] = useState(projects.data);
+  const [ProjectsData, setProjectsData] = useState(projects);
   const imgRef = useRef();
   const [isHovered, setIsHovered] = useState(false);
   const lastMousePosition = useRef({ x: 0, y: 0 });
@@ -124,38 +125,41 @@ export function Projects({ projects }) {
   // Fonction pour gérer l'incrémentation de l'ID du projet
   const incrementProjectId = () => {
     setIdProject((prevId) => {
-      const nextId = (prevId % 4) + 1;
+      const nextId = (prevId % ProjectsData.length) + 1; // Mise à jour pour s'adapter au nombre de projets
       return nextId;
     });
   };
+
   // Fonction pour gérer l'incrémentation de l'ID du projet
   const incrementProjectIdByClick = (id) => {
-    console.log(id);
     setIdProject(id);
   };
-  const handleMouseMove = (e) => {
-    setAnimImg(false);
-    if (!containerImg.current || !imgRef.current) return;
-    const containerRect = containerImg.current.getBoundingClientRect();
-    const imageRect = imgRef.current.getBoundingClientRect();
 
-    const containerCenterX = containerRect.width / 2;
-    const containerCenterY = containerRect.height / 2;
+  // const handleMouseMove = (e) => {
+  //   setAnimImg(false);
+  //   if (!containerImg.current || !imgRef.current) return;
+  //   const containerRect = containerImg.current.getBoundingClientRect();
+  //   const imageRect = imgRef.current.getBoundingClientRect();
 
-    const mouseX = e.clientX - containerRect.left;
-    const mouseY = e.clientY - containerRect.top;
+  //   const containerCenterX = containerRect.width / 2;
+  //   const containerCenterY = containerRect.height / 2;
 
-    const moveX = (containerCenterX - mouseX) / 6;
-    const moveY = (containerCenterY - mouseY) / 6;
+  //   const mouseX = e.clientX - containerRect.left;
+  //   const mouseY = e.clientY - containerRect.top;
 
-    imgRef.current.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1)`;
+  //   const moveX = (containerCenterX - mouseX) / 6;
+  //   const moveY = (containerCenterY - mouseY) / 6;
 
-    lastMousePosition.current = { x: mouseX, y: mouseY };
-  };
+  //   imgRef.current.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1)`;
+
+  //   lastMousePosition.current = { x: mouseX, y: mouseY };
+  // };
 
   const handleMouseEnter = () => {
-    // imgRef.current.style.transform = `scale(1.15)`;
-    console.log(animImg);
+    setAnimImg(false);
+    imgRef.current.style.transition = "all 0.05s ease-in-out";
+    imgRef.current.style.transform = `scale(1.05)`;
+
     setIsHovered(true);
   };
 
@@ -175,47 +179,30 @@ export function Projects({ projects }) {
       }, 5000);
     }
 
-    // Nettoyer l'intervalle lorsque le composant est démonté
     return () => {
       clearInterval(intervalAnim);
     };
   }, [dotClick]);
+
   return (
     <div className={`${home.container} ${home.containerProjects}`}>
       <section>
-        <h2 className={`${home.projectTitle}`}>
-          <AnimateText once={false}>
-            <div className="revea-container">
-              <p>Take a closer</p>
-            </div>
-            <div className="reveal-container">
-              <p>
-                <span>look</span> at our{" "}
-              </p>
-            </div>
-            <div className="reveal-container">
-              <p>work</p>
-            </div>
-          </AnimateText>
-        </h2>
         <div className={`${home.projects} intersectLogo`}>
           <Link
-            href={`/project/${ProjectsData[idProject - 1].attributes.slug}`}
+            href={`/project/${ProjectsData[idProject - 1].fields.Sujet}`} // Mise à jour de slug vers Sujet
             className={
               animImg === true
                 ? `${home.containerImg} anim`
                 : `${home.containerImg}`
             }
             ref={containerImg}
-            onMouseMove={handleMouseMove}
+            // onMouseMove={handleMouseMove}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
             <Image
-              src={`${ImgURL}${
-                ProjectsData[idProject - 1].attributes.Cover.data.attributes.url
-              }`}
-              alt="Footbal Cover Design"
+              src={`${ProjectsData[idProject - 1].fields.Image[0].url}`} // Mise à jour pour accéder à l'URL de l'image
+              alt="Project Cover"
               fill={true}
               style={{
                 objectFit: "cover",
@@ -243,42 +230,42 @@ export function Projects({ projects }) {
           <Section>
             <motion.div variants={fadeInUp} className={home.projectFooter}>
               <div className={home.footerInfo}>
-                <div class="container-txt">
+                <div className="container-txt">
                   <p>Client</p>
                 </div>
-                <div class="container-txt">
+                <div className="container-txt">
                   <p className={home.subInfo}>
-                    {ProjectsData[idProject - 1].attributes.client}
+                    {ProjectsData[idProject - 1].fields.Client}
                   </p>
                 </div>
               </div>
               <div className={home.footerInfo}>
-                <div class="container-txt">
+                <div className="container-txt">
                   <p>Date</p>
                 </div>
-                <div class="container-txt">
+                <div className="container-txt">
                   <p className={home.subInfo}>
-                    {ProjectsData[idProject - 1].attributes.date}
+                    {ProjectsData[idProject - 1].fields.Date}
                   </p>
                 </div>
               </div>
               <div className={home.footerInfo}>
-                <div class="container-txt">
+                <div className="container-txt">
                   <p>Subject</p>
                 </div>
-                <div class="container-txt">
+                <div className="container-txt">
                   <p className={home.subInfo}>
-                    {ProjectsData[idProject - 1].attributes.subject}
+                    {ProjectsData[idProject - 1].fields.Sujet}
                   </p>
                 </div>
               </div>
               <div className={home.footerInfo}>
-                <div class="container-txt">
+                <div className="container-txt">
                   <p>Working on the</p>
                 </div>
-                <div class="container-txt">
+                <div className="container-txt">
                   <p className={home.subInfo}>
-                    {ProjectsData[idProject - 1].attributes.working}
+                    {ProjectsData[idProject - 1].fields["Working On"]}
                   </p>
                 </div>
               </div>
@@ -291,7 +278,7 @@ export function Projects({ projects }) {
                     animate={"show"}
                     initial="hide"
                   >
-                    {ProjectsData[idProject - 1].id}
+                    {idProject}
                   </motion.span>
                   .
                 </p>
@@ -303,6 +290,8 @@ export function Projects({ projects }) {
     </div>
   );
 }
+
+
 export default function Home({ projects }) {
   const { scrollYProgress } = useScroll();
   const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
@@ -369,12 +358,17 @@ export default function Home({ projects }) {
   );
 }
 export async function getServerSideProps() {
-  const ProjectsData = await fetcher(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/projects?populate=*`
+  const API_KEY = "patf38NGwq1uuDExU.2a7d95a5d70fecef0fa606e5d327341ab1627e4c7129dcc3ffbcf844d0e3421c";
+    const ProjectsData = await fetcher(
+    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/Table%201`,{
+      headers: {
+        Authorization: `Bearer ${API_KEY}`
+      }
+    }    
   );
   return {
     props: {
-      projects: ProjectsData,
+      projects: ProjectsData.records,
     },
   };
 }

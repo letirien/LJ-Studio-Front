@@ -32,7 +32,7 @@ export default function Navbar() {
             entries.forEach(entry => {
                 const top = entry.target.getBoundingClientRect().top + window.pageYOffset;
                 if (entry.isIntersecting) {
-                        scrollToSlowly(top, 1000);
+                        // scrollToSlowly(top, 1000);
                     if (entry.target.classList.contains('white')) {
                         setLogoColor('dark');
                     } else {

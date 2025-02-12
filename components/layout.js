@@ -33,7 +33,7 @@ export default function Layout({ children, home }) {
                     {home ? (
                     <>
                         <Navbar/>
-                        <h1 className={styles.mainTitle}>
+                        {/* <h1 className={styles.mainTitle}>
                             <AnimateText once={true}>
                                 <div className="reveal-container">
                                     <p>Turning <span>Sports</span> </p>
@@ -45,10 +45,8 @@ export default function Layout({ children, home }) {
                                     <p><span>Art</span>istic Expression</p>
                                 </div>
                             </AnimateText>
-                            {/* <Link href="/projects/first-project">
-                            Go
-                            </Link> */}
-                        </h1>
+                        </h1> */}
+                        
                         {/* <div className={styles.currentInfoContainer}><div><Clock/></div></div> */}
                         <div className={styles.currentInfoContainer}><div>french creative studio   |   17:47:22 UTC+2</div></div>
                         <div className={styles.headimg}>

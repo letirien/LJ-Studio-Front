@@ -1,12 +1,5 @@
 module.exports = {
-    images: {
-        remotePatterns: [
-          {
-            protocol: "http",
-            hostname: "localhost",
-            port: "1337",
-            pathname: "/**",
-          },
-        ],
-      },
-  }
+  images: {
+    domains: ['v5.airtableusercontent.com'], // Ajoute ce domaine ici
+  },
+}
