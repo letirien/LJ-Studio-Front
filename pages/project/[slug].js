@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Head from 'next/head';
 import Layout from "../../components/layout";
-import { fetcher } from '../../lib/api.Js';
+import { fetcher } from '../../lib/api.js';
 export default function Project({project}){
     return (
         <>
