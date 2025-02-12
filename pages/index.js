@@ -21,7 +21,7 @@ import {
 } from "../lib/animation/variant";
 import Link from "next/link";
 
-import { fetcher } from "../lib/api.Js";
+import { fetcher } from "../lib/api.js";
 export const variants = {
   show: {
     opacity: 1,
