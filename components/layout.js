@@ -33,6 +33,11 @@ export default function Layout({ children, home }) {
                     {home ? (
                     <>
                         <Navbar/>
+                        <h1 className={`${styles.mainTitle} ${styles.container}`}>
+                            <p>LJ STUDIO</p>
+                            <p>WELCOME ON</p>
+                            <p>OUR PITCH</p>
+                        </h1>
                         {/* <h1 className={styles.mainTitle}>
                             <AnimateText once={true}>
                                 <div className="reveal-container">
@@ -51,7 +56,7 @@ export default function Layout({ children, home }) {
                         <div className={styles.currentInfoContainer}><div>french creative studio   |   17:47:22 UTC+2</div></div>
                         <div className={styles.headimg}>
                             <Image
-                                src="/images/header_img.jpg"
+                                src="/images/HEADER.webp"
                                 alt="Footbal Cover Design"
                                 fill={true}
                                 style={{

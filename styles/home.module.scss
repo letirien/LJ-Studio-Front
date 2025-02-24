@@ -5,83 +5,99 @@
     flex-direction: column;
     height: 100vh; */
 }
-.introSection {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  position: relative;
-  height: 871px;
-  background: white;
+.catHighlight{
+  font-size: 24px;
+  font-family: TenTwentyExtraLight;
+  opacity: 0.5;
+}
+.black{
+  background: #000;
+  padding: 160px 0;
 
-  > div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 50%;
-
-    &.black {
-      font-size: 24px;
-      font-weight: 400;
-      background: black;
-      div.introtxtContainer {
-        padding: 0 24px;
-        max-width: 597px;
-        .introPresetations {
-          p:not(:last-child) {
-            margin-bottom: 60px;
-          }
-        }
-        p > span {
-          font-family: Migra;
-          text-transform: capitalize;
-          font-weight: 400;
-        }
-        .introInfo {
-          margin-top: 100px;
-          display: flex;
-          gap: 16px;
-          align-items: center;
-          flex-wrap: wrap;
-
-          p:first-child {
-            font-weight: bold;
-          }
-
-          > :not(:first-child) {
-            font-family: Migra;
-            text-transform: capitalize;
-            font-weight: 400;
-          }
-          > :last-child {
-            border: 1px solid white;
-            padding: 8px 12px;
-            border-radius: 32px;
-          }
-        }
-      }
-    }
-    &.white {
-      background: white;
-      color: black;
-      height: 1116px;
-
-      > div p {
-        max-width: 344px;
-        margin: 0 auto;
-        font-size: clamp(32px, 8vw, 96px);
-        font-weight: 700;
-        line-height: clamp(32px, 8vw, 96px);
-
-        span {
-          font-family: Migra;
-          text-transform: capitalize;
-          font-weight: 400;
-        }
-      }
-    }
+  & > div > h2{
+    text-align: center;
+    font-family: Hardbop;
+    font-size: 148px;
+    line-height: 110px
   }
 }
+// .introSection {
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: space-between;
+//   position: relative;
+//   height: 871px;
+//   background: white;
+
+//   > div {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     flex-direction: column;
+//     width: 50%;
+
+//     &.black {
+//       font-size: 24px;
+//       font-weight: 400;
+//       background: black;
+//       div.introtxtContainer {
+//         padding: 0 24px;
+//         max-width: 597px;
+//         .introPresetations {
+//           p:not(:last-child) {
+//             margin-bottom: 60px;
+//           }
+//         }
+//         p > span {
+//           font-family: Migra;
+//           text-transform: capitalize;
+//           font-weight: 400;
+//         }
+//         .introInfo {
+//           margin-top: 100px;
+//           display: flex;
+//           gap: 16px;
+//           align-items: center;
+//           flex-wrap: wrap;
+
+//           p:first-child {
+//             font-weight: bold;
+//           }
+
+//           > :not(:first-child) {
+//             font-family: Migra;
+//             text-transform: capitalize;
+//             font-weight: 400;
+//           }
+//           > :last-child {
+//             border: 1px solid white;
+//             padding: 8px 12px;
+//             border-radius: 32px;
+//           }
+//         }
+//       }
+//     }
+//     &.white {
+//       background: white;
+//       color: black;
+//       height: 1116px;
+
+//       > div p {
+//         max-width: 344px;
+//         margin: 0 auto;
+//         font-size: clamp(32px, 8vw, 96px);
+//         font-weight: 700;
+//         line-height: clamp(32px, 8vw, 96px);
+
+//         span {
+//           font-family: Migra;
+//           text-transform: capitalize;
+//           font-weight: 400;
+//         }
+//       }
+//     }
+//   }
+// }
 .purpleBg {
   background: #7357ff;
   height: 953px;

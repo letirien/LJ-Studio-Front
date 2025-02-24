@@ -305,7 +305,17 @@ export default function Home({ projects }) {
           <title>{siteTitle}</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <section className={`${home.introSection}`} data-scroll>
+        <section className={`${home.black} bg-red`} data-scroll>
+          <div>
+            <h2>
+              <div className="flex gap-12 justify-center"><p className={home.catHighlight}>French</p><p>CRAFTING</p><p className={home.catHighlight}>Studio</p></div>
+              <p>SPORTS STORIES TROUGH</p>
+              <p>CREATIVE CANVAS.</p>
+            </h2>
+          </div>
+
+        </section>
+        {/* <section className={`${home.introSection}`} data-scroll>
           <div className={`${home.white} intersectLogo white`}>
             <div className="">
               <motion.p style={{ x: x }}>
@@ -349,10 +359,8 @@ export default function Home({ projects }) {
               </Section>
             </div>
           </div>
-        </section>
-        <div className={home.purpleBg}>
-          <Projects projects={projects} />
-        </div>
+        </section> */}
+        <Projects projects={projects} />
       </div>
     </Layout>
   );

@@ -1,3 +1,6 @@
+@import 'tailwindcss';
+
+
 @font-face {
   font-family: HelveticaRegular;
   src: url("/typos/HelveticaNeue-01.ttf");
@@ -13,6 +16,15 @@
 @font-face {
   font-family: Migra;
   src: url("/typos/MigraItalic-Extralightitalic.otf");
+}
+@font-face {
+  font-family: Hardbop;
+  src: url("/typos/HARDBOP/hardbop-regular.otf");
+}
+
+@font-face {
+  font-family: TenTwentyExtraLight;
+  src: url("/typos/TEN TWENTY/tentwenty-extralightitalic-1.otf");
 }
 html,
 body {

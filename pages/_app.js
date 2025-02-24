@@ -1,4 +1,4 @@
-import '../styles/global.css';
+import '/styles/global.css';
 import { AnimatePresence } from 'framer-motion';
 import { ReactLenis } from 'lenis/react';
 import { useEffect } from 'react';
