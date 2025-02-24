@@ -312,6 +312,11 @@ export default function Home({ projects }) {
               <p>SPORTS STORIES TROUGH</p>
               <p>CREATIVE CANVAS.</p>
             </h2>
+            <p className="text-center w-1/3 ml-auto mr-auto mt-12">
+            LJ is a French creative studio based in Paris with an exclusive focus on the sports sector. Driven by a profound passion of sports and the emotion they provide, our studio prides itself on capturing and translating that into captivating visual narratives.
+
+            From digital branding to creative direction, motion, print layouts and graphic creation, we offer a wide spectrum of services.               
+            </p>
           </div>
 
         </section>

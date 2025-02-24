@@ -59,6 +59,7 @@ export default function Layout({ children, home }) {
                                 src="/images/HEADER.webp"
                                 alt="Footbal Cover Design"
                                 fill={true}
+                                quality={100}
                                 style={{
                                     objectFit: 'cover'
                                 }}
