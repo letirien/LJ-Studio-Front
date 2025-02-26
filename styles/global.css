@@ -26,6 +26,15 @@
   font-family: TenTwentyExtraLight;
   src: url("/typos/TEN TWENTY/tentwenty-extralightitalic-1.otf");
 }
+
+@font-face {
+  font-family: Roboto;
+  src: url("/typos/ROBOTO/Roboto-Regular.ttf");
+}
+@font-face {
+  font-family: RobotoLight;
+  src: url("/typos/ROBOTO/Roboto-Thin.ttf");
+}
 html,
 body {
   padding: 0;

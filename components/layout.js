@@ -11,6 +11,8 @@ import AnimateText from '../lib/animation/animationText';
 
 
 export default function Layout({ children, home }) {
+    const words = ["OUR PITCH", "OUR GAME", "OUR CRAFT", "BOARD"];
+
     return (
         <div>
             <Head>
@@ -28,15 +30,24 @@ export default function Layout({ children, home }) {
                 <meta name="og:title" content={siteTitle} />
                 <meta name="twitter:card" content="summary_large_image" />
             </Head>
+            
             <motion.div>
                 <header className={`${styles.header} intersectLogo header` }>
                     {home ? (
                     <>
                         <Navbar/>
-                        <h1 className={`${styles.mainTitle} ${styles.container}`}>
+                        <h1 className={`${styles.mainTitle} mainContainer`}>
                             <p>LJ STUDIO</p>
                             <p>WELCOME ON</p>
-                            <p>OUR PITCH</p>
+                            <div className='flex h-full'>
+                                <span className=''>
+                                    <p>OUR PITCH</p>
+                                    <p>OUR GAME</p>
+                                    <p>OUR CRAFT</p>
+                                    <p>BOARD</p>
+                                    <p>OUR PITCH</p>
+                                </span>
+                            </div>
                         </h1>
                         {/* <h1 className={styles.mainTitle}>
                             <AnimateText once={true}>
@@ -53,7 +64,7 @@ export default function Layout({ children, home }) {
                         </h1> */}
                         
                         {/* <div className={styles.currentInfoContainer}><div><Clock/></div></div> */}
-                        <div className={styles.currentInfoContainer}><div>french creative studio   |   17:47:22 UTC+2</div></div>
+                        <div className={`${styles.currentInfoContainer} font-light`}><div>GAME TIME : 17:47:22 UTC+2</div></div>
                         <div className={styles.headimg}>
                             <Image
                                 src="/images/HEADER.webp"

@@ -62,12 +62,12 @@ export default function Navbar() {
 
     return (
         <>
-            <div id={styles.navbar} className={layoutStyle.container}>
+            <div id={styles.navbar} className="mainContainer">
                 <div className={`${styles.logo} ${styles[logoColor]}`}>
                     <Image
                         width={98}
                         height={98}
-                        src="/images/logo.svg"
+                        src="/images/LOGO.svg"
                         alt="LJ Studio LOGO"
                         style={{
                             objectFit: 'cover'
