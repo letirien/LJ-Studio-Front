@@ -22,6 +22,24 @@ import {
 import Link from "next/link";
 
 import { fetcher } from "../lib/api.js";
+
+// Hook personnalisé pour l'animation sans modifier la structure DOM
+function useAnimationControls(once = false) {
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: once });
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
+    }
+  }, [controls, isInView]);
+
+  return { ref, controls };
+}
+
 export const variants = {
   show: {
     opacity: 1,
@@ -35,6 +53,7 @@ export const variants = {
     opacity: 0,
   },
 };
+
 export function Section({ children }) {
   const controls = useAnimation();
   const ref = useRef(null);
@@ -298,6 +317,24 @@ export default function Home({ projects }) {
   const leftx = useTransform(scrollYProgress, [1, 0], [-100, 0]);
   const rightx = useTransform(scrollYProgress, [0, 1], [-100, 0]);
   const newx = useTransform(scrollYProgress, [1, 0], [50, 0]);
+  
+  // Référence pour la section entière
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
+  
+  // Animations simples
+  const titleAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: { 
+        duration: 0.6,
+        delay: i * 0.1
+      }
+    })
+  };
+  
   return (
     <Layout home>
       <div>
@@ -305,21 +342,67 @@ export default function Home({ projects }) {
           <title>{siteTitle}</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <section className={`${home.black} bg-red`} data-scroll>
+        <section className={`${home.black} bg-red`} data-scroll ref={sectionRef}>
           <div>
             <h2>
-              <div className="flex gap-12 justify-center"><p className={home.catHighlight}>French</p><p>CRAFTING</p><p className={home.catHighlight}>Studio</p></div>
-              <p>SPORTS STORIES TROUGH</p>
-              <p>CREATIVE CANVAS.</p>
+              <div className="flex gap-12 justify-center">
+                <motion.p 
+                  initial="hidden"
+                  animate={isInView ? "visible" : "hidden"}
+                  variants={titleAnimation}
+                  custom={0}
+                  className={home.catHighlight}
+                >
+                  French
+                </motion.p>
+                <motion.p 
+                  initial="hidden"
+                  animate={isInView ? "visible" : "hidden"}
+                  variants={titleAnimation}
+                  custom={1}
+                >
+                  CRAFTING
+                </motion.p>
+                <motion.p 
+                  initial="hidden"
+                  animate={isInView ? "visible" : "hidden"}
+                  variants={titleAnimation}
+                  custom={2}
+                  className={home.catHighlight}
+                >
+                  Studio
+                </motion.p>
+              </div>
+              <motion.p 
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                variants={titleAnimation}
+                custom={3}
+              >
+                SPORTS STORIES TROUGH
+              </motion.p>
+              <motion.p 
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                variants={titleAnimation}
+                custom={4}
+              >
+                CREATIVE CANVAS.
+              </motion.p>
             </h2>
-            <p className={`${home.defaultText} text-center w-1/3 ml-auto mr-auto mt-12`}>
-            LJ is a French creative studio based in Paris with an exclusive focus on the sports sector. Driven by a profound passion of sports and the emotion they provide, our studio prides itself on capturing and translating that into captivating visual narratives.
-            <br></br>
-            <br></br>
-            From digital branding to creative direction, motion, print layouts and graphic creation, we offer a wide spectrum of services.               
-            </p>
+            <motion.p 
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              variants={titleAnimation}
+              custom={5}
+              className={`${home.defaultText} text-center w-1/3 ml-auto mr-auto mt-12`}
+            >
+              LJ is a French creative studio based in Paris with an exclusive focus on the sports sector. Driven by a profound passion of sports and the emotion they provide, our studio prides itself on capturing and translating that into captivating visual narratives.
+              <br></br>
+              <br></br>
+              From digital branding to creative direction, motion, print layouts and graphic creation, we offer a wide spectrum of services.               
+            </motion.p>
           </div>
-
         </section>
         {/* <section className={`${home.introSection}`} data-scroll>
           <div className={`${home.white} intersectLogo white`}>

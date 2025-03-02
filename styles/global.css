@@ -20,6 +20,7 @@
 @font-face {
   font-family: Hardbop;
   src: url("/typos/HARDBOP/hardbop-regular.otf");
+  ascent-override: 90%;
 }
 
 @font-face {

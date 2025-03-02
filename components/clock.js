@@ -43,7 +43,7 @@ export const Clock = () => {
     return(
         <>
             <p ref={clockRef}>
-                french creative studio   |   {hours}:{minutes}:{seconds} UTC+2
+                game time : {hours}:{minutes}:{seconds} UTC+2
             </p>
             
         </>

@@ -31,6 +31,8 @@
     div:last-child {
       transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1) 1.15s;
       overflow: hidden;
+      margin-top: 0.05em;
+      line-height: 0.75;
       height: calc(1em * 0.8);
       span {
         display: inline-block;

@@ -7,8 +7,12 @@ import Navbar from './navbar';
 import Image from 'next/image'
 import {motion} from 'framer-motion'
 import AnimateText from '../lib/animation/animationText';
+import dynamic from 'next/dynamic'
 
-
+// Importer dynamiquement le Clock sans rendu côté serveur
+const Clock = dynamic(() => import('../components/clock').then(mod => mod.Clock), {
+  ssr: false
+});
 
 export default function Layout({ children, home }) {
     const words = ["OUR PITCH", "OUR GAME", "OUR CRAFT", "BOARD"];
@@ -62,9 +66,8 @@ export default function Layout({ children, home }) {
                                 </div>
                             </AnimateText>
                         </h1> */}
-                        
-                        {/* <div className={styles.currentInfoContainer}><div><Clock/></div></div> */}
-                        <div className={`${styles.currentInfoContainer} font-light`}><div>GAME TIME : 17:47:22 UTC+2</div></div>
+                        <div className={styles.currentInfoContainer}><div><Clock/></div></div>
+                        {/* <div className={`${styles.currentInfoContainer} font-light`}><div>GAME TIME : 17:47:22 UTC+2</div></div> */}
                         <div className={styles.headimg}>
                             <Image
                                 src="/images/HEADER.webp"
