@@ -44,6 +44,13 @@ body {
   background-color: #000000;
   color: white;
 }
+.HardbopH2{
+    text-align: center;
+    font-family: Hardbop;
+    font-size: 190px;
+    line-height:0.75;
+    text-transform: uppercase;
+}
 p > span {
   font-family: Migra;
   text-transform: capitalize;
@@ -183,7 +190,7 @@ button {
     opacity: 0;
   }
   75% {
-    transform: translateY(19px);
+    transform: translateY(10px);
     opacity: 1;
   }
   100% {

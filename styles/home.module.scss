@@ -16,8 +16,8 @@
 
 }
 .black{
-  background: #000;
-  padding: 160px 0;
+  // background: #000;
+  padding-top: 160px;
 
   & > div > h2{
     text-align: center;
@@ -118,7 +118,7 @@
     position: absolute;
     top: 60%;
     right: 0;
-    background: black;
+    // background: black;
     grid-template-columns: 80% 20%;
     .containerImg {
       position: relative;
