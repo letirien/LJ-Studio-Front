@@ -22,7 +22,11 @@
   src: url("/typos/HARDBOP/hardbop-regular.otf");
   ascent-override: 90%;
 }
-
+@font-face {
+  font-family: HardbopBold;
+  src: url("/typos/HARDBOP/hardbop-bold.otf");
+  ascent-override: 90%;
+}
 @font-face {
   font-family: TenTwentyExtraLight;
   src: url("/typos/TEN TWENTY/tentwenty-extralightitalic-1.otf");
@@ -35,6 +39,11 @@
 @font-face {
   font-family: RobotoLight;
   src: url("/typos/ROBOTO/Roboto-Thin.ttf");
+}
+:root {
+  --tilted-container-height: 180px;
+  --tilted-div-height: 30px;
+  --img-bottom-height: calc(var(--tilted-container-height) - var(--tilted-div-height));
 }
 html,
 body {

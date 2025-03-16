@@ -5,8 +5,11 @@
   width: 100%;
   height: 100vh;
   position: relative;
+  overflow: hidden;
 
   .headimg {
+    //filter: contrast(70%);
+    filter: brightness(0.6) contrast(1.1) saturate(1.2) hue-rotate(10deg);
     position: absolute;
     z-index: 0;
     width: 100%;
@@ -16,11 +19,11 @@
   }
   .mainTitle {
     // font-size: clamp(40px, 10vw, 123px);
-    font-family: Hardbop;
-    font-size: 130px;
+    font-family: HardbopBold;
+    font-size: 146px;
     line-height: 0.8;
     // padding: 0.1 0;
-    bottom: -11%;
+    bottom: 4%;
     left: 0%;
     padding-left: 3vw;
     // -ms-transform: translateY(-50%);
@@ -85,10 +88,10 @@
 
   .currentInfoContainer {
     position: absolute;
-    bottom: -10%;
+    bottom: 4%;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1;
+    z-index: 444;
     font-weight: lighter;
     font-size: 13.7px;
     text-transform: uppercase;
@@ -102,6 +105,40 @@
   }
 }
 
+.tiltedContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--tilted-container-height); /* Utilisation de la variable */
+  display: flex;
+}
+
+.tiltedDiv1, .tiltedDiv2, .tiltedDiv3 {
+  flex: 1;
+  height: var(--tilted-div-height); /* Utilisation de la variable */
+  background-color: black;
+}
+
+.tiltedDiv1 {
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+}
+
+.tiltedDiv2 {
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+}
+
+.tiltedDiv3 {
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+}
+
+.imgBottom {
+  height: var(--img-bottom-height); /* Calcul automatique */
+  width: 100vw;
+  position: absolute;
+  bottom: 0%;
+  background: black;
+}
 #main {
   flex: 1;
 }

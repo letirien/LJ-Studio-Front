@@ -36,59 +36,6 @@ export default function Layout({ children, home }) {
             </Head>
             
             <motion.div>
-                <header className={`${styles.header} intersectLogo header` }>
-                    {home ? (
-                    <>
-                        <Navbar/>
-                        <h1 className={`${styles.mainTitle} mainContainer`}>
-                            <p>LJ STUDIO</p>
-                            <p>WELCOME ON</p>
-                            <div className='flex h-full'>
-                                <span className=''>
-                                    <p>OUR PITCH</p>
-                                    <p>OUR GAME</p>
-                                    <p>OUR CRAFT</p>
-                                    <p>BOARD</p>
-                                    <p>OUR PITCH</p>
-                                </span>
-                            </div>
-                        </h1>
-                        {/* <h1 className={styles.mainTitle}>
-                            <AnimateText once={true}>
-                                <div className="reveal-container">
-                                    <p>Turning <span>Sports</span> </p>
-                                </div>
-                                <div className="reveal-container">
-                                    <p>Passion into </p>
-                                </div>
-                                <div className="reveal-container">
-                                    <p><span>Art</span>istic Expression</p>
-                                </div>
-                            </AnimateText>
-                        </h1> */}
-                        <div className={styles.currentInfoContainer}><div><Clock/></div></div>
-                        {/* <div className={`${styles.currentInfoContainer} font-light`}><div>GAME TIME : 17:47:22 UTC+2</div></div> */}
-                        <div className={styles.headimg}>
-                            <Image
-                                src="/images/HEADER.webp"
-                                alt="Footbal Cover Design"
-                                fill={true}
-                                quality={100}
-                                style={{
-                                    objectFit: 'cover'
-                                }}
-                            />
-                        </div>
-                    </>
-                    ) : (
-                    <>
-                        <h1 className={utilStyles.heading2Xl}>Template Other Page</h1>
-                        <Link href="/">
-                            Go Back Home
-                        </Link>
-                    </>
-                    )}
-                </header>
                 <motion.div className={utilStyles.in} initial={{scaleY: 0.5}} animate={{scaleY: 0}} exit={{scaleY: 0}} transition={{duration: 1.8, ease:[0.22, 1, 0.36, 1]}}/>
                 <motion.div className={utilStyles.out} initial={{scaleY:  0.5}} animate={{scaleY: 0}} exit={{scaleY: 0}} transition={{duration: 1.8, ease:[0.22, 1, 0.36, 1]}}/>
                 <main style={{flex: 1}}>

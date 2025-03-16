@@ -16,6 +16,7 @@ import Link from "next/link";
 
 import { fetcher } from "../lib/api.js";
 import Projects from "../components/home/ProjectSlider";
+import {Header} from "../components/home/Header";
 
 
 
@@ -50,6 +51,7 @@ export default function Home({ projects }) {
           <title>{siteTitle}</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
+        <Header/>
         <section className={`${home.black} bg-red`} data-scroll ref={sectionRef}>
           <div>
             <h2>

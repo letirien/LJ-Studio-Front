@@ -147,6 +147,7 @@ const Projects = ({ projects }) => {
     }, [dotClick]);
   
     return (
+      <div className="relative">
       <div className={`${home.container} ${home.containerProjects}`}>
         <div>
           <div className={`${home.projects} intersectLogo`}>
@@ -172,7 +173,7 @@ const Projects = ({ projects }) => {
                 ref={imgRef}
               />
             </Link>
-            <div className={home.slideBlock}>
+{/*            <div className={home.slideBlock}>
               <Section>
                 <div className={home.containerSlideInfo}>
                   <Link href="#" className={home.verticalText}>
@@ -188,69 +189,70 @@ const Projects = ({ projects }) => {
                   />
                 </div>
               </Section>
-            </div>
-            <Section>
-              <motion.div variants={fadeInUp} className={home.projectFooter}>
-                <div className={home.footerInfo}>
-                  <div className="container-txt">
-                    <p>Client</p>
-                  </div>
-                  <div className="container-txt">
-                    <p className={home.subInfo}>
-                      {ProjectsData[idProject - 1].fields.Client}
-                    </p>
-                  </div>
-                </div>
-                <div className={home.footerInfo}>
-                  <div className="container-txt">
-                    <p>Date</p>
-                  </div>
-                  <div className="container-txt">
-                    <p className={home.subInfo}>
-                      {ProjectsData[idProject - 1].fields.Date}
-                    </p>
-                  </div>
-                </div>
-                <div className={home.footerInfo}>
-                  <div className="container-txt">
-                    <p>Subject</p>
-                  </div>
-                  <div className="container-txt">
-                    <p className={home.subInfo}>
-                      {ProjectsData[idProject - 1].fields.Sujet}
-                    </p>
-                  </div>
-                </div>
-                <div className={home.footerInfo}>
-                  <div className="container-txt">
-                    <p>Working on the</p>
-                  </div>
-                  <div className="container-txt">
-                    <p className={home.subInfo}>
-                      {ProjectsData[idProject - 1].fields["Working On"]}
-                    </p>
-                  </div>
-                </div>
-                <div className={home.footerInfo}>
-                  <p className={home.slideCount}>
-                    0
-                    <motion.span
-                      key={idProject}
-                      variants={variants}
-                      animate={"show"}
-                      initial="hide"
-                    >
-                      {idProject}
-                    </motion.span>
-                    .
-                  </p>
-                </div>
-              </motion.div>
-            </Section>
+            </div>*/}
           </div>
         </div>
       </div>
+{/*              <Section>
+                  <motion.div variants={fadeInUp} className={home.projectFooter}>
+                      <div className={home.footerInfo}>
+                          <div className="container-txt">
+                              <p>Client</p>
+                          </div>
+                          <div className="container-txt">
+                              <p className={home.subInfo}>
+                                  {ProjectsData[idProject - 1].fields.Client}
+                              </p>
+                          </div>
+                      </div>
+                      <div className={home.footerInfo}>
+                          <div className="container-txt">
+                              <p>Date</p>
+                          </div>
+                          <div className="container-txt">
+                              <p className={home.subInfo}>
+                                  {ProjectsData[idProject - 1].fields.Date}
+                              </p>
+                          </div>
+                      </div>
+                      <div className={home.footerInfo}>
+                          <div className="container-txt">
+                              <p>Subject</p>
+                          </div>
+                          <div className="container-txt">
+                              <p className={home.subInfo}>
+                                  {ProjectsData[idProject - 1].fields.Sujet}
+                              </p>
+                          </div>
+                      </div>
+                      <div className={home.footerInfo}>
+                          <div className="container-txt">
+                              <p>Working on the</p>
+                          </div>
+                          <div className="container-txt">
+                              <p className={home.subInfo}>
+                                  {ProjectsData[idProject - 1].fields["Working On"]}
+                              </p>
+                          </div>
+                      </div>
+                      <div className={home.footerInfo}>
+                          <p className={home.slideCount}>
+                              0
+                              <motion.span
+                                  key={idProject}
+                                  variants={variants}
+                                  animate={"show"}
+                                  initial="hide"
+                              >
+                                  {idProject}
+                              </motion.span>
+                              .
+                          </p>
+                      </div>
+                  </motion.div>
+              </Section>*/}
+      </div>
     );
-  }
+}
 
 export default Projects;
