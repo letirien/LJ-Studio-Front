@@ -1,258 +1,335 @@
-'use client'
+"use client";
 
-import React, { useRef, useState, useEffect } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import home from "../../styles/home.module.scss"
-import Section from './Section.js'
+import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import home from "../../styles/home.module.scss";
+import Section from './Section.js';
+import dynamic from 'next/dynamic';
 import {
-    fadeInRight,
-    fadeInUp,
-    fadeInLeft
-  } from "../../lib/animation/variant";
+  fadeInRight,
+  fadeInUp,
+  fadeInLeft
+} from "../../lib/animation/variant";
 
-
-const variants = {
-  hide: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 }
-}
-
+// Bibliothèque GSAP externe - chargée dynamiquement
+const gsapLib = {
+  gsap: null,
+  Observer: null,
+  loaded: false
+};
 
 export function SliderDot({ Nb, idProject, home, onButtonClick }) {
-    const handleDotClick = (index) => {
-      onButtonClick(index);
-    };
-    const circles = Array.from({ length: Nb }, (_, index) => (
-      <motion.div
-        key={index} // Ajoutez une clé unique pour chaque cercle
-        variants={fadeInRight}
-        className={`${home.cercle} ${
-          index === idProject - 1 ? home.current : ""
-        }`}
-        onClick={() => handleDotClick(index + 1)}
-      />
-    ));
+  const handleDotClick = (index) => {
+    onButtonClick(index);
+  };
   
-    return <div className={home.cercleContainer}>{circles}</div>;
+  const circles = Array.from({ length: Nb }, (_, index) => (
+    <motion.div
+      key={index}
+      variants={fadeInRight}
+      className={`${home.cercle} ${
+        index === idProject - 1 ? home.current : ""
+      }`}
+      onClick={() => handleDotClick(index + 1)}
+    />
+  ));
+
+  return <div className={home.cercleContainer}>{circles}</div>;
 }
 
-const Projects = ({ projects }) => {
-    const containerImg = useRef("");
-    const [animImg, setAnimImg] = useState(false);
+export default function ProjectSlider({ projects, navRef }) {
     const [idProject, setIdProject] = useState(1);
-    const [dotClick, setDotClick] = useState(null);
-    const [ProjectsData, setProjectsData] = useState(projects);
-    const imgRef = useRef();
-    const [isHovered, setIsHovered] = useState(false);
-    const lastMousePosition = useRef({ x: 0, y: 0 });
-  
-    const handleChildButtonClick = (data) => {
-      if (data) {
-        setDotClick(data);
-      }
-    };
-    const ImgURL = "http://localhost:1337";
-  
-    // Fonction pour gérer l'animation des textes
-    const anim = () => {
-      const containerTxt = document.querySelectorAll(".container-txt");
-      setAnimImg(true);
-      containerTxt.forEach((el) => {
-        Array.from(el.children).forEach((child) =>
-          child.classList.add("slideUpInfoImg")
-        );
-      });
-      if (!dotClick) {
-        setTimeout(() => {
-          incrementProjectId();
-        }, 600);
-      } else {
-        setTimeout(() => {
-          incrementProjectIdByClick(dotClick);
-        }, 600);
-      }
-  
-      setTimeout(() => {
-        setAnimImg(false);
-        containerTxt.forEach((el) => {
-          Array.from(el.children).forEach((child) =>
-            child.classList.remove("slideUpInfoImg")
-          );
-        });
-        setDotClick(null);
-      }, 1600);
-    };
-  
-    // Fonction pour gérer l'incrémentation de l'ID du projet
-    const incrementProjectId = () => {
-      setIdProject((prevId) => {
-        const nextId = (prevId % ProjectsData.length) + 1; // Mise à jour pour s'adapter au nombre de projets
-        return nextId;
-      });
-    };
-  
-    // Fonction pour gérer l'incrémentation de l'ID du projet
-    const incrementProjectIdByClick = (id) => {
-      setIdProject(id);
-    };
-  
-    // const handleMouseMove = (e) => {
-    //   setAnimImg(false);
-    //   if (!containerImg.current || !imgRef.current) return;
-    //   const containerRect = containerImg.current.getBoundingClientRect();
-    //   const imageRect = imgRef.current.getBoundingClientRect();
-  
-    //   const containerCenterX = containerRect.width / 2;
-    //   const containerCenterY = containerRect.height / 2;
-  
-    //   const mouseX = e.clientX - containerRect.left;
-    //   const mouseY = e.clientY - containerRect.top;
-  
-    //   const moveX = (containerCenterX - mouseX) / 6;
-    //   const moveY = (containerCenterY - mouseY) / 6;
-  
-    //   imgRef.current.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.1)`;
-  
-    //   lastMousePosition.current = { x: mouseX, y: mouseY };
-    // };
-  
-    const handleMouseEnter = () => {
-      setAnimImg(false);
-      imgRef.current.style.transition = "transform 1s cubic-bezier(0.23, 1, 0.32, 1)";
-      imgRef.current.style.transform = `scale(1.05)`;
-      setIsHovered(true);
-    };
-  
-    const handleMouseLeave = () => {
-      setIsHovered(false);
-      setAnimImg(null);
-      imgRef.current.style.transition = "transform 1s cubic-bezier(0.23, 1, 0.32, 1)";
-      imgRef.current.style.transform = "translate(0, 0) scale(1)";
-    };
-  
+    const [idProjectDelay, setDelayIdProject] = useState(1);
+    const sectionRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false)
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [direction, setDirection] = useState(0);
+    const containerRef = useRef(null);
+    const slideRefs = useRef([]);
+    const slideInnerRefs = useRef([]);
+    const decoRef = useRef(null);
+    const totalProjects = projects.length;
+
+    // Initialiser les refs pour chaque slide
     useEffect(() => {
-      let intervalAnim;
-      if (dotClick) {
-        anim(dotClick);
-      } else {
-        intervalAnim = setInterval(() => {
-          anim();
-        }, 5000);
+        slideRefs.current = Array(totalProjects).fill().map((_, i) => slideRefs.current[i] || React.createRef());
+        slideInnerRefs.current = Array(totalProjects).fill().map((_, i) => slideInnerRefs.current[i] || React.createRef());
+    }, [totalProjects]);
+
+    const anim = () => {
+      const secondParagraph = document.querySelectorAll(".container-txt p:nth-of-type(2)");
+    
+      // Vérifier si le deuxième <p> existe
+      if (secondParagraph) {
+        // Appliquer l'animation à ses enfants
+        Array.from(secondParagraph).forEach(el=>el.classList.add("slideUpInfoImg"))
+
+        // Après l'animation, enlever la classe d'animation
+        setTimeout(() => {
+          Array.from(secondParagraph).forEach(el=> el.classList.remove("slideUpInfoImg"))
+        }, 1600);
       }
-  
+    };
+
+    // Handler pour la navigation
+    const handleNavigation = (dir) => {
+        if (isAnimating || !gsapLib.loaded) return false;
+        setIsAnimating(true);
+        setDirection(dir);
+
+        const previousId = idProject;
+        const newId =
+            dir === 1
+                ? previousId < totalProjects
+                    ? previousId + 1
+                    : 1
+                : previousId > 1
+                ? previousId - 1
+                : totalProjects;
+        
+        // Effectuer l'animation de transition
+        const currentSlide = slideRefs.current[previousId - 1].current;
+        const currentInner = slideInnerRefs.current[previousId - 1].current;
+        const upcomingSlide = slideRefs.current[newId - 1].current;
+        const upcomingInner = slideInnerRefs.current[newId - 1].current;
+        const deco = decoRef.current;
+
+        // Animation séquence avec GSAP
+        setIdProject(newId);
+        anim()
+        setTimeout(()=>{
+          setDelayIdProject(newId)
+        }, 300)
+        gsapLib.gsap.timeline({
+            defaults: {
+                duration: 1.3
+            },
+            onComplete: () => {
+                setIsAnimating(false);
+            }
+        })
+        .addLabel('start', 0)
+        .to(currentSlide, {
+            duration: 0.4,
+            ease: 'power2.in',
+            yPercent: -dir * 100
+        }, 'start')
+        .to(currentInner, {
+            duration: 0.4,
+            ease: 'power2.in',
+            yPercent: dir * 75,
+            rotation: -dir * 2
+        }, 'start')
+        .fromTo(deco, {
+            yPercent: dir * 100,
+            autoAlpha: 1
+        }, {
+            duration: 0.4,
+            ease: 'power2.in',
+            yPercent: 0,
+        }, 'start')
+        
+        .addLabel('middle', 'start+=0.5')
+        .to(deco, {
+            ease: 'expo',
+            yPercent: -dir * 100,
+        }, 'middle')
+        .fromTo(upcomingSlide, {
+            autoAlpha: 1,
+            yPercent: dir * 100
+        }, {
+            ease: 'expo',
+            yPercent: 0
+        }, 'middle')
+        .fromTo(upcomingInner, {
+            yPercent: -dir * 75,
+            rotation: dir * 2
+        }, {
+            ease: 'expo',
+            yPercent: 0,
+            rotation: 0
+        }, 'middle');
+    };
+
+    // Navigation handlers
+    const navigationHandler = useRef({
+        handleNext: () => handleNavigation(1),
+        handlePrev: () => handleNavigation(-1)
+    });
+
+    // Update navigation handlers when needed
+    useEffect(() => {
+        navigationHandler.current = {
+            handleNext: () => handleNavigation(1),
+            handlePrev: () => handleNavigation(-1)
+        };
+    }, [idProject, isAnimating, totalProjects]);
+
+    // Exposer les méthodes de navigation au parent via la ref
+    useEffect(() => {
+        if (navRef) {
+            navRef.current = {
+                handleNext: navigationHandler.current.handleNext,
+                handlePrev: navigationHandler.current.handlePrev
+            };
+        }
+    }, [navRef, idProject, isAnimating]);
+
+    // Charger GSAP et initialiser l'Observer
+    useEffect(() => {
+        let observer = null;
+        
+        const loadGSAP = async () => {
+            try {
+                const gsapModule = await import('gsap');
+                const observerModule = await import('gsap/Observer');
+                
+                gsapLib.gsap = gsapModule.gsap;
+                gsapLib.Observer = observerModule.Observer;
+                gsapLib.gsap.registerPlugin(gsapLib.Observer);
+                gsapLib.loaded = true;
+                
+                // Initialiser l'Observer pour le scroll et les interactions tactiles
+                observer = gsapLib.Observer.create({
+                    type: "touch,pointer",
+                    onDown: () => navigationHandler.current.handlePrev(),
+                    onUp: () => navigationHandler.current.handleNext(),
+                    wheelSpeed: -1,
+                    tolerance: 10,
+                });
+            } catch (error) {
+                console.error("Erreur lors du chargement de GSAP:", error);
+            }
+        };
+        
+        loadGSAP();
+        
+        // Nettoyage
+        return () => {
+            if (observer) {
+                observer.kill();
+            }
+        };
+    }, []);
+
+    // Fonction pour précharger les images
+    useEffect(() => {
+        const preloadImages = async () => {
+            const imagePromises = projects.map(project => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve; // Continuer même si l'image ne charge pas
+                    img.src = project.fields.Image[0].url;
+                });
+            });
+            
+            await Promise.all(imagePromises);
+            
+            // Ajouter une classe loaded ou autre effet quand tout est chargé
+            if (containerRef.current) {
+                containerRef.current.classList.add(home.loaded || 'loaded');
+            }
+        };
+        
+        preloadImages();
+    }, [projects]);
+
+    useEffect(()=>{
+      const observer = new IntersectionObserver(
+          ([entry]) => {
+              setIsVisible(entry.isIntersecting);
+          },
+          { threshold: 0.7 } // Ajuste le seuil pour déclencher l'effet plus tôt ou plus tard
+      );
+
+      if (sectionRef.current) {
+          observer.observe(sectionRef.current);
+      }
+
       return () => {
-        clearInterval(intervalAnim);
+          if (sectionRef.current) {
+              observer.unobserve(sectionRef.current);
+          }
       };
-    }, [dotClick]);
-  
+    },[])
     return (
-      <div className="relative">
-      <div className={`${home.container} ${home.containerProjects}`}>
-        <div>
-          <div className={`${home.projects} intersectLogo`}>
-            <Link
-              href={`/project/${ProjectsData[idProject - 1].fields.Sujet}`} // Mise à jour de slug vers Sujet
-              className={
-                animImg === true
-                  ? `${home.containerImg} anim`
-                  : `${home.containerImg}`
-              }
-              ref={containerImg}
-              // onMouseMove={handleMouseMove}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              <Image
-                src={`${ProjectsData[idProject - 1].fields.Image[0].url}`} // Mise à jour pour accéder à l'URL de l'image
-                alt="Project Cover"
-                fill={true}
-                style={{
-                  objectFit: "cover",
-                }}
-                ref={imgRef}
-              />
-            </Link>
-{/*            <div className={home.slideBlock}>
-              <Section>
-                <div className={home.containerSlideInfo}>
-                  <Link href="#" className={home.verticalText}>
-                    <motion.p variants={fadeInLeft}>
-                      More <span>works (+)</span>{" "}
-                    </motion.p>
-                  </Link>
-                  <SliderDot
-                    Nb={ProjectsData.length}
-                    idProject={idProject}
-                    home={home}
-                    onButtonClick={handleChildButtonClick}
-                  />
-                </div>
-              </Section>
-            </div>*/}
+        <div 
+            ref={sectionRef} 
+            className={`relative transition-all duration-500 ease-in-out ${isVisible ? "-mt-[6%]" : "mt-0"}`}
+        > 
+         <div className={`${home.sliderContainer} !w-[70%] mx-auto rounded-md`}>
+              <div className={`rounded-md ${home.sliderWrapper}`} ref={containerRef}>
+                  {/* Élément décoratif pour les transitions */}
+                  <div className={`rounded-md ${home.deco}`} ref={decoRef}></div>
+                  
+                  {projects.map((project, index) => (
+                      <div
+                          key={project.id}
+                          className={
+                              index + 1 === idProject
+                                  ? `${home.projectSlide} ${home.active}`
+                                  : home.projectSlide
+                          }
+                          ref={slideRefs.current[index]}
+                      >
+                          <div 
+                              className={`rounded-md ${home.slideInner}`}
+                              ref={slideInnerRefs.current[index]}
+                          >
+                              <Image
+                                  src={project.fields.Image[0].url}
+                                  alt={project.title}
+                                  width={1920}
+                                  height={1080}
+                                  priority
+                                  className={`${home.slideImg} rounded-xs`}
+                              />
+                          </div>
+                      </div>
+                  ))}
+              </div>
           </div>
+          <div className={home.slideBlock}>
+                <Section>
+                    <div className={home.containerSlideInfo}>
+                        <SliderDot
+                            Nb={totalProjects}
+                            idProject={idProject}
+                            home={home}
+                            onButtonClick={(id) => {
+                                if (isAnimating) return;
+                                const dir = id > idProject ? 1 : -1;
+                                setDirection(dir);
+                                handleNavigation(dir);
+                            }}
+                        />
+                    </div>
+                </Section>
+            </div>
+
+            <Section>
+                <motion.div className={`items-center ${home.projectFooter}`} variants={fadeInUp}>
+                    {['Team', 'Match Day', 'Game Plan', 'Perf'].map((field) => (
+                        <div className={home.footerInfo} key={field}>
+                            <div className="container-txt flex items-center gap-2">
+                                <p className='harbop !text-[48px] uppercase'>{field}</p>
+                                <motion.p variants={fadeInUp} className={`${home.subInfo} flex-1`}>
+                                    {projects[idProjectDelay - 1].fields[field]}
+                                </motion.p>
+                            </div>
+                        </div>
+                    ))}
+                    <div className={`${home.footerInfo}`}>
+                        <p className={home.slideCount}>
+                            0
+                            <motion.span key={idProject}>{idProject}</motion.span>.
+                        </p>
+                    </div>
+                </motion.div>
+            </Section>
         </div>
-      </div>
-{/*              <Section>
-                  <motion.div variants={fadeInUp} className={home.projectFooter}>
-                      <div className={home.footerInfo}>
-                          <div className="container-txt">
-                              <p>Client</p>
-                          </div>
-                          <div className="container-txt">
-                              <p className={home.subInfo}>
-                                  {ProjectsData[idProject - 1].fields.Client}
-                              </p>
-                          </div>
-                      </div>
-                      <div className={home.footerInfo}>
-                          <div className="container-txt">
-                              <p>Date</p>
-                          </div>
-                          <div className="container-txt">
-                              <p className={home.subInfo}>
-                                  {ProjectsData[idProject - 1].fields.Date}
-                              </p>
-                          </div>
-                      </div>
-                      <div className={home.footerInfo}>
-                          <div className="container-txt">
-                              <p>Subject</p>
-                          </div>
-                          <div className="container-txt">
-                              <p className={home.subInfo}>
-                                  {ProjectsData[idProject - 1].fields.Sujet}
-                              </p>
-                          </div>
-                      </div>
-                      <div className={home.footerInfo}>
-                          <div className="container-txt">
-                              <p>Working on the</p>
-                          </div>
-                          <div className="container-txt">
-                              <p className={home.subInfo}>
-                                  {ProjectsData[idProject - 1].fields["Working On"]}
-                              </p>
-                          </div>
-                      </div>
-                      <div className={home.footerInfo}>
-                          <p className={home.slideCount}>
-                              0
-                              <motion.span
-                                  key={idProject}
-                                  variants={variants}
-                                  animate={"show"}
-                                  initial="hide"
-                              >
-                                  {idProject}
-                              </motion.span>
-                              .
-                          </p>
-                      </div>
-                  </motion.div>
-              </Section>*/}
-      </div>
     );
 }
-
-export default Projects;

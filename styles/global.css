@@ -33,6 +33,11 @@
 }
 
 @font-face {
+  font-family: TenTwenty;
+  src: url("/typos/TEN TWENTY/tentwenty-regular-1.otf");
+}
+
+@font-face {
   font-family: Roboto;
   src: url("/typos/ROBOTO/Roboto-Regular.ttf");
 }
@@ -53,12 +58,16 @@ body {
   background-color: #000000;
   color: white;
 }
+.harbop{
+  font-family: Hardbop;
+}
 .HardbopH2{
     text-align: center;
     font-family: Hardbop;
-    font-size: 190px;
-    line-height:0.75;
+    font-size: 15vw;
+    line-height: 12vw;
     text-transform: uppercase;
+    /* z-index: 5; */
 }
 p > span {
   font-family: Migra;
@@ -153,7 +162,7 @@ button {
   animation: revealImg 1.2s ease-in-out;
 }
 .slideUpInfoImg {
-  animation: reveal-text-img 1.2s linear;
+  animation: reveal-text-img 1.3s linear;
 }
 @keyframes slideImg {
   0% {
@@ -191,15 +200,15 @@ button {
     opacity: 1;
   }
   25% {
-    transform: translateY(-19px);
+    transform: translateY(-10px);
     opacity: 0;
   }
   50% {
-    transform: translateY(19px);
+    transform: translateY(10px);
     opacity: 0;
   }
   75% {
-    transform: translateY(10px);
+    transform: translateY(5px);
     opacity: 1;
   }
   100% {
@@ -213,6 +222,9 @@ button {
   overflow: hidden; /* Assure-toi que le scroll est activé */
 }
 
+.bg-half-col{
+  background: linear-gradient(to bottom, #fa6218 50%, black 50%);
+}
 .cursor {
   z-index: 100;
   background-color: #ff4c24;
