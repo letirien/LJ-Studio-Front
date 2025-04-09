@@ -60,6 +60,9 @@ body {
 }
 .harbop{
   font-family: Hardbop;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 .HardbopH2{
     text-align: center;
@@ -67,6 +70,9 @@ body {
     font-size: 15vw;
     line-height: 12vw;
     text-transform: uppercase;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     /* z-index: 5; */
 }
 p > span {

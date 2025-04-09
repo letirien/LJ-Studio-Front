@@ -54,8 +54,20 @@ export default function ProjectSlider({ projects, navRef }) {
 
     // Initialiser les refs pour chaque slide
     useEffect(() => {
-        slideRefs.current = Array(totalProjects).fill().map((_, i) => slideRefs.current[i] || React.createRef());
-        slideInnerRefs.current = Array(totalProjects).fill().map((_, i) => slideInnerRefs.current[i] || React.createRef());
+        // Créer des références DOM réelles pour tous les slides dès le début
+        slideRefs.current = Array(totalProjects).fill().map((_, i) => {
+            const existing = slideRefs.current[i];
+            return existing || React.createRef();
+        });
+        
+        slideInnerRefs.current = Array(totalProjects).fill().map((_, i) => {
+            const existing = slideInnerRefs.current[i];
+            return existing || React.createRef();
+        });
+        
+        // Force un re-render pour s'assurer que les refs sont attachées
+        // aux éléments DOM avant la première animation
+        setIdProject(idProject);
     }, [totalProjects]);
 
     const anim = () => {
@@ -72,6 +84,7 @@ export default function ProjectSlider({ projects, navRef }) {
         }, 1600);
       }
     };
+    const [firstClickHandled, setFirstClickHandled] = useState(false);
 
     // Handler pour la navigation
     const handleNavigation = (dir) => {
@@ -96,12 +109,27 @@ export default function ProjectSlider({ projects, navRef }) {
         const upcomingInner = slideInnerRefs.current[newId - 1].current;
         const deco = decoRef.current;
 
+        if (!currentSlide || !currentInner || !upcomingSlide || !upcomingInner || !deco) {
+            console.error('Some slide references are missing', {
+                currentSlide, currentInner, upcomingSlide, upcomingInner, deco
+            });
+            setIsAnimating(false);
+            return;
+        }
         // Animation séquence avec GSAP
         setIdProject(newId);
         anim()
         setTimeout(()=>{
           setDelayIdProject(newId)
         }, 300)
+
+        if (!firstClickHandled) {
+            // Force l'état visible pour le slide actuel avant l'animation
+            gsapLib.gsap.set(currentSlide, { autoAlpha: 1 });
+            gsapLib.gsap.set(currentInner, { autoAlpha: 1 });
+            setFirstClickHandled(true);
+        }
+
         gsapLib.gsap.timeline({
             defaults: {
                 duration: 1.3
@@ -163,7 +191,7 @@ export default function ProjectSlider({ projects, navRef }) {
     useEffect(() => {
         navigationHandler.current = {
             handleNext: () => handleNavigation(1),
-            handlePrev: () => handleNavigation(-1)
+            handlePrev: () => handleNavigation(-1),
         };
     }, [idProject, isAnimating, totalProjects]);
 
@@ -191,6 +219,10 @@ export default function ProjectSlider({ projects, navRef }) {
                 gsapLib.gsap.registerPlugin(gsapLib.Observer);
                 gsapLib.loaded = true;
                 
+                // Attendre un court délai pour s'assurer que tout est initialisé
+                setTimeout(() => {
+                    setSliderReady(true);
+                }, 200);
                 // Initialiser l'Observer pour le scroll et les interactions tactiles
                 observer = gsapLib.Observer.create({
                     type: "touch,pointer",

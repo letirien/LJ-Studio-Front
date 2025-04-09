@@ -23,7 +23,10 @@
     text-align: center;
     font-family: Hardbop;
     font-size: 15vw;
-    line-height: 12vw
+    line-height: 12vw;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 .sliderContainer {
