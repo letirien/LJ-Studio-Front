@@ -17,10 +17,11 @@ import Link from "next/link";
 import { fetcher } from "../lib/api.js";
 import Projects from "../components/home/ProjectSlider";
 import {Header} from "../components/home/Header";
+import BrandingSection from "../components/home/GamePlan.js";
 
 
 
-export default function Home({ projects }) {
+export default function Home({ projects, gamePlan }) {
   const { scrollYProgress } = useScroll();
   const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const leftx = useTransform(scrollYProgress, [1, 0], [-100, 0]);
@@ -44,7 +45,7 @@ export default function Home({ projects }) {
       }
     })
   };
-  
+  console.log(gamePlan)
   return (
     <Layout home>
       <div>
@@ -248,6 +249,34 @@ export default function Home({ projects }) {
           </div>
           </div>
         </section>
+        <section className="overflow-hidden bg-black">
+          <div className="marquee-container relative w-full -mb-12">
+            <div className="marquee-content flex whitespace-nowrap">
+              {/* Un seul groupe répété */}
+              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+            </div>
+            <div className="marquee-content flex whitespace-nowrap">
+              {/* Copie exacte dans un élément séparé */}
+              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+            </div>
+          </div>
+        </section>
+        <BrandingSection gamePlan={gamePlan} />
+
       </div>
     </Layout>
   );
@@ -255,15 +284,23 @@ export default function Home({ projects }) {
 export async function getServerSideProps() {
   const API_KEY = "patf38NGwq1uuDExU.2a7d95a5d70fecef0fa606e5d327341ab1627e4c7129dcc3ffbcf844d0e3421c";
     const ProjectsData = await fetcher(
-    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/Table%201`,{
+    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/Projects`,{
       headers: {
         Authorization: `Bearer ${API_KEY}`
       }
     }    
-  );
+    );
+    const GamePlanData = await fetcher(
+      `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/GamePlan`,{
+        headers: {
+          Authorization: `Bearer ${API_KEY}`
+        }
+      }    
+      );
   return {
     props: {
       projects: ProjectsData.records,
+      gamePlan: GamePlanData.records,
     },
   };
 }

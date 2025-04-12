@@ -51,12 +51,21 @@
   --img-bottom-height: calc(var(--tilted-container-height) - var(--tilted-div-height));
 }
 html,
+li{
+  margin: 0!important;
+}
 body {
   padding: 0;
   margin: 0;
   font-family: HelveticaRegular;
   background-color: #000000;
   color: white;
+}
+.roboto{
+  font-family: roboto;
+}
+.hardbop-bold{
+  font-family: HardbopBold;
 }
 .harbop{
   font-family: Hardbop;
@@ -256,4 +265,53 @@ body:has( [data-cursor]:hover) .cursor{
   .cursor {
     display: none;
   }
+}
+
+
+/* Configuration du conteneur */
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Style pour le contenu défilant */
+.marquee-content {
+  flex-shrink: 0;
+  display: flex;
+  animation: scrolling 30s linear infinite;
+}
+
+@keyframes scrolling {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%); /* Déplace de 100% au lieu de 50% */
+  }
+}
+.scroll-text{
+  line-height: 14vw;
+}
+
+.scroll-text:nth-child(even) {
+  color: transparent;
+  background-color: black;
+  -webkit-text-stroke: 2px #888; /* Pour Chrome, Safari */
+  text-stroke: 2px #888; /* Pour Firefox */
+}
+
+/* Style pour les éléments impairs (1er, 3e, etc.) - texte noir sur fond gris */
+.scroll-text:nth-child(odd) {
+  color: #888;
+}
+.image-plan{
+  height: calc(100vh - (0.32rem * 42));
+  width: 100%;
+}
+
+.writing-mode-vertical {
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  transform: rotate(180deg);
 }
