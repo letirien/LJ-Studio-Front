@@ -18,6 +18,7 @@ import { fetcher } from "../lib/api.js";
 import Projects from "../components/home/ProjectSlider";
 import {Header} from "../components/home/Header";
 import BrandingSection from "../components/home/GamePlan.js";
+import Collab from "../components/home/Collab.js";
 
 
 
@@ -276,7 +277,48 @@ export default function Home({ projects, gamePlan }) {
           </div>
         </section>
         <BrandingSection gamePlan={gamePlan} />
-
+        <section className="w-full bg-black">
+          <div className="w-full h-[90vh] relative top-24">
+            <div className="absolute bottom-0 left-0 right-0 h-[20vh] bg-gradient-to-t from-black to-transparent z-10"></div>
+            <Image src="/images/lj-fcnante.png" fill={true}
+              quality={100}
+              style={{
+                objectFit: 'cover',
+                objectPosition:'top'
+              }}>
+            </Image>
+          </div>
+          <div className="flex justify-between w-full items-center px-[3vw] mt-12 relative z-20 h-[170px]">
+            <div className="w-1/3">
+              <h2 className={`collaborationTitle uppercase text-center`}>
+                <p className="flex items-center gap-2"><span className="text-[32px]">ON</span>Every Pitch...</p>
+                <p>OUR CLIENT</p>
+                <div className='text-center'>
+                  <span className=''>
+                    <p>COLLABORATIONS</p>
+                  </span>                                
+                </div>
+              </h2>
+            </div>
+            <div className="w-1/4">
+              <p className="uppercase harbop text-[48px] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
+              <p className="robotoRegular mt-2 tracking-wider opacity-75 text-medium">Creativity</p>
+            </div>
+            <div className="w-1/4">
+              <p className="uppercase harbop text-[48px] leading-[0.8]">WINNING STRATEGY</p>
+              <p className="robotoRegular mt-2 tracking-wider opacity-75 text-medium">Mixing pixels and passion</p>
+            </div>
+          </div>
+          <Collab/>
+        </section>
+        <section className="relative bg-white py-42">
+          <h2 className="text-center HardbopH2 mx-xl text-black">
+            <p className="flex items-center gap-3 justify-center">BEYOND <span className="tenTwenty tracking-tight text-[06vw]">THE</span> SURFACE...</p>
+            <p>STEP INSIDE OUR</p>
+            <p className="flex items-center gap-3 justify-center"><span className="tenTwenty tracking-tight text-[06vw]">VISUAL</span>GALLERY AND</p>
+            <p className="flex items-center gap-3 justify-center">EXPLORE<span className="tenTwenty tracking-tight text-[06vw]">ARCHIVE</span></p>
+          </h2>
+        </section>
       </div>
     </Layout>
   );

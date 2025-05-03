@@ -18,9 +18,35 @@
   src: url("/typos/MigraItalic-Extralightitalic.otf");
 }
 @font-face {
+  font-family: MigraNormal;
+  src: url("/typos/Migra-ExtraLight.otf");
+}
+@font-face {
+  font-family: robotoThin;
+  src: url("/typos/ROBOTO/roboto-Thin.ttf");
+}
+.robotoThin {
+  font-family: robotoThin;
+}
+@font-face {
+  font-family: robotoRegular;
+  src: url("/typos/ROBOTO/roboto-Regular.ttf");
+}
+.robotoReg {
+  font-family: robotoRegular;
+}
+@font-face {
   font-family: Hardbop;
   src: url("/typos/HARDBOP/hardbop-regular.otf");
   ascent-override: 90%;
+}
+@font-face {
+  font-family: HardbopNormal;
+  src: url("/typos/HARDBOP/hardbop-normal.otf");
+  ascent-override: 90%;
+}
+.hardbop-normal{
+  font-family:HardbopNormal ;
 }
 @font-face {
   font-family: HardbopBold;
@@ -29,12 +55,16 @@
 }
 @font-face {
   font-family: TenTwentyExtraLight;
-  src: url("/typos/TEN TWENTY/tentwenty-extralightitalic-1.otf");
+  src: url("/typos/TEN TWENTY/tentwenty-extralight-1.otf");
+  ascent-override: 90%;
 }
 
 @font-face {
   font-family: TenTwenty;
   src: url("/typos/TEN TWENTY/tentwenty-regular-1.otf");
+}
+.tenTwenty{
+  font-family: TenTwenty;
 }
 
 @font-face {
@@ -76,17 +106,20 @@ body {
 .HardbopH2{
     text-align: center;
     font-family: Hardbop;
-    font-size: 15vw;
-    line-height: 12vw;
+    font-size: 13vw;
+    line-height: 10vw;
     text-transform: uppercase;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     /* z-index: 5; */
 }
-p > span {
+p > span:not(.tenTwenty) {
   font-family: Migra;
   text-transform: capitalize;
+}
+p>span.tenTwenty{
+  font-family: TenTwentyExtraLight;
 }
 body::-webkit-scrollbar {
   display: none;
@@ -314,4 +347,44 @@ body:has( [data-cursor]:hover) .cursor{
   writing-mode: vertical-lr;
   text-orientation: mixed;
   transform: rotate(180deg);
+}
+
+.collaborationTitle {
+  font-family: HardbopBold;
+  font-size: 72px;
+  line-height: 0.8;
+  /* // padding: 0.1 0; */
+  bottom: 4%;
+  left: 0%;
+  padding-left: 3vw;
+  /* // -ms-transform: translateY(-50%);
+  // transform: translateY(-50%); */
+  position: absolute;
+  z-index: 1;
+
+  &.div:last-child {
+    transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1) 1.15s;
+    overflow: hidden;
+    margin-top: 0.05em;
+    line-height: 0.75;
+    height: calc(1em * 0.8);
+    span {
+      display: inline-block;
+      animation: cycleText 8s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+      
+      p {
+          height: calc(1em * 0.8);
+          margin: 0;
+          padding: 0;
+      }
+    }
+  }
+  p > span{
+    font-family: MigraNormal;
+    display: flex;
+    align-items: center;
+    line-height: inherit;
+    margin-top: 4px;
+    margin-right: 4px;
+  }
 }

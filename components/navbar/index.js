@@ -8,58 +8,38 @@ export default function Navbar() {
     const [isBetweenSections, setIsBetweenSections] = useState(false); // New state for tracking position
 
     useEffect(() => {
-        const scrollToSlowly = (targetTop, duration) => {
-            const start = window.pageYOffset;
-            const distance = targetTop - start;
-            const startTime = performance.now();
+        console.log('Navbar useEffect exécuté');
         
-            const easeOutCubic = t => 1 - Math.pow(1 - t, 3); // Adjust the easing function
-        
-            const scrollStep = timestamp => {
-                const currentTime = timestamp - startTime;
-                const progress = Math.min(currentTime / duration, 1);
-                const easedProgress = easeOutCubic(progress);
-        
-                window.scrollTo(0, start + distance * easedProgress);
-        
-                if (currentTime < duration) {
-                    requestAnimationFrame(scrollStep);
+        const handleScroll = () => {
+            const sections = document.querySelectorAll('.intersectLogo.white');
+            const navbar = document.getElementById(styles.navbar);
+            
+            if (!navbar) return;
+            
+            const navbarRect = navbar.getBoundingClientRect();
+            const navbarBottom = navbarRect.bottom;
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= navbarBottom && rect.bottom >= navbarBottom) {
+                    setLogoColor('dark');
+                    return;
+                }else{
+                    setLogoColor('white');
                 }
-            };
-        
-            requestAnimationFrame(scrollStep);
-        };
-
-        const handleIntersection = (entries) => {
-            entries.forEach(entry => {
-                const top = entry.target.getBoundingClientRect().top + window.pageYOffset;
-                if (entry.isIntersecting) {
-                        // scrollToSlowly(top, 1000);
-                    if (entry.target.classList.contains('white')) {
-                        setLogoColor('dark');
-                    } else {
-                        setLogoColor('white');
-                    }
-                }                
             });
+            
+            
         };
 
-        let observer = new IntersectionObserver(handleIntersection, {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.15
-        });
-
-        const sections = document.querySelectorAll('.intersectLogo');
-        sections.forEach(section => {
-            observer.observe(section);
-        });
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Vérifier immédiatement
         
         return () => {
-            observer.disconnect();
+            window.removeEventListener('scroll', handleScroll);
         };
     }, []);
-
+    
     return (
         <>
             <div id={styles.navbar} className="mainContainer">

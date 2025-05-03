@@ -44,7 +44,7 @@ export default function BrandingSection({ gamePlan }) {
   }
   
   return (
-    <section className="bg-white py-42">
+    <section className="bg-white py-42 intersectLogo white">
       {/* Container with relative positioning for absolute elements */}
       <div className="max-w-screen-2xl mx-auto h-full relative">
         {/* Navigation verticale à gauche - absolument positionnée */}

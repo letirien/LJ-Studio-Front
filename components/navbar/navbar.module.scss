@@ -16,10 +16,10 @@
         width: auto;
         transition: 0.4s;
         &.white{
-            filter: none;
-          }
-          &.dark{
-            filter: brightness(0); /* Rend l'élément complètement noir */
-          }
+            filter: brightness(1) invert(0);
+        }
+        &.dark{
+            filter: brightness(0) invert(0); /* Rend l'élément complètement noir */
+        }
     }
 }
