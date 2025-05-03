@@ -24,8 +24,8 @@ const Collab = () => {
   const bottomRowLogos = logoFiles.slice(Math.ceil(logoFiles.length / 2));
 
   useEffect(() => {
-    // Dynamically import GSAP to avoid SSR issues
     const initMarquees = async () => {
+      // Dynamically import GSAP to avoid SSR issues
       const gsapModule = await import('gsap');
       const gsap = gsapModule.gsap;
       
@@ -36,21 +36,6 @@ const Collab = () => {
       // Register the plugin
       gsap.registerPlugin(ScrollTrigger);
       
-      // Variables for scroll effects
-      let lastScrollPosition = 0;
-      let scrollTimeout;
-      let isAccelerating = false;
-      let lastScrollDirection = null;
-      let scrollDetectionThreshold = 2; // Seuil minimal de défilement pour détecter un changement de direction
-      let lastDirectionChangeTime = 0;
-      let directionChangeCooldown = 300; // Temps minimal entre deux changements de direction (en ms)
-      let isDirectionLocked = false;
-      let wheelEvents = [];
-      let wheelProcessTimeout;
-      
-      // Store animation references
-      const marqueeData = [];
-      
       // Initialize each marquee
       document.querySelectorAll('[data-marquee-scroll-direction]').forEach((marquee) => {
         // Query marquee elements
@@ -60,224 +45,83 @@ const Collab = () => {
         if (!marqueeScroll || !marqueeCollections.length) return;
         
         // Get data attributes
-        const baseSpeed = parseFloat(marquee.dataset.marqueeSpeed) || 35;
-        const baseDirection = marquee.dataset.marqueeDirection === 'right' ? 1 : -1;
-        const scrollSpeed = parseFloat(marquee.dataset.marqueeScrollSpeed) || 5;
-        const boostFactor = parseFloat(marquee.dataset.marqueeBoostFactor) || 3;
+        const speed = parseFloat(marquee.dataset.marqueeSpeed) || 20;
+        const direction = marquee.dataset.marqueeDirection === 'right' ? 1 : -1; // 1 for right, -1 for left
+        const scrollSpeed = parseFloat(marquee.dataset.marqueeScrollSpeed) || 10;
         
-        // Ensure enough logos to cover the screen
+        // Calculate appropriate speed based on content width and viewport
+        const speedMultiplier = window.innerWidth < 479 ? 0.25 : window.innerWidth < 991 ? 0.5 : 1;
         const collectionWidth = marqueeCollections[0].offsetWidth;
         const viewportWidth = window.innerWidth;
-        const totalWidth = collectionWidth * marqueeCollections.length;
+        const marqueeSpeed = speed * (collectionWidth / viewportWidth) * speedMultiplier;
         
-        if (totalWidth < viewportWidth * 3) {
-          const cloneCount = Math.ceil((viewportWidth * 3 - totalWidth) / collectionWidth);
-          for (let i = 0; i < cloneCount; i++) {
-            const clone = marqueeCollections[0].cloneNode(true);
-            marqueeScroll.appendChild(clone);
+        // Set width and margin for the scroll container to create parallax effect
+        marqueeScroll.style.marginLeft = `${scrollSpeed * -1}%`;
+        marqueeScroll.style.width = `${(scrollSpeed * 2) + 100}%`;
+        
+        // Ensure enough logos to cover the screen by duplicating collections if needed
+        if (marqueeCollections.length < 3) {
+          const fragment = document.createDocumentFragment();
+          for (let i = 0; i < 3 - marqueeCollections.length; i++) {
+            fragment.appendChild(marqueeCollections[0].cloneNode(true));
           }
+          marqueeScroll.appendChild(fragment);
         }
         
         // Get all collections after potentially adding clones
         const allCollections = marquee.querySelectorAll('[data-marquee-collection]');
         
-        // Calculate appropriate speed
-        const speedMultiplier = window.innerWidth < 479 ? 0.4 : window.innerWidth < 991 ? 0.6 : 1;
-        const duration = baseSpeed * (collectionWidth / viewportWidth) * speedMultiplier;
-        
-        // Create and configure the main animation
+        // Create the main animation for infinite scrolling
         const animation = gsap.to(allCollections, {
-          xPercent: -100,
+          xPercent: -100, // Move completely out of view
           repeat: -1,
-          duration,
-          ease: "none",
+          duration: marqueeSpeed,
+          ease: 'none'
         }).totalProgress(0.5);
         
-        // Set initial direction
-        animation.timeScale(baseDirection);
+        // Initialize marquee in the correct direction
+        gsap.set(allCollections, { xPercent: direction === 1 ? 0 : -100 });
+        animation.timeScale(direction);
         
-        // Store reference to animation and its configuration
-        marqueeData.push({
-          element: marquee,
-          animation,
-          baseDirection,
-          currentDirection: baseDirection,
-          baseSpeed: duration,
-          boostFactor,
-          isInverted: false
+        // Set initial status
+        marquee.setAttribute('data-marquee-status', 'normal');
+        
+        // ScrollTrigger for direction inversion - exactly as in the original code
+        ScrollTrigger.create({
+          trigger: marquee,
+          start: 'top bottom',
+          end: 'bottom top',
+          onUpdate: (self) => {
+            const isInverted = self.direction === 1; // Scrolling down
+            const currentDirection = isInverted ? -direction : direction;
+            
+            // Update animation direction and marquee status
+            animation.timeScale(currentDirection);
+            marquee.setAttribute('data-marquee-status', isInverted ? 'inverted' : 'normal');
+          }
         });
         
-        // Create a separate timeline for the subtle parallax effect
-        gsap.timeline({
+        // Extra parallax effect on scroll - exactly as in the original code
+        const tl = gsap.timeline({
           scrollTrigger: {
             trigger: marquee,
             start: '0% 100%',
             end: '100% 0%',
-            scrub: 0.8
+            scrub: 0
           }
-        }).fromTo(
-          marqueeScroll, 
-          { x: `${baseDirection * -scrollSpeed}vw` }, 
-          { x: `${baseDirection * scrollSpeed}vw`, ease: 'none' }
+        });
+        
+        const scrollStart = direction === -1 ? scrollSpeed : -scrollSpeed;
+        const scrollEnd = -scrollStart;
+        
+        tl.fromTo(marqueeScroll, 
+          { x: `${scrollStart}vw` }, 
+          { x: `${scrollEnd}vw`, ease: 'none' }
         );
       });
-      
-      // Fonction pour changer la direction des marquees avec une protection contre les changements trop fréquents
-      const changeMarqueeDirection = (shouldBeInverted) => {
-        const now = Date.now();
-        
-        // Vérifier si nous sommes en période de cooldown pour éviter des changements trop rapides
-        if (isDirectionLocked || now - lastDirectionChangeTime < directionChangeCooldown) {
-          return false;
-        }
-        
-        // Vérifier si l'état demandé est différent de l'état actuel
-        const firstMarquee = marqueeData[0];
-        if (!firstMarquee || firstMarquee.isInverted === shouldBeInverted) {
-          return false; // Pas de changement nécessaire
-        }
-        
-        // Mettre à jour le timestamp du dernier changement
-        lastDirectionChangeTime = now;
-        
-        // Verrouiller temporairement la direction pour éviter les oscillations
-        isDirectionLocked = true;
-        setTimeout(() => {
-          isDirectionLocked = false;
-        }, directionChangeCooldown / 2);
-        
-        marqueeData.forEach(data => {
-          // Mettre à jour l'état d'inversion
-          data.isInverted = shouldBeInverted;
-          
-          // Calculer la nouvelle direction
-          data.currentDirection = shouldBeInverted ? -data.baseDirection : data.baseDirection;
-          
-          // Récupérer le facteur d'accélération actuel (si une accélération est en cours)
-          const currentSpeedFactor = Math.abs(data.animation.timeScale()) / Math.abs(data.currentDirection || 1);
-          
-          // Appliquer immédiatement la nouvelle direction
-          data.animation.timeScale(data.currentDirection * currentSpeedFactor);
-          
-          // Mettre à jour l'attribut de statut pour le style CSS
-          data.element.setAttribute('data-marquee-status', shouldBeInverted ? 'inverted' : 'normal');
-        });
-        
-        return true; // Changement effectué
-      };
-      
-      // Fonction pour appliquer le boost de vitesse
-      const applySpeedBoost = (intensity) => {
-        if (isAccelerating) return;
-        isAccelerating = true;
-        
-        marqueeData.forEach(data => {
-          // Calculer la vitesse boostée, en préservant la direction
-          const boostMultiplier = 1 + (data.boostFactor - 1) * intensity;
-          
-          // Appliquer immédiatement la vitesse boostée
-          data.animation.timeScale(data.currentDirection * boostMultiplier);
-        });
-        
-        // Réinitialiser le timeout pour revenir à la vitesse normale
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          // Revenir progressivement à la vitesse normale (en gardant la direction)
-          marqueeData.forEach(data => {
-            gsap.to(data.animation, {
-              timeScale: data.currentDirection,
-              duration: 0.5,
-              ease: "power1.out"
-            });
-          });
-          
-          isAccelerating = false;
-        }, 120);
-      };
-      
-      // Fonction de lissage des événements wheel - collecte plusieurs événements sur une courte période
-      const processWheelEvents = () => {
-        if (wheelEvents.length === 0) return;
-        
-        // Déterminer la tendance dominante
-        let sumDeltaY = 0;
-        wheelEvents.forEach(e => {
-          sumDeltaY += e.deltaY;
-        });
-        
-        // Direction majoritaire
-        const dominantDirection = sumDeltaY > 0 ? 'down' : 'up';
-        
-        // Si la direction dominante est différente de la dernière direction enregistrée, changer le sens
-        if (lastScrollDirection === null || dominantDirection !== lastScrollDirection) {
-          const shouldBeInverted = dominantDirection === 'up';
-          if (changeMarqueeDirection(shouldBeInverted)) {
-            lastScrollDirection = dominantDirection;
-          }
-        }
-        
-        // Calculer l'intensité du boost basée sur l'amplitude moyenne des événements
-        const avgDelta = Math.abs(sumDeltaY) / wheelEvents.length;
-        const boostIntensity = Math.min(avgDelta / 60, 1);
-        
-        // Appliquer le boost
-        if (avgDelta >= scrollDetectionThreshold) {
-          applySpeedBoost(boostIntensity);
-        }
-        
-        // Réinitialiser la liste d'événements
-        wheelEvents = [];
-      };
-      
-      // Gestionnaire d'événement wheel - plus précis pour détecter la direction
-      const handleWheel = (e) => {
-        // Collecter l'événement
-        wheelEvents.push(e);
-        
-        // Déclencher le traitement des événements après un court délai
-        clearTimeout(wheelProcessTimeout);
-        wheelProcessTimeout = setTimeout(processWheelEvents, 50);
-      };
-      
-      // Gestionnaire de scroll standard pour la compatibilité
-      const handleScroll = () => {
-        const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-        const scrollDelta = Math.abs(currentScrollPosition - lastScrollPosition);
-        
-        if (scrollDelta < scrollDetectionThreshold) return;
-        
-        // Détecter la direction seulement pour les défilements significatifs
-        const currentDirection = currentScrollPosition > lastScrollPosition ? 'down' : 'up';
-        
-        // Éviter les oscillations rapides en vérifiant le temps depuis le dernier changement
-        const now = Date.now();
-        if (lastScrollDirection !== currentDirection && now - lastDirectionChangeTime >= directionChangeCooldown) {
-          const shouldBeInverted = currentDirection === 'up';
-          if (changeMarqueeDirection(shouldBeInverted)) {
-            lastScrollDirection = currentDirection;
-          }
-        }
-        
-        // Mettre à jour la position de scroll pour la prochaine comparaison
-        lastScrollPosition = currentScrollPosition;
-      };
-      
-      // Ajouter les écouteurs d'événements
-      window.addEventListener('wheel', handleWheel, { passive: true });
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      
-      // Fonction de nettoyage
-      return () => {
-        window.removeEventListener('wheel', handleWheel);
-        window.removeEventListener('scroll', handleScroll);
-        clearTimeout(scrollTimeout);
-        clearTimeout(wheelProcessTimeout);
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-        marqueeData.forEach(data => data.animation.kill());
-      };
     };
     
-    // Initialize on load or when DOM is ready
+    // Initialize when DOM is ready
     if (document.readyState === 'complete') {
       initMarquees();
     } else {
@@ -294,9 +138,8 @@ const Collab = () => {
         data-marquee-scroll-direction 
         data-marquee-direction="left" 
         data-marquee-status="normal" 
-        data-marquee-speed="35" 
-        data-marquee-scroll-speed="5"
-        data-marquee-boost-factor="3"
+        data-marquee-speed="15" 
+        data-marquee-scroll-speed="10"
       >
         <div className="marquee-advanced__scroll" data-marquee-scroll>
           {[1, 2, 3, 4].map((group) => (
@@ -326,9 +169,8 @@ const Collab = () => {
         data-marquee-scroll-direction 
         data-marquee-direction="right" 
         data-marquee-status="normal" 
-        data-marquee-speed="35" 
-        data-marquee-scroll-speed="5"
-        data-marquee-boost-factor="3"
+        data-marquee-speed="15" 
+        data-marquee-scroll-speed="10"
       >
         <div className="marquee-advanced__scroll" data-marquee-scroll>
           {[1, 2, 3, 4].map((group) => (
