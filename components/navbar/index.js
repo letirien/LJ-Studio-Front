@@ -18,16 +18,20 @@ export default function Navbar() {
             
             const navbarRect = navbar.getBoundingClientRect();
             const navbarBottom = navbarRect.bottom;
-            
+            let isOverlapping = false;
+
             sections.forEach(section => {
                 const rect = section.getBoundingClientRect();
                 if (rect.top <= navbarBottom && rect.bottom >= navbarBottom) {
-                    setLogoColor('dark');
-                    return;
-                }else{
-                    setLogoColor('white');
+                    isOverlapping = true;
                 }
             });
+
+            if (isOverlapping) {
+                setLogoColor('dark');
+            } else {
+                setLogoColor('white');
+            }
             
             
         };
@@ -54,7 +58,7 @@ export default function Navbar() {
                         }}
                     />
                 </div>
-                <button className={styles.menuBTN}><svg xmlns="http://www.w3.org/2000/svg" width="74" height="35" viewBox="0 0 74 35"><g><g><g><path fill="#fff" d="M.441 5.07V.683H37V5.07z"/><path fill="none" d="M.441 5.07V.683H37V5.07z"/></g><g><path fill="#fff" d="M.441 19.694v-4.387h55.57v4.387z"/><path fill="none" d="M.441 19.694v-4.387h55.57v4.387z"/></g><g><path fill="#fff" d="M37 34.317V29.93h36.559v4.387z"/><path fill="none" d="M37 34.317V29.93h36.559v4.387z"/></g></g></g></svg></button>
+                <button className={styles.menuBTN}><svg xmlns="http://www.w3.org/2000/svg" width="74" height="35" viewBox="0 0 74 35"><g><g><g><path fill={logoColor} d="M.441 5.07V.683H37V5.07z"/><path fill="none" d="M.441 5.07V.683H37V5.07z"/></g><g><path fill={logoColor} d="M.441 19.694v-4.387h55.57v4.387z"/><path fill="none" d="M.441 19.694v-4.387h55.57v4.387z"/></g><g><path fill={logoColor} d="M37 34.317V29.93h36.559v4.387z"/><path fill="none" d="M37 34.317V29.93h36.559v4.387z"/></g></g></g></svg></button>
             </div>
         </>
     );

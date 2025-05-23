@@ -7,8 +7,9 @@
 }
 .catHighlight{
   font-size: 2.5vw;
-  font-family: TenTwentyExtraLight;
+  font-family: Migra;
   color: gray;
+  font-style: italic
 }
 .defaultText{
   font-size: 18px;
@@ -31,8 +32,9 @@
 }
 .sliderContainer {
   position: relative;
-  width: 100%;
-  height: 740px;
+  width: 70%;
+  height: auto;
+  aspect-ratio: 16/9;
   overflow: hidden;
 }
 
@@ -397,5 +399,71 @@
     > img {
       aspect-ratio: 16/9;
     }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .black > div > h2 {
+    font-size: 26vw; /* Plus petit sur mobile mais toujours impactant */
+    line-height: 21vw;
+    /* Optionnel: ajuster l'espacement */
+    letter-spacing: -0.02em;
+  }
+  
+  .catHighlight {
+    font-size: 8vw; /* Plus visible sur mobile */
+  }
+  
+  /* Ajuster le texte descriptif aussi */
+  .defaultText {
+    font-size: 16px; /* Légèrement plus petit sur mobile */
+    /* Changer la largeur fixe en vw pour quelque chose de plus adaptatif */
+    width: 85vw !important; /* Au lieu de 40vw */
+    max-width: 600px; /* Limite maximale */
+  }
+
+  .sliderContainer{
+    width: 100%!important;
+    // height: auto;
+  }
+
+  .projectFooter{
+    width: 80%;
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:16px;
+    // margin-right: auto!important;
+    // margin-left:0;
+    .footerInfo{
+      width:100%!important;
+      &:last-child{
+        grid-column: span 2
+
+      }
+    }
+    // // gap: 24px;
+    // // justify-content: space-between;
+    // .footerInfo:not(:last-child) {
+    // //   font-family: HelveticaBold;
+    //   width: auto;
+    // }
+  
+    //   .subInfo {
+    //     font-family: Roboto;
+    //     text-transform: uppercase;
+    //     font-size: 12px;
+    //     color: rgba(255, 255, 255, 0.497);
+    //   }
+    // }
+    // .slideCount {
+    //   font-size: 19px;
+    //   font-family: TenTwenty;
+    //   color: #fa6218;
+    //   letter-spacing: 4px;
+    //   text-align: end;
+    //   > span {
+    //     font-family: TenTwenty;
+    //   }
+    // }
   }
 }

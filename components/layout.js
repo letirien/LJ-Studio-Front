@@ -8,6 +8,7 @@ import Image from 'next/image'
 import {motion} from 'framer-motion'
 import AnimateText from '../lib/animation/animationText';
 import dynamic from 'next/dynamic'
+import Footer from './footer';
 
 // Importer dynamiquement le Clock sans rendu côté serveur
 const Clock = dynamic(() => import('../components/clock').then(mod => mod.Clock), {
@@ -38,11 +39,10 @@ export default function Layout({ children, home }) {
             <motion.div>
                 <motion.div className={utilStyles.in} initial={{scaleY: 0.5}} animate={{scaleY: 0}} exit={{scaleY: 0}} transition={{duration: 1.8, ease:[0.22, 1, 0.36, 1]}}/>
                 <motion.div className={utilStyles.out} initial={{scaleY:  0.5}} animate={{scaleY: 0}} exit={{scaleY: 0}} transition={{duration: 1.8, ease:[0.22, 1, 0.36, 1]}}/>
-                <main style={{flex: 1}}>
+                <main className="rounded-md" style={{flex: 1}}>
                     {children}
                 </main>
-                <footer>
-                </footer>
+                <Footer/>
             </motion.div>
         </div>
     )

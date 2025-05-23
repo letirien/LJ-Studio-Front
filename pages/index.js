@@ -19,6 +19,7 @@ import Projects from "../components/home/ProjectSlider";
 import {Header} from "../components/home/Header";
 import BrandingSection from "../components/home/GamePlan.js";
 import Collab from "../components/home/Collab.js";
+import StudioBanner from "../components/home/StudioBanner.js";
 
 
 
@@ -28,8 +29,9 @@ export default function Home({ projects, gamePlan }) {
   const leftx = useTransform(scrollYProgress, [1, 0], [-100, 0]);
   const rightx = useTransform(scrollYProgress, [0, 1], [-100, 0]);
   const newx = useTransform(scrollYProgress, [1, 0], [50, 0]);
+  const [buttonTopPosition, setButtonTopPosition] = useState('');
+  const sectionImageRef = useRef(null);
   const sliderNavRef = useRef(null);
-
   // Référence pour la section entière
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
@@ -46,7 +48,44 @@ export default function Home({ projects, gamePlan }) {
       }
     })
   };
-  console.log(gamePlan)
+
+  const calculateButtonPosition = () => {
+    const imageRef = document.getElementById('sliderContainer')
+
+    if (imageRef && sectionImageRef.current) {
+      const sectionRect = sectionImageRef.current.getBoundingClientRect();
+      const imageRect = imageRef.getBoundingClientRect();
+      
+      // Position du haut de l'image par rapport à la section
+      const imageTop = imageRect.top - sectionRect.top;
+      
+      // Placer les boutons à la moitié de la distance entre le haut de la section et l'image
+      const middlePosition = imageTop / 2;
+      
+      // Convertir en pourcentage de la hauteur de la section
+      const sectionHeight = sectionRect.height;
+      const topPercentage = (middlePosition / sectionHeight) * 100;
+      
+      setButtonTopPosition(`${topPercentage.toFixed(1)}%`);
+    }
+  };
+
+  useEffect(() => {
+    // Calculer après le premier rendu
+    const timer = setTimeout(calculateButtonPosition, 100);
+    
+    // Recalculer lors du redimensionnement
+    const handleResize = () => {
+      calculateButtonPosition();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   return (
     <Layout home>
       <div>
@@ -58,7 +97,7 @@ export default function Home({ projects, gamePlan }) {
         <section className={`${home.black} bg-red`} data-scroll ref={sectionRef}>
           <div>
             <h2>
-              <div className="flex gap-12 justify-center">
+              <div className="flex gap-6 md:gap-12 justify-center">
                 <motion.p 
                   initial="hidden"
                   animate={isInView ? "visible" : "hidden"}
@@ -121,7 +160,7 @@ export default function Home({ projects, gamePlan }) {
               <div className="grid grid-cols-16 gap-4 max-h-[500px]">
                 {/* Première colonne */}
                 <motion.div 
-                  className="col-span-4 relative flex flex-col gap-4 h-[800px] rounded-xl"
+                  className="md:col-span-4 col-span-8 relative flex flex-col gap-4 h-[800px] rounded-xl"
                   style={{ y: useTransform(scrollYProgress, [0, 1], [0, 100]) }}
                 >
                   <div className="flex-1 rounded-xl relative">
@@ -135,7 +174,7 @@ export default function Home({ projects, gamePlan }) {
 
                 {/* Deuxième colonne */}
                 <motion.div 
-                  className="col-span-4 relative flex flex-col gap-4 h-[800px] rounded-xl"
+                  className="col-span-4 relative flex flex-col gap-4 h-[800px] rounded-xl hidden md:flex"
                   style={{ y: useTransform(scrollYProgress, [0, 1], [100, -100]) }}
                 >
                   <div className="flex-1 rounded-xl relative">
@@ -149,7 +188,7 @@ export default function Home({ projects, gamePlan }) {
 
                 {/* Troisième colonne */}
                 <motion.div 
-                  className="col-span-4 relative flex flex-col gap-4 h-[800px] rounded-xl"
+                  className="col-span-4 relative flex flex-col gap-4 h-[800px] rounded-xl hidden md:flex"
                   style={{ y: useTransform(scrollYProgress, [0, 1], [0, 100]) }}
                 >
                   <div className="flex-1 rounded-xl relative">
@@ -163,7 +202,7 @@ export default function Home({ projects, gamePlan }) {
 
                 {/* Quatrième colonne */}
                 <motion.div 
-                  className="col-span-4 relative flex flex-col gap-4 h-[800px] rounded-xl"
+                  className="md:col-span-4 col-span-8 relative flex flex-col gap-4 h-[800px] rounded-xl"
                   style={{ y: useTransform(scrollYProgress, [0, 1], [100, -100]) }}
                 >
                   <div className="flex-1 rounded-xl relative">
@@ -223,13 +262,24 @@ export default function Home({ projects, gamePlan }) {
             </div>
           </div>
         </section> */}
-        <section className="bg-half-col py-42 relative">
+        <section className="bg-half-col py-42 relative" ref={sectionImageRef}>
           <div className="mx-auto px-[4%]">
-            <h2 className="HardbopH2 relative"><p>highlights of</p><p>our recent games</p></h2>
+            <h2 className="HardbopH2 relative">
+              <p className="flex justify-center gap-6 md:gap-12">
+                <span className={`${home.catHighlight} !text-black`}>
+                  Pitch
+                </span>
+                highlights of
+                <span className={`${home.catHighlight} !text-black`}>
+                  Vison
+                </span>
+                </p>
+              <p>our recent games</p>
+            </h2>
             <Projects projects={projects} navRef={sliderNavRef} />
       
           {/* Boutons de navigation positionnés relativement au parent bg-half-col */}
-          <div className="absolute top-1/2 -translate-y-1/2 right-8 z-50 flex flex-col gap-3">
+          <div className="absolute hidden lg:flex lg:-translate-y-1/2 lg:right-8 z-50 flex flex-col gap-3" ref={sliderNavRef} style={{ top: buttonTopPosition }}>
             <button 
               className={`w-14 h-14 flex items-center justify-center border-2 border-black text-white rounded-xl hover:bg-white/20 transition-colors`}
               onClick={() => sliderNavRef.current?.handleNext()}
@@ -311,7 +361,7 @@ export default function Home({ projects, gamePlan }) {
           </div>
           <Collab/>
         </section>
-        <section className="relative bg-white py-42">
+        <section className="relative bg-white py-42 intersectLogo white">
           <h2 className="text-center HardbopH2 mx-xl text-black">
             <p className="flex items-center gap-3 justify-center">BEYOND <span className="tenTwenty tracking-tight text-[06vw]">THE</span> SURFACE...</p>
             <p>STEP INSIDE OUR</p>
@@ -319,6 +369,7 @@ export default function Home({ projects, gamePlan }) {
             <p className="flex items-center gap-3 justify-center">EXPLORE<span className="tenTwenty tracking-tight text-[06vw]">ARCHIVE</span></p>
           </h2>
         </section>
+        <StudioBanner/>
       </div>
     </Layout>
   );

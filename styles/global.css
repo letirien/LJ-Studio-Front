@@ -15,7 +15,7 @@
 }
 @font-face {
   font-family: Migra;
-  src: url("/typos/MigraItalic-Extralightitalic.otf");
+  src: url("/typos/MigraItalic-ExtralightItalic.otf");
 }
 @font-face {
   font-family: MigraNormal;
@@ -386,5 +386,14 @@ body:has( [data-cursor]:hover) .cursor{
     line-height: inherit;
     margin-top: 4px;
     margin-right: 4px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .HardbopH2{
+    font-size: 22vw; /* Plus petit sur mobile mais toujours impactant */
+    line-height: 19vw;
+    /* Optionnel: ajuster l'espacement */
+    letter-spacing: -0.02em;
   }
 }

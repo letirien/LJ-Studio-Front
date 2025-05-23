@@ -75,7 +75,7 @@ export default function BrandingSection({ gamePlan }) {
         </div>
         
         {/* Le contenu principal centré */}
-        <div className="flex justify-around gap-4">
+        <div className="flex flex-col-reverse items-center md:flex-row md:items-[inherit] justify-around gap-4">
           {/* Image centrée */}
           <div className="w-full max-w-lg mb-12">
             <div className="relative h-full w-full">

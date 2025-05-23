@@ -292,7 +292,7 @@ export default function ProjectSlider({ projects, navRef }) {
             ref={sectionRef} 
             className={`relative transition-all duration-500 ease-in-out ${isVisible ? "-mt-[6%]" : "mt-0"}`}
         > 
-         <div className={`${home.sliderContainer} !w-[70%] mx-auto rounded-md`}>
+         <div id="sliderContainer" className={`${home.sliderContainer} mx-auto rounded-md`}>
               <div className={`rounded-md ${home.sliderWrapper}`} ref={containerRef}>
                   {/* Élément décoratif pour les transitions */}
                   <div className={`rounded-md ${home.deco}`} ref={decoRef}></div>
@@ -343,12 +343,12 @@ export default function ProjectSlider({ projects, navRef }) {
             </div>
 
             <Section>
-                <motion.div className={`items-center ${home.projectFooter}`} variants={fadeInUp}>
+                <motion.div className={`items-top lg:items-center ${home.projectFooter}`} variants={fadeInUp}>
                     {['Team', 'Match Day', 'Game Plan', 'Perf'].map((field) => (
                         <div className={home.footerInfo} key={field}>
-                            <div className="container-txt flex items-center gap-2">
-                                <p className='harbop !text-[48px] uppercase'>{field}</p>
-                                <motion.p variants={fadeInUp} className={`${home.subInfo} flex-1`}>
+                            <div className="container-txt flex flex-col lg:flex-row items-center flex-wrap gap-2">
+                                <p className='harbop !text-[48px] uppercase leading-9'>{field}</p>
+                                <motion.p variants={fadeInUp} className={`${home.subInfo} flex-1 text-center lg:text-left`}>
                                     {projects[idProjectDelay - 1].fields[field]}
                                 </motion.p>
                             </div>
