@@ -48,7 +48,7 @@ export default function BrandingSection({ gamePlan }) {
       {/* Container with relative positioning for absolute elements */}
       <div className="max-w-screen-2xl mx-auto h-full relative">
         {/* Navigation verticale à gauche - absolument positionnée */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2">
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 hidden md:block">
           <div className="flex flex-col space-y-16 items-center uppercase">
             {uniqueCategories.map((category) => (
               <div 
@@ -75,7 +75,7 @@ export default function BrandingSection({ gamePlan }) {
         </div>
         
         {/* Le contenu principal centré */}
-        <div className="flex flex-col-reverse items-center md:flex-row md:items-[inherit] justify-around gap-4">
+        <div className="flex flex-col-reverse items-center md:flex-row md:items-[inherit] justify-around gap-4 px-4">
           {/* Image centrée */}
           <div className="w-full max-w-lg mb-12">
             <div className="relative h-full w-full">
@@ -95,16 +95,16 @@ export default function BrandingSection({ gamePlan }) {
           
           {/* Texte centré */}
           <div className="w-full max-w-lg">
-            <h2 className="hardbop-bold text-[#000] text-[180px] text-base/36 uppercase font-bold tracking-tight">
+            <h2 className="hardbop-bold text-[#000] text-[24vw] md:text-[180px] text-base/36 uppercase font-bold tracking-tight leading-[0.8]">
               {activePlanData.fields.Title}
             </h2>
             
-            <div className="mt-8">
-              <h3 className="hardbop-bold text-[#000] text-[72px] text-base/23 uppercase text-gray-500 font-medium mb-6">
+            <div className="mt-1 md:mt-8">
+              <h3 className="hardbop-bold text-[#000] text-[56px] md:text-[72px] text-base/23 uppercase text-gray-500 font-medium mb-2 md:mb-6">
                 {activePlanData.fields.Plan}
               </h3>
               
-              <div className="w-full my-6 h-px bg-gray-300"></div>
+              <div className="w-full my-4 md:my-6 h-px bg-gray-300"></div>
               
               <p className="text-gray-300 roboto text-medium">
                 {activePlanData.fields.Description}

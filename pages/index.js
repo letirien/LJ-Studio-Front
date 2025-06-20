@@ -279,7 +279,7 @@ export default function Home({ projects, gamePlan }) {
             <Projects projects={projects} navRef={sliderNavRef} />
       
           {/* Boutons de navigation positionnés relativement au parent bg-half-col */}
-          <div className="absolute hidden lg:flex lg:-translate-y-1/2 lg:right-8 z-50 flex flex-col gap-3" ref={sliderNavRef} style={{ top: buttonTopPosition }}>
+          <div className={`absolute hidden lg:flex lg:-translate-y-1/2 lg:right-8 z-50 flex flex-col gap-3 top-${buttonTopPosition} md:top-1/2`} ref={sliderNavRef}>
             <button 
               className={`w-14 h-14 flex items-center justify-center border-2 border-black text-white rounded-xl hover:bg-white/20 transition-colors`}
               onClick={() => sliderNavRef.current?.handleNext()}
@@ -301,7 +301,7 @@ export default function Home({ projects, gamePlan }) {
           </div>
         </section>
         <section className="overflow-hidden bg-black">
-          <div className="marquee-container relative w-full -mb-12">
+          <div className="marquee-container relative w-full -mb-4 md:-mb-12">
             <div className="marquee-content flex whitespace-nowrap">
               {/* Un seul groupe répété */}
               <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
