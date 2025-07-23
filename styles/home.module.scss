@@ -12,9 +12,11 @@
   font-style: italic
 }
 .defaultText{
-  font-size: 18px;
-  font-family: RobotoLight;
-  letter-spacing: 1px;
+  font-size: 20px;
+  font-family: RobotoMonoLight;
+  // letter-spacing: 1px;
+  line-height: 28px;
+  opacity: 55%
 }
 .black{
   // background: #000;
@@ -420,6 +422,7 @@
     /* Changer la largeur fixe en vw pour quelque chose de plus adaptatif */
     width: 85vw !important; /* Au lieu de 40vw */
     max-width: 600px; /* Limite maximale */
+    font-family: RobotoMonoLight;
   }
 
   .sliderContainer{

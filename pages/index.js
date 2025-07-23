@@ -20,10 +20,13 @@ import {Header} from "../components/home/Header";
 import BrandingSection from "../components/home/GamePlan.js";
 import Collab from "../components/home/Collab.js";
 import StudioBanner from "../components/home/StudioBanner.js";
+import AnimatedField from "../components/home/AnimatedField.js";
 
 
 
 export default function Home({ projects, gamePlan }) {
+  // console.log(projects)
+  console.log(gamePlan)
   const { scrollYProgress } = useScroll();
   const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const leftx = useTransform(scrollYProgress, [1, 0], [-100, 0]);
@@ -45,6 +48,17 @@ export default function Home({ projects, gamePlan }) {
       transition: { 
         duration: 0.6,
         delay: i * 0.1
+      }
+    })
+  };
+    const textAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+      opacity: 0.55,
+      y: 0,
+      transition: { 
+        duration: 0.6,
+        delay: i * 0.15
       }
     })
   };
@@ -145,7 +159,7 @@ export default function Home({ projects, gamePlan }) {
             <motion.p 
               initial="hidden"
               animate={isInView ? "visible" : "hidden"}
-              variants={titleAnimation}
+              variants={textAnimation}
               custom={5}
               className={`${home.defaultText} text-center w-[40vw] ml-auto mr-auto mt-12`}
             >
@@ -300,36 +314,37 @@ export default function Home({ projects, gamePlan }) {
           </div>
           </div>
         </section>
-        <section className="overflow-hidden bg-black">
-          <div className="marquee-container relative w-full -mb-4 md:-mb-12">
-            <div className="marquee-content flex whitespace-nowrap">
-              {/* Un seul groupe répété */}
-              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+        {/*
+          <section className="overflow-hidden bg-black">
+            <div className="marquee-container relative w-full -mb-4 md:-mb-12">
+              <div className="marquee-content flex whitespace-nowrap">
+                <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+              </div>
+              <div className="marquee-content flex whitespace-nowrap">
+                <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
+                <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
+              </div>
             </div>
-            <div className="marquee-content flex whitespace-nowrap">
-              {/* Copie exacte dans un élément séparé */}
-              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">OUR GAME PLAN</span>
-              <span className="mx-4 harbop text-[18vw] scroll-text">SKILLS</span>
-            </div>
-          </div>
-        </section>
+          </section>
+        */}
+        <AnimatedField/>
         <BrandingSection gamePlan={gamePlan} />
         <section className="w-full bg-black">
-          <div className="w-full h-[90vh] relative top-24">
-            <div className="absolute bottom-0 left-0 right-0 h-[20vh] bg-gradient-to-t from-black to-transparent z-10"></div>
+          <div className="w-full h-[90vh] relative">
+            <div className="absolute bottom-0 left-0 right-0 h-[10vh] bg-gradient-to-t from-black to-transparent z-10"></div>
             <Image src="/images/lj-fcnante.png" fill={true}
               quality={100}
               style={{
@@ -338,7 +353,7 @@ export default function Home({ projects, gamePlan }) {
               }}>
             </Image>
           </div>
-          <div className="flex justify-between w-full items-center px-[3vw] mt-12 relative z-20 h-[170px]">
+          <div className="flex justify-between w-full items-center px-[3vw] relative z-20 h-[170px]">
             <div className="w-1/3">
               <h2 className={`collaborationTitle uppercase text-center`}>
                 <p className="flex items-center gap-2"><span className="text-[32px]">ON</span>Every Pitch...</p>
@@ -384,7 +399,7 @@ export async function getServerSideProps() {
     }    
     );
     const GamePlanData = await fetcher(
-      `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/GamePlan`,{
+      `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/METIERS`,{
         headers: {
           Authorization: `Bearer ${API_KEY}`
         }
@@ -393,7 +408,7 @@ export async function getServerSideProps() {
   return {
     props: {
       projects: ProjectsData.records,
-      gamePlan: GamePlanData.records,
+      gamePlan: GamePlanData.records.sort((a, b) => a.fields.id - b.fields.id),
     },
   };
 }

@@ -1,118 +1,89 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 export default function BrandingSection({ gamePlan }) {
-  // État pour suivre la catégorie active
-  const [activeCategory, setActiveCategory] = useState("");
-  const [activePlanData, setActivePlanData] = useState(null);
-  const [sortedGamePlan, setSortedGamePlan] = useState([]);
 
   useEffect(() => {
-    if (gamePlan && gamePlan.length > 0) {
-      // Sort the game plan by ID field
-      const sorted = [...gamePlan].sort((a, b) => {
-        // Convert to numbers to ensure proper numeric sorting
-        const idA = parseInt(a.fields.id, 10);
-        const idB = parseInt(b.fields.id, 10);
-        return idB - idA;
-      });
-      
-      setSortedGamePlan(sorted);
-      // Par défaut, utiliser la première catégorie du plan trié
-      setActiveCategory(sorted[gamePlan.length - 2].fields.Plan);
-      setActivePlanData(sorted[gamePlan.length - 2]);
+    console.log(gamePlan)
+  },[]);
+
+  const [containerRef, inView] = useInView({
+    threshold: 0.1,
+    triggerOnce: false
+  });
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const getBackgroundColor = (index) => {
+    const colors = ['bg-white', 'bg-black', 'bg-[#fa6218]'];
+    return colors[index % colors.length];
+  };
+
+  const getTextColor = (index) => {
+    // Si c'est le block orange (multiple de 3)
+    if (index % 3 === 2) {
+      return 'text-white'; // texte blanc par défaut sur orange
     }
-  }, [gamePlan]);
-  
-  // Extraire toutes les catégories uniques à partir des données triées
-  const uniqueCategories = sortedGamePlan.length > 0 
-    ? [...new Set(sortedGamePlan.map(item => item.fields.Plan))]
-    : [];
-  
-  // Fonction pour changer de catégorie
-  const handleCategoryChange = (category) => {
-    setActiveCategory(category);
-    const matchingItem = sortedGamePlan.find(item => item.fields.Plan === category);
-    if (matchingItem) {
-      setActivePlanData(matchingItem);
+    // Si c'est le block noir
+    if (index % 3 === 1) {
+      return 'text-white'; // texte blanc sur noir
     }
+    // Si c'est le block blanc
+    return 'text-black'; // texte noir sur blanc
+  };
+
+  const getTitleColor = (index) => {
+    return index % 3 === 1 ? 'text-white' : 'text-black';
+  };
+
+  const hasRadius = (index) => {
+    return index % 2 === 0 ? 'rounded-t-3xl' : '';
   };
   
-  // Si les données ne sont pas encore chargées
-  if (sortedGamePlan.length === 0 || !activeCategory) {
-    return <div>Loading...</div>;
-  }
-  
   return (
-    <section className="bg-white py-42 intersectLogo white">
-      {/* Container with relative positioning for absolute elements */}
-      <div className="max-w-screen-2xl mx-auto h-full relative">
-        {/* Navigation verticale à gauche - absolument positionnée */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 hidden md:block">
-          <div className="flex flex-col space-y-16 items-center uppercase">
-            {uniqueCategories.map((category) => (
-              <div 
-                key={category}
-                className="cursor-pointer whitespace-nowrap"
-                onClick={() => handleCategoryChange(category)}
-              >
-                <span 
-                  className={`text-xs ${
-                    activeCategory === category ? 'font-medium harbop text-light text-[42px] text-gray-400' : 'roboto text-gray-300'
-                  }`}
-                  style={{ 
-                    writingMode: 'vertical-lr', 
-                    textOrientation: 'mixed',
-                    transform: 'rotate(180deg)'
-                  }}
-                >
-                  {category}
-                </span>
-                
-              </div>
-            ))}
-          </div>
-        </div>
+    <section ref={containerRef} className="bg-white intersectLogo">
+      {gamePlan && gamePlan.map((item, index) => (
         
-        {/* Le contenu principal centré */}
-        <div className="flex flex-col-reverse items-center md:flex-row md:items-[inherit] justify-around gap-4 px-4">
-          {/* Image centrée */}
-          <div className="w-full max-w-lg mb-12">
-            <div className="relative h-full w-full">
-              {activePlanData && activePlanData.fields.Image && activePlanData.fields.Image[0] && (
-                <div className="relative image-plan">
-                  <Image
-                    src={activePlanData.fields.Image[0].url}
-                    alt={activePlanData.fields.Title}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    className="rounded-sm"
-                  />
-                </div>
-              )}
-            </div>
+        <motion.div
+          key={index}
+          className={`flex items-stretch min-h-[400px] py-24 gap-12 px-[3vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
+          style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: index,
+            transform: 'translateZ(0)', // Performance optimization
+          }}
+          initial={{ y: index * 100 }}
+          animate={{
+            y: useTransform(
+              scrollYProgress,
+              [0, 1],
+              [index * 100, 0]
+            )
+          }}
+        >
+          <div className='w-1/2 flex flex-col justify-around'>
+            <h2 className={`HardbopH2 !text-left mx-xl ${getTitleColor(index)}`}>{item.fields['TITRE METIER']}</h2>
+            <p className={`${getTextColor(index)} defaultText ${index % 3 === 2 ? "!opacity-100": ""}`}>{item.fields['DESCRIPTION METIER']}</p>
+            <p className={`${getTextColor(index)}`}>{item.fields['SOUS METIERS']}</p>
           </div>
-          
-          {/* Texte centré */}
-          <div className="w-full max-w-lg">
-            <h2 className="hardbop-bold text-[#000] text-[24vw] md:text-[180px] text-base/36 uppercase font-bold tracking-tight leading-[0.8]">
-              {activePlanData.fields.Title}
-            </h2>
-            
-            <div className="mt-1 md:mt-8">
-              <h3 className="hardbop-bold text-[#000] text-[56px] md:text-[72px] text-base/23 uppercase text-gray-500 font-medium mb-2 md:mb-6">
-                {activePlanData.fields.Plan}
-              </h3>
-              
-              <div className="w-full my-4 md:my-6 h-px bg-gray-300"></div>
-              
-              <p className="text-gray-300 roboto text-medium">
-                {activePlanData.fields.Description}
-              </p>
-            </div>
+          <div className='w-1/2'>
+            <Image 
+              src={item.fields.Image[0].url} 
+              alt={item.fields.Image[0].filename || 'Game plan image'}
+              width={item.fields.Image[0].width}
+              height={item.fields.Image[0].height}
+              objectFit='cover'
+            />
           </div>
-        </div>
-      </div>
+
+        </motion.div>
+      ))}
     </section>
   );
 }

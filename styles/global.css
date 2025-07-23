@@ -72,6 +72,15 @@
   src: url("/typos/ROBOTO/Roboto-Regular.ttf");
 }
 @font-face {
+  font-family: RobotoMonoLight;
+  src: url("/typos/ROBOTO MONO/RobotoMono-Light.ttf");
+}
+@font-face {
+  font-family: RobotoMono;
+  src: url("/typos/ROBOTO MONO/RobotoMono-Regular.ttf");
+}
+
+@font-face {
   font-family: RobotoLight;
   src: url("/typos/ROBOTO/Roboto-Thin.ttf");
 }
@@ -285,6 +294,12 @@ button {
   inset: 0% auto auto 0%;
   pointer-events: none;
 }
+.defaultText{
+  font-size: 20px;
+  font-family: RobotoMono;
+  line-height: 28px;
+  opacity: 55%
+}
 
 body:has( a:hover) .cursor,
 body:has( button:hover) .cursor,
@@ -396,4 +411,14 @@ body:has( [data-cursor]:hover) .cursor{
     /* Optionnel: ajuster l'espacement */
     letter-spacing: -0.02em;
   }
+}
+.st0 {
+  fill: none;
+  stroke: #fff;
+  stroke-miterlimit: 40;
+  stroke-width: 3px;
+}
+
+.st1 {
+  fill: #fff;
 }
