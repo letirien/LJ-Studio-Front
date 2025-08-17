@@ -6,16 +6,18 @@
     height: 100vh; */
 }
 .catHighlight{
-  font-size: 2.5vw;
-  font-family: Migra;
+  font-size: 51pt;
+  // line-height: 39pt;
+  font-family: TenTwentyExtraLightItalic;
   color: gray;
-  font-style: italic
+  text-transform: capitalize;
+  // font-style: italic
 }
 .defaultText{
-  font-size: 20px;
+  font-size: 20pt;
   font-family: RobotoMonoLight;
   // letter-spacing: 1px;
-  line-height: 28px;
+  line-height: 28pt;
   opacity: 55%
 }
 .black{
@@ -24,9 +26,7 @@
 
   & > div > h2{
     text-align: center;
-    font-family: Hardbop;
-    font-size: 15vw;
-    line-height: 12vw;
+    font-family: HardbopUltraBold;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -254,8 +254,8 @@
 .projectFooter {
   bottom: -70px;
   width: 70%;
-  margin: 0 auto;
-  padding-top: 32px;
+  margin: 32px auto 0 auto;
+  // padding-top: 32px;
   display: flex;
   // gap: 24px;
   justify-content: space-between;
@@ -264,15 +264,15 @@
     width: 20%;
 
     .subInfo {
-      font-family: Roboto;
+      font-family: RobotoMono;
       text-transform: uppercase;
-      font-size: 12px;
+      font-size: 11pt;
       color: rgba(255, 255, 255, 0.497);
     }
   }
   .slideCount {
-    font-size: 19px;
-    font-family: TenTwenty;
+    font-size: 19pt;
+    font-family: RobotoMono;
     color: #fa6218;
     letter-spacing: 4px;
     text-align: end;
@@ -403,18 +403,26 @@
     }
   }
 }
-
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1400px) {
   .black > div > h2 {
     font-size: 26vw; /* Plus petit sur mobile mais toujours impactant */
     line-height: 21vw;
     /* Optionnel: ajuster l'espacement */
     letter-spacing: -0.02em;
   }
+}
+
+@media screen and (max-width: 768px) {
+  // .black > div > h2 {
+  //   font-size: 26vw; /* Plus petit sur mobile mais toujours impactant */
+  //   line-height: 21vw;
+  //   /* Optionnel: ajuster l'espacement */
+  //   letter-spacing: -0.02em;
+  // }
   
-  .catHighlight {
-    font-size: 8vw; /* Plus visible sur mobile */
-  }
+  // .catHighlight {
+  //   font-size: 8vw; /* Plus visible sur mobile */
+  // }
   
   /* Ajuster le texte descriptif aussi */
   .defaultText {

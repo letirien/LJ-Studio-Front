@@ -347,7 +347,7 @@ export default function ProjectSlider({ projects, navRef }) {
                     {['Team', 'Match Day', 'Game Plan', 'Perf'].map((field) => (
                         <div className={home.footerInfo} key={field}>
                             <div className="container-txt flex flex-col lg:flex-row items-center flex-wrap gap-2">
-                                <p className='harbop !text-[48px] uppercase leading-9'>{field}</p>
+                                <p className='harbop !text-[45pt]/[38pt] sm:!text-[45pt] text-center uppercase'>{field}</p>
                                 <motion.p variants={fadeInUp} className={`${home.subInfo} flex-1 text-center lg:text-left`}>
                                     {projects[idProjectDelay - 1].fields[field]}
                                 </motion.p>

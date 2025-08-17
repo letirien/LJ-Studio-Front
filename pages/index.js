@@ -108,7 +108,7 @@ export default function Home({ projects, gamePlan }) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Header/>
-        <section className={`${home.black} bg-red`} data-scroll ref={sectionRef}>
+        <section className={`${home.black} bg-red sm:text-[269pt]/[208pt]`} data-scroll ref={sectionRef}>
           <div>
             <h2>
               <div className="flex gap-6 md:gap-12 justify-center">
@@ -161,7 +161,7 @@ export default function Home({ projects, gamePlan }) {
               animate={isInView ? "visible" : "hidden"}
               variants={textAnimation}
               custom={5}
-              className={`${home.defaultText} text-center w-[40vw] ml-auto mr-auto mt-12`}
+              className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-12`}
             >
               LJ is a French creative studio based in Paris with an exclusive focus on the sports sector. Driven by a profound passion of sports and the emotion they provide, our studio prides itself on capturing and translating that into captivating visual narratives.
               <br></br>
@@ -278,7 +278,7 @@ export default function Home({ projects, gamePlan }) {
         </section> */}
         <section className="bg-half-col py-42 relative" ref={sectionImageRef}>
           <div className="mx-auto px-[4%]">
-            <h2 className="HardbopH2 relative">
+            <h2 className="TenTwentyH2 relative">
               <p className="flex justify-center gap-6 md:gap-12">
                 <span className={`${home.catHighlight} !text-black`}>
                   Pitch
@@ -353,31 +353,31 @@ export default function Home({ projects, gamePlan }) {
               }}>
             </Image>
           </div>
-          <div className="flex justify-between w-full items-center px-[3vw] relative z-20 h-[170px]">
-            <div className="w-1/3">
-              <h2 className={`collaborationTitle uppercase text-center`}>
-                <p className="flex items-center gap-2"><span className="text-[32px]">ON</span>Every Pitch...</p>
-                <p>OUR CLIENT</p>
-                <div className='text-center'>
-                  <span className=''>
-                    <p>COLLABORATIONS</p>
-                  </span>                                
-                </div>
-              </h2>
+          <div className="flex justify-around w-full items-center px-[3vw] relative z-20 pb-12">
+          
+            <h2 className={`collaborationTitle uppercase text-center`}>
+              <p className="flex items-center gap-2"><span className="text-[32px] prefix">ON</span>Every Pitch...</p>
+              <p>OUR CLIENT</p>
+              <div className='text-center'>
+                <p className="flex"><span>COLLABORATIONS</span><span className="suffix">(*)</span></p>                             
+              </div>
+            </h2>
+            <div className="flex justify-around flex-1">
+              <div className="">
+                <p className="uppercase harbop text-[60pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
+                <p className="defaultText mt-2 tracking-wider opacity-75 text-medium">Creativity</p>
+              </div>
+              <div className="">
+                <p className="uppercase harbop text-[60pt] leading-[0.8]">WINNING STRATEGY</p>
+                <p className="defaultText mt-2 tracking-wider opacity-75 text-medium">Mixing pixels and passion</p>
+              </div>
             </div>
-            <div className="w-1/4">
-              <p className="uppercase harbop text-[48px] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
-              <p className="robotoRegular mt-2 tracking-wider opacity-75 text-medium">Creativity</p>
-            </div>
-            <div className="w-1/4">
-              <p className="uppercase harbop text-[48px] leading-[0.8]">WINNING STRATEGY</p>
-              <p className="robotoRegular mt-2 tracking-wider opacity-75 text-medium">Mixing pixels and passion</p>
-            </div>
+ 
           </div>
           <Collab/>
         </section>
         <section className="relative bg-white py-42 intersectLogo white">
-          <h2 className="text-center HardbopH2 mx-xl text-black">
+          <h2 className="text-center TenTwentyH2 mx-xl text-black">
             <p className="flex items-center gap-3 justify-center">BEYOND <span className="tenTwenty tracking-tight text-[06vw]">THE</span> SURFACE...</p>
             <p>STEP INSIDE OUR</p>
             <p className="flex items-center gap-3 justify-center"><span className="tenTwenty tracking-tight text-[06vw]">VISUAL</span>GALLERY AND</p>

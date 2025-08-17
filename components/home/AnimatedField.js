@@ -173,7 +173,7 @@ export default function AnimatedField() {
     return (
         <section ref={sectionRef} className="overflow-hidden relative">
             <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center'>
-                <h2 className='text-center HardbopH2'>
+                <h2 className='text-center TenTwentyH2'>
                     <p>whenever</p>
                     <p>you play, we're</p> 
                     <p>by your side</p>

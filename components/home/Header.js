@@ -13,7 +13,7 @@ export function Header() {
             (
                 <>
                     <Navbar/>
-                    <h1 className={`${styles.mainTitle} text-[30vw] sm:text-[146px] top-[45%] md:top-[inherit] mainContainer`}>
+                    <h1 className={`${styles.mainTitle} text-[30vw] sm:text-[158px] top-[45%] md:top-[inherit] mainContainer`}>
                         <p>LJ STUDIO</p>
                         <p>WELCOME ON</p>
                         <div className='flex h-full'>

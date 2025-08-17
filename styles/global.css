@@ -22,8 +22,20 @@
   src: url("/typos/Migra-ExtraLight.otf");
 }
 @font-face {
+  font-family: TenTwenty;
+  src: url("/typos/TEN TWENTY/tentwenty-regular-1.otf");
+}
+@font-face {
+  font-family: TenTwentyExtraLightItalic;
+  src: url("/typos/TEN TWENTY/tentwenty-extralightitalic-1.otf");
+}
+@font-face {
   font-family: robotoThin;
   src: url("/typos/ROBOTO/roboto-Thin.ttf");
+}
+@font-face {
+  font-family: robotoCondensed;
+  src: url("/typos/ROBOTO/roboto-Condensed.ttf");
 }
 .robotoThin {
   font-family: robotoThin;
@@ -41,6 +53,11 @@
   ascent-override: 90%;
 }
 @font-face {
+  font-family: HardbopBlack;
+  src: url("/typos/HARDBOP/hardbop-black.otf");
+  ascent-override: 90%;
+}
+@font-face {
   font-family: HardbopNormal;
   src: url("/typos/HARDBOP/hardbop-normal.otf");
   ascent-override: 90%;
@@ -54,6 +71,11 @@
   ascent-override: 90%;
 }
 @font-face {
+  font-family: HardbopUltraBold;
+  src: url("/typos/HARDBOP/hardbop-ultrabold.otf");
+  ascent-override: 90%;
+}
+@font-face {
   font-family: TenTwentyExtraLight;
   src: url("/typos/TEN TWENTY/tentwenty-extralight-1.otf");
   ascent-override: 90%;
@@ -62,6 +84,10 @@
 @font-face {
   font-family: TenTwenty;
   src: url("/typos/TEN TWENTY/tentwenty-regular-1.otf");
+}
+@font-face {
+  font-family: TenTwentyThin;
+  src: url("/typos/TEN TWENTY/tentwenty-thin-1.otf");
 }
 .tenTwenty{
   font-family: TenTwenty;
@@ -112,24 +138,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
-.HardbopH2{
+.TenTwentyH2{
     text-align: center;
-    font-family: Hardbop;
-    font-size: 13vw;
-    line-height: 10vw;
+    font-family: HardbopUltraBold;
+    font-size: 285pt;
+    line-height: 217pt;
+    /* font-size: 13vw;
+    line-height: 10vw; */
     text-transform: uppercase;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     /* z-index: 5; */
 }
-p > span:not(.tenTwenty) {
+/* p > span:not(.tenTwenty) {
   font-family: Migra;
   text-transform: capitalize;
-}
-p>span.tenTwenty{
+} */
+/* p>span.tenTwenty{
   font-family: TenTwentyExtraLight;
-}
+} */
+
 body::-webkit-scrollbar {
   display: none;
 }
@@ -365,8 +394,8 @@ body:has( [data-cursor]:hover) .cursor{
 }
 
 .collaborationTitle {
-  font-family: HardbopBold;
-  font-size: 72px;
+  font-family: HardbopBlack;
+  font-size: 107pt;
   line-height: 0.8;
   /* // padding: 0.1 0; */
   bottom: 4%;
@@ -374,8 +403,14 @@ body:has( [data-cursor]:hover) .cursor{
   padding-left: 3vw;
   /* // -ms-transform: translateY(-50%);
   // transform: translateY(-50%); */
-  position: absolute;
+  /* position: absolute; */
   z-index: 1;
+
+  .prefix{
+    font-size: 54pt;
+    font-family: TenTwentyThin;
+    /* margin-right: 0.5em; */
+  }
 
   &.div:last-child {
     transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1) 1.15s;
@@ -394,18 +429,22 @@ body:has( [data-cursor]:hover) .cursor{
       }
     }
   }
-  p > span{
+  .suffix{
+    font-family: robotoCondensed;
+    font-size: 96pt
+  }
+  /* p > span > p{
     font-family: MigraNormal;
     display: flex;
     align-items: center;
     line-height: inherit;
     margin-top: 4px;
     margin-right: 4px;
-  }
+  } */
 }
 
-@media screen and (max-width: 768px) {
-  .HardbopH2{
+@media screen and (max-width: 1620px) {
+  .TenTwentyH2{
     font-size: 22vw; /* Plus petit sur mobile mais toujours impactant */
     line-height: 19vw;
     /* Optionnel: ajuster l'espacement */
