@@ -21,11 +21,13 @@ import BrandingSection from "../components/home/GamePlan.js";
 import Collab from "../components/home/Collab.js";
 import StudioBanner from "../components/home/StudioBanner.js";
 import AnimatedField from "../components/home/AnimatedField.js";
+import CreativeCanvas from "../components/home/CreativeCanvas.js";
 
 
 
-export default function Home({ projects, gamePlan, logoClients }) {
+export default function Home({ projects, gamePlan, logoClients, sliderImages }) {
   const { scrollYProgress } = useScroll();
+  console.log(sliderImages)
   const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const leftx = useTransform(scrollYProgress, [1, 0], [-100, 0]);
   const rightx = useTransform(scrollYProgress, [0, 1], [-100, 0]);
@@ -167,67 +169,8 @@ export default function Home({ projects, gamePlan, logoClients }) {
               From digital branding to creative direction, motion, print layouts and graphic creation, we offer a wide spectrum of services.               
             </motion.p>
           </div>
-          <div className="w-full mt-32 overflow-hidden grayscale">
-            <div className="relative w-[120vw] left-1/2 -translate-x-1/2">
-              <div className="grid grid-cols-16 gap-4 max-h-[500px]">
-                {/* Première colonne */}
-                <motion.div 
-                  className="md:col-span-4 col-span-8 relative flex flex-col gap-4 h-[800px] rounded-xl"
-                  style={{ y: useTransform(scrollYProgress, [0, 1], [0, 100]) }}
-                >
-                  <div className="flex-1 rounded-xl relative">
-                    <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 via-10% via-transparent/0 to-transparent z-10 rounded-xl"></div>
-                    <Image src="/images/projects/slide1.png" alt="Grid Image 1-1" layout="fill" objectFit="cover" className="rounded-xl transition-transform duration-700 !relative"/>
-                  </div>
-                  <div className="flex-1 rounded-xl relative">
-                    <Image src="/images/projects/slide2.png" alt="Grid Image 1-2" layout="fill" objectFit="cover" className="rounded-xl transition-transform duration-700 !relative"/>
-                  </div>
-                </motion.div>
-
-                {/* Deuxième colonne */}
-                <motion.div 
-                  className="col-span-4 relative flex flex-col gap-4 h-[800px] rounded-xl hidden md:flex"
-                  style={{ y: useTransform(scrollYProgress, [0, 1], [100, -100]) }}
-                >
-                  <div className="flex-1 rounded-xl relative">
-                    <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 via-10% via-transparent/0 to-transparent z-10 rounded-xl"></div>
-                    <Image src="/images/projects/slide3.png" alt="Grid Image 2-1" layout="fill" objectFit="cover" className="rounded-xl transition-transform duration-700 !relative"/>
-                  </div>
-                  <div className="flex-1 rounded-xl relative">
-                    <Image src="/images/projects/slide4.png" alt="Grid Image 2-2" layout="fill" objectFit="cover" className="rounded-xl transition-transform duration-700 !relative"/>
-                  </div>
-                </motion.div>
-
-                {/* Troisième colonne */}
-                <motion.div 
-                  className="col-span-4 relative flex flex-col gap-4 h-[800px] rounded-xl hidden md:flex"
-                  style={{ y: useTransform(scrollYProgress, [0, 1], [0, 100]) }}
-                >
-                  <div className="flex-1 rounded-xl relative">
-                    <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 via-10% via-transparent/0 to-transparent z-10 rounded-xl"></div>
-                    <Image src="/images/projects/slide1.png" alt="Grid Image 3-1" layout="fill" objectFit="cover" className="rounded-xl transition-transform duration-700 !relative"/>
-                  </div>
-                  <div className="flex-1 rounded-xl relative">
-                    <Image src="/images/projects/slide3.png" alt="Grid Image 3-2" layout="fill" objectFit="cover" className="rounded-xl transition-transform duration-700 !relative"/>
-                  </div>
-                </motion.div>
-
-                {/* Quatrième colonne */}
-                <motion.div 
-                  className="md:col-span-4 col-span-8 relative flex flex-col gap-4 h-[800px] rounded-xl"
-                  style={{ y: useTransform(scrollYProgress, [0, 1], [100, -100]) }}
-                >
-                  <div className="flex-1 rounded-xl relative">
-                    <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 via-10% via-transparent/0 to-transparent z-10 rounded-xl"></div>
-                    <Image src="/images/projects/slide2.png" alt="Grid Image 4-1" layout="fill" objectFit="cover" className="rounded-xl transition-transform duration-700 !relative"/>
-                  </div>
-                  <div className="flex-1 rounded-xl relative">
-                    <Image src="/images/projects/slide4.png" alt="Grid Image 4-2" layout="fill" objectFit="cover" className="rounded-xl transition-transform duration-700 !relative"/>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-          </div>
+          
+        <CreativeCanvas images={sliderImages}/>
         </section>
         {/* <section className={`${home.introSection}`} data-scroll>
           <div className={`${home.white} intersectLogo white`}>
@@ -408,11 +351,19 @@ export async function getServerSideProps() {
       }
     }    
   );
+  const sliderImagesData = await fetcher(
+    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/SLIDER%20IMAGES`,{
+      headers: {
+        Authorization: `Bearer ${API_KEY}`
+      }
+    }    
+  );
   return {
     props: {
       projects: ProjectsData.records,
       gamePlan: GamePlanData.records.sort((a, b) => a.fields.id - b.fields.id),
-      logoClients : logoClientsData.records.sort((a, b) => a.fields.id - b.fields.id)
+      logoClients : logoClientsData.records.sort((a, b) => a.fields.id - b.fields.id),
+      sliderImages: sliderImagesData.records
     },
   };
 }
