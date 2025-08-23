@@ -427,6 +427,7 @@
   /* Ajuster le texte descriptif aussi */
   .defaultText {
     font-size: 16px; /* Légèrement plus petit sur mobile */
+    line-height: 18pt;
     /* Changer la largeur fixe en vw pour quelque chose de plus adaptatif */
     width: 85vw !important; /* Au lieu de 40vw */
     max-width: 600px; /* Limite maximale */
