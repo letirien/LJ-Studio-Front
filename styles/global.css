@@ -493,7 +493,7 @@ body:has( [data-cursor]:hover) .cursor{
   }
   .gallery{
     font-size: 20vw;
-    line-height: 19vw;
+    line-height: 0.8;
   }
   .gallery > p > span{
     font-size: 10vw;
