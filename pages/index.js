@@ -361,12 +361,12 @@ export default function Home({ projects, gamePlan, logoClients }) {
             </h2>
             <div className="flex flex-col sm:flex-row gap-8 justify-around flex-1">
               <div className="">
-                <p className="uppercase hardbopBlack text-[53pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
-                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[25pt]">Creativity</p>
+                <p className="uppercase hardbopBlack text-[12vw] sm:text-[53pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
+                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[25pt]">Creativity</p>
               </div>
               <div className="">
-                <p className="uppercase hardbopBlack text-[53pt] leading-[0.8]">WINNING STRATEGY</p>
-                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[25pt]">Mixing pixels and passion</p>
+                <p className="uppercase hardbopBlack text-[12vw] sm:text-[53pt] leading-[0.8]">WINNING STRATEGY</p>
+                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[25pt]">Mixing pixels and passion</p>
               </div>
             </div>
           </div>
