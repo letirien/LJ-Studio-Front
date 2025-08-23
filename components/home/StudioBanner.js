@@ -3,12 +3,13 @@ import React from 'react';
 const StudioBanner = () => {
     const repeatedContent = (
         <div className="flex items-center gap-12 px-4">
-          <span className="font-bold tracking-wide text-xl sm:text-2xl">LJ STUDIO<sup className="text-sm">™</sup></span>
-          <span className="uppercase text-xs font-semibold tracking-widest">French Creative Studio</span>
+          <span className="robotoBold text-[12vw] sm:text-[92pt] uppercase leading-[90pt]">LJ STUDIO<sup className=""><span className='-pt-12'>™</span></sup></span>
+          <span className="robotoMonoMedium uppercase text-[14pt] leading-[12pt] sm:text-[19pt] sm:leading-[23pt]"><p>French</p> <p>Creative</p> <p>Studio</p></span>
           <span className="font-serif text-xl sm:text-2xl">
-            <span className="italic">Let’s shoot </span>
-            <span className="not-italic font-bold">us a message</span>
+            <span className="tenTwentyThin text-[12vw] sm:text-[90pt] uppercase">Let’s shoot </span>
+            <span className="robotoBold text-[12vw] sm:text-[92pt] uppercase">us a message</span>
           </span>
+          <span className="robotoMonoMedium uppercase text-[14pt] leading-[12pt] sm:text-[19pt] sm:leading-[23pt]"><p>French</p> <p>Creative</p> <p>Studio</p></span>
         </div>
       );
     

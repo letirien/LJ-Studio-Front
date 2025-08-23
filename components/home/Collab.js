@@ -1,28 +1,17 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
-const Collab = () => {
+const Collab = ({logos}) => {
   const containerRef = useRef(null);
-  
-  const logoFiles = [
-    'Ligue_1_Uber_Eats.svg',
-    'Eurosport New.png',
-    'Paris_Saint-Germain_F.C..png',
-    'ffbb.png',
-    'sb29.png',
-    'LFP_e5d2655ef3.webp',
-    '6214aaace5b628591b3144b5_EAJF_HD.png',
-    'lille@logotyp.us.png',
-    'Logo_Roland-Garros.svg.webp',
-    'Amazon_Prime_Video_logo.svg.png',
-    'Logo_Ligue_2_BKT_2024.svg.png',
-    'Logo_AS_Monaco_FC_-_2021.svg.png'
-  ];
-
   // Diviser les logos en deux rangées
-  const topRowLogos = logoFiles.slice(0, Math.ceil(logoFiles.length / 2));
-  const bottomRowLogos = logoFiles.slice(Math.ceil(logoFiles.length / 2));
-
+  const topRowLogos = logos.slice(0, (logos.length / 2));
+  const bottomRowLogos = logos.slice((logos.length /2), logos.length);
+  bottomRowLogos.forEach((logo)=>{
+    console.log(logo)
+  })
+  console.log(topRowLogos)
+  console.log(bottomRowLogos)
   useEffect(() => {
     const initMarquees = async () => {
       // Dynamically import GSAP to avoid SSR issues
@@ -146,14 +135,14 @@ const Collab = () => {
             <div key={`top-group-${group}`} className="marquee-advanced__collection" data-marquee-collection>
               {topRowLogos.map((logo, index) => (
                 <div key={`top-${group}-${index}`} className="marquee-advanced__item">
-                  <div className="logo-wrapper">
+                  <a className="logo-wrapper" href={logo.fields?.URL} target='_blank'>
                     <Image
-                      src={`/images/logo/${logo}`}
+                      src={logo.fields.Logo[0].url}
                       alt={`Partner logo ${index}`}
                       fill
                       style={{ objectFit: 'contain' }}
                     />
-                  </div>
+                  </a>
                 </div>
               ))}
             </div>
@@ -177,14 +166,14 @@ const Collab = () => {
             <div key={`bottom-group-${group}`} className="marquee-advanced__collection" data-marquee-collection>
               {bottomRowLogos.map((logo, index) => (
                 <div key={`bottom-${group}-${index}`} className="marquee-advanced__item">
-                  <div className="logo-wrapper">
+                  <a className="logo-wrapper" href={logo.fields?.URL} target='_blank'>
                     <Image
-                      src={`/images/logo/${logo}`}
+                      src={logo.fields.Logo[0].url}
                       alt={`Partner logo ${index}`}
                       fill
                       style={{ objectFit: 'contain' }}
                     />
-                  </div>
+                  </a>
                 </div>
               ))}
             </div>

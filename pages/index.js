@@ -24,9 +24,7 @@ import AnimatedField from "../components/home/AnimatedField.js";
 
 
 
-export default function Home({ projects, gamePlan }) {
-  // console.log(projects)
-  console.log(gamePlan)
+export default function Home({ projects, gamePlan, logoClients }) {
   const { scrollYProgress } = useScroll();
   const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const leftx = useTransform(scrollYProgress, [1, 0], [-100, 0]);
@@ -278,8 +276,8 @@ export default function Home({ projects, gamePlan }) {
         </section> */}
         <section className="bg-half-col py-42 relative" ref={sectionImageRef}>
           <div className="mx-auto px-[4%]">
-            <h2 className="TenTwentyH2 relative">
-              <p className="flex justify-center gap-6 md:gap-12">
+            <h2 className="bigH2 relative">
+              <p className="flex justify-center gap-2 md:gap-12">
                 <span className={`${home.catHighlight} !text-black`}>
                   Pitch
                 </span>
@@ -343,8 +341,8 @@ export default function Home({ projects, gamePlan }) {
         <AnimatedField/>
         <BrandingSection gamePlan={gamePlan} />
         <section className="w-full bg-black">
-          <div className="w-full h-[90vh] relative">
-            <div className="absolute bottom-0 left-0 right-0 h-[10vh] bg-gradient-to-t from-black to-transparent z-10"></div>
+          <div className="w-full h-[100vh] relative">
+            <div className="absolute -bottom-1 left-0 right-0 h-[30vh] bg-gradient-to-t from-black to-transparent z-10"></div>
             <Image src="/images/lj-fcnante.png" fill={true}
               quality={100}
               style={{
@@ -353,35 +351,33 @@ export default function Home({ projects, gamePlan }) {
               }}>
             </Image>
           </div>
-          <div className="flex justify-around w-full items-center px-[3vw] relative z-20 pb-12">
-          
-            <h2 className={`collaborationTitle uppercase text-center`}>
-              <p className="flex items-center gap-2"><span className="text-[32px] prefix">ON</span>Every Pitch...</p>
+          <div className="p-[4vw] flex flex-wrap gap-12 justify-around w-full items-center px-[3vw] relative z-20 pb-12 -mt-[35vh]">
+            <h2 className={`collaborationTitle text-[21vw] sm:text-[107pt] uppercase text-center`}>
+              <p className="flex items-center gap-2"><span className="prefix">ON</span>Every Pitch...</p>
               <p>OUR CLIENT</p>
-              <div className='text-center'>
-                <p className="flex"><span>COLLABORATIONS</span><span className="suffix">(*)</span></p>                             
+              <div className=''>
+                <p className="flex items-start"><span>COLLABORATIONS</span><span className="suffix flex items-center leading-[60px]"><span className="text-[47px]">(</span>*<span className="text-[47px]">)</span></span></p>                             
               </div>
             </h2>
-            <div className="flex justify-around flex-1">
+            <div className="flex flex-col sm:flex-row gap-8 justify-around flex-1">
               <div className="">
-                <p className="uppercase harbop text-[60pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
-                <p className="defaultText mt-2 tracking-wider opacity-75 text-medium">Creativity</p>
+                <p className="uppercase hardbopBlack text-[53pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
+                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[25pt]">Creativity</p>
               </div>
               <div className="">
-                <p className="uppercase harbop text-[60pt] leading-[0.8]">WINNING STRATEGY</p>
-                <p className="defaultText mt-2 tracking-wider opacity-75 text-medium">Mixing pixels and passion</p>
+                <p className="uppercase hardbopBlack text-[53pt] leading-[0.8]">WINNING STRATEGY</p>
+                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[25pt]">Mixing pixels and passion</p>
               </div>
             </div>
- 
           </div>
-          <Collab/>
+          <Collab logos={logoClients} />
         </section>
-        <section className="relative bg-white py-42 intersectLogo white">
-          <h2 className="text-center TenTwentyH2 mx-xl text-black">
-            <p className="flex items-center gap-3 justify-center">BEYOND <span className="tenTwenty tracking-tight text-[06vw]">THE</span> SURFACE...</p>
+        <section className="relative bg-white py-42 intersectLogo white px-[4vw]">
+          <h2 className="text-center gallery mx-xl text-black">
+            <p className="flex items-center gap-3 justify-center">BEYOND <span className="tenTwentyThin text-[125pt]">THE</span> SURFACE...</p>
             <p>STEP INSIDE OUR</p>
-            <p className="flex items-center gap-3 justify-center"><span className="tenTwenty tracking-tight text-[06vw]">VISUAL</span>GALLERY AND</p>
-            <p className="flex items-center gap-3 justify-center">EXPLORE<span className="tenTwenty tracking-tight text-[06vw]">ARCHIVE</span></p>
+            <p className="flex items-center gap-3 justify-center"><span className="tenTwentyThin text-[125pt]">VISUAL</span>GALLERY AND</p>
+            <p className="flex items-center gap-3 justify-center">EXPLORE<span className="tenTwentyThin text-[125pt]">ARCHIVES</span></p>
           </h2>
         </section>
         <StudioBanner/>
@@ -397,18 +393,26 @@ export async function getServerSideProps() {
         Authorization: `Bearer ${API_KEY}`
       }
     }    
-    );
-    const GamePlanData = await fetcher(
-      `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/METIERS`,{
-        headers: {
-          Authorization: `Bearer ${API_KEY}`
-        }
-      }    
-      );
+  );
+  const GamePlanData = await fetcher(
+    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/METIERS`,{
+      headers: {
+        Authorization: `Bearer ${API_KEY}`
+      }
+    }    
+  );
+  const logoClientsData = await fetcher(
+    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/Logo%20clients`,{
+      headers: {
+        Authorization: `Bearer ${API_KEY}`
+      }
+    }    
+  );
   return {
     props: {
       projects: ProjectsData.records,
       gamePlan: GamePlanData.records.sort((a, b) => a.fields.id - b.fields.id),
+      logoClients : logoClientsData.records.sort((a, b) => a.fields.id - b.fields.id)
     },
   };
 }

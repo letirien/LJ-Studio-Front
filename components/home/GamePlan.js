@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -29,11 +29,48 @@ const Etiquette = ({ text }) => {
 };
 
 export default function BrandingSection({ gamePlan }) {
-  // Générer des positions aléatoires uniques pour chaque élément
-  const randomPositions = useMemo(() => {
-    if (!gamePlan) return [];
-    return gamePlan.map(() => Math.floor(Math.random() * 300));
-  }, [gamePlan?.length]);
+  const titleRefs = useRef([]);
+  const labelPositions = useRef({});
+  
+  // Fonction pour calculer la position d'une étiquette basée sur la taille réelle du titre
+  const calculateLabelPosition = (index) => {
+    const titleRef = titleRefs.current[index];
+    if (!titleRef) return 60; // Position par défaut
+    
+    // Si on a déjà calculé la position pour cet index, la réutiliser
+    if (labelPositions.current[index] !== undefined) {
+      return labelPositions.current[index];
+    }
+    const title = titleRef.getBoundingClientRect();
+    // Mesurer la largeur réelle de l'élément h2
+    const titleWidth = titleRef.offsetWidth;
+    
+    // Adapter les pourcentages selon la taille du titre
+    let minPercent, maxPercent;
+    
+    if (titleWidth < 768) {
+      // Mobile : position plus centrée
+      minPercent = 0.1;
+      maxPercent = 0.2
+    } else {
+      // Desktop : position plus étendue
+      minPercent = 0.2;
+      maxPercent = 0.6;
+    }
+    
+    // Calculer une position entre les pourcentages adaptés
+    const minPosition = titleWidth * minPercent;
+    const maxPosition = titleWidth * maxPercent;
+    
+    // Position aléatoire dans cette plage
+    const randomPosition = minPosition + Math.random() * (maxPosition - minPosition);
+    const finalPosition = Math.floor(randomPosition);
+    
+    // Stocker la position pour cet index
+    labelPositions.current[index] = finalPosition;
+    
+    return finalPosition;
+  };
 
   useEffect(() => {
     console.log(gamePlan)
@@ -78,8 +115,8 @@ export default function BrandingSection({ gamePlan }) {
   return (
     <section ref={containerRef} className="bg-white intersectLogo">
       {gamePlan && gamePlan.map((item, index) => {
-        // Utiliser la position aléatoire spécifique à cet index
-        const randomLeft = randomPositions[index] || 60;
+        // Calculer la position pour cette étiquette spécifique
+        const labelLeft = calculateLabelPosition(index);
         
         // Calculer la transformation Y pour cet élément
         const yTransform = useTransform(
@@ -91,41 +128,47 @@ export default function BrandingSection({ gamePlan }) {
         return (
           <motion.div
             key={index}
-            className={`flex items-stretch min-h-[400px] py-24 gap-12 px-[3vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
+            className={`flex flex-col md:flex-row items-stretch min-h-[400px] py-24 gap-12 px-[3vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
             style={{
               position: 'sticky',
               top: 0,
               zIndex: index,
               transform: 'translateZ(0)', // Performance optimization
-              y: yTransform, // Utiliser la valeur transformée directement
+            }}
+            initial={{ y: index * 100 }}
+            animate={{
+              y: useTransform(
+                scrollYProgress,
+                [0, 1],
+                [index * 100, 0]
+              )
             }}
           >
-            <div className='w-1/2 flex flex-col justify-around'>
-                 <div className="relative inline-block">
+            <div className='md:w-1/2 w-full flex flex-col justify-around gap-6'>
+                 <div className="inline-block">
                     <h2
-                      className={`TenTwentyH2 !text-[172pt]/[142pt] !text-left mx-xl ${getTitleColor(
+                      ref={(el) => (titleRefs.current[index] = el)}
+                      className={`bigH2 md:!text-[172pt]/[142pt] !text-left mx-xl relative w-min ${getTitleColor(
                         index
                       )}`}
                     >
                       {item.fields["TITRE METIER"]}
-                    </h2>
-
-                    {/* L'étiquette au-dessus du h2, position aléatoire */}
-                    <div
+                      <div
                       className="absolute"
                       style={{
                         top: `60%`,
-                        left: `${randomLeft}px`,
+                        left: `${labelLeft}px`,
                         rotate: `-12deg`,
                       }}
                     >
                       <Etiquette text={item.fields["SOUS METIERS"]} />
                     </div>
+                    </h2>
                 </div>
               <p className={`${getTextColor(index)} defaultText ${index % 3 === 2 ? "!opacity-100": ""}`}>{item.fields['DESCRIPTION METIER']}</p>
               <Link className={`${getTextColor(index)} roboto uppercase text-xs mt-4 ${index % 3 === 2 ? "!opacity-100": "opacity-55"}`} href="">› check more</Link>
             </div>
-            <div className='w-1/2'>
+            <div className='md:w-1/2'>
               <Image 
                 src={item.fields.Image[0].url} 
                 alt={item.fields.Image[0].filename || 'Game plan image'}

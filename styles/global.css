@@ -1,5 +1,10 @@
 @import 'tailwindcss';
-
+body{
+  scroll-behavior: smooth;
+}
+a{
+  text-decoration: none!important
+}
 
 @font-face {
   font-family: HelveticaRegular;
@@ -35,7 +40,7 @@
 }
 @font-face {
   font-family: robotoCondensed;
-  src: url("/typos/ROBOTO/roboto-Condensed.ttf");
+  src: url("/typos/ROBOTO/Roboto-Condensed.ttf");
 }
 .robotoThin {
   font-family: robotoThin;
@@ -88,14 +93,24 @@
 @font-face {
   font-family: TenTwentyThin;
   src: url("/typos/TEN TWENTY/tentwenty-thin-1.otf");
+  ascent-override: 90%;
 }
 .tenTwenty{
   font-family: TenTwenty;
+}
+.tenTwentyThin{
+  font-family: TenTwentyThin;
 }
 
 @font-face {
   font-family: Roboto;
   src: url("/typos/ROBOTO/Roboto-Regular.ttf");
+}
+@font-face {
+  font-family: RobotoBold;
+  src: url("/typos/ROBOTO/Roboto-Bold.ttf");
+  ascent-override: 90%;
+
 }
 @font-face {
   font-family: RobotoMonoLight;
@@ -105,7 +120,16 @@
   font-family: RobotoMono;
   src: url("/typos/ROBOTO MONO/RobotoMono-Regular.ttf");
 }
-
+@font-face {
+  font-family: RobotoMonoMedium;
+  src: url("/typos/ROBOTO MONO/RobotoMono-Medium.ttf");
+}
+.robotoMonoMedium{
+  font-family: RobotoMonoMedium;
+}
+.robotoRegular{
+  font-family: RobotoMono;
+}
 @font-face {
   font-family: RobotoLight;
   src: url("/typos/ROBOTO/Roboto-Thin.ttf");
@@ -127,7 +151,10 @@ body {
   color: white;
 }
 .roboto{
-  font-family: roboto;
+  font-family: Roboto;
+}
+.robotoBold{
+  font-family: RobotoBold;
 }
 .hardbop-bold{
   font-family: HardbopBold;
@@ -138,7 +165,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
-.TenTwentyH2{
+.bigH2{
     text-align: center;
     font-family: HardbopUltraBold;
     font-size: 285pt;
@@ -150,6 +177,19 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     /* z-index: 5; */
+}
+.gallery{
+  text-align: center;
+  font-family: hardbopBlack;
+  font-size: 248pt;
+  line-height: 189pt;
+  /* font-size: 13vw;
+  line-height: 10vw; */
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* z-index: 5; */
 }
 /* p > span:not(.tenTwenty) {
   font-family: Migra;
@@ -392,15 +432,16 @@ body:has( [data-cursor]:hover) .cursor{
   text-orientation: mixed;
   transform: rotate(180deg);
 }
-
+.hardbopBlack{
+  font-family: HardbopBlack;
+  line-height: 0.8;
+}
 .collaborationTitle {
   font-family: HardbopBlack;
-  font-size: 107pt;
   line-height: 0.8;
   /* // padding: 0.1 0; */
   bottom: 4%;
   left: 0%;
-  padding-left: 3vw;
   /* // -ms-transform: translateY(-50%);
   // transform: translateY(-50%); */
   /* position: absolute; */
@@ -444,11 +485,18 @@ body:has( [data-cursor]:hover) .cursor{
 }
 
 @media screen and (max-width: 1620px) {
-  .TenTwentyH2{
+  .bigH2{
     font-size: 22vw; /* Plus petit sur mobile mais toujours impactant */
     line-height: 19vw;
     /* Optionnel: ajuster l'espacement */
-    letter-spacing: -0.02em;
+    /* letter-spacing: -0.02em; */
+  }
+  .gallery{
+    font-size: 20vw;
+    line-height: 19vw;
+  }
+  .gallery > p > span{
+    font-size: 10vw;
   }
 }
 .st0 {
