@@ -36,14 +36,13 @@ export default function BrandingSection({ gamePlan }) {
   const calculateLabelPosition = (index) => {
     const titleRef = titleRefs.current[index];
     if (!titleRef) return 60; // Position par défaut
-    
     // Si on a déjà calculé la position pour cet index, la réutiliser
     if (labelPositions.current[index] !== undefined) {
       return labelPositions.current[index];
     }
     const title = titleRef.getBoundingClientRect();
     // Mesurer la largeur réelle de l'élément h2
-    const titleWidth = titleRef.offsetWidth;
+    const titleWidth = titleRef.offsetWidth / 1.5
     
     // Adapter les pourcentages selon la taille du titre
     let minPercent, maxPercent;
@@ -54,8 +53,8 @@ export default function BrandingSection({ gamePlan }) {
       maxPercent = 0.2
     } else {
       // Desktop : position plus étendue
-      minPercent = 0.2;
-      maxPercent = 0.6;
+      minPercent = 0.1;
+      maxPercent = 0.4;
     }
     
     // Calculer une position entre les pourcentages adaptés
