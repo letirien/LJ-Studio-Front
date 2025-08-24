@@ -292,11 +292,68 @@ export default function ProjectSlider({ projects, navRef }) {
             ref={sectionRef} 
             className={`relative transition-all duration-500 ease-in-out ${isVisible ? "-mt-[6%]" : "mt-0"}`}
         > 
+        <button className="absolute inset-0 pointer-events-none z-20 cursor-pointer group" onClick={() => {handleNavigation(1)}}>
+            <div className="absolute right-[2vw] bottom-[50%] sm:right-[-2vw] sm:bottom-[45%] md:right-[12vw] md:bottom-[20%] rotate-[-10deg] pointer-events-auto">
+                <motion.svg 
+                    width="82" 
+                    height="80" 
+                    viewBox="0 0 82 80" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                    initial="rest"
+                    whileHover="hover"
+                >
+                    <rect width="82" height="80" rx="12" fill="#FA6218"/>
+                    
+                    {/* Premier groupe d'icônes play (gauche) */}
+                    <motion.g
+                        variants={{
+                            rest: { y: 0, scale: 1 },
+                            hover: {
+                                y: [0, -4, 0, -6, 0],
+                                scale: [1, 1.02, 1, 1.04, 1],
+                                transition: { 
+                                    duration: 0.6,
+                                    ease: [0.68, -0.55, 0.265, 1.55]
+                                }
+                            }
+                        }}
+                    >
+                        <rect width="4.71789" height="38.7821" transform="translate(22.1279 19.9043)" fill="black"/>
+                        <rect width="4.71789" height="47.2436" transform="translate(18 15.6733)" fill="black"/>
+                        <rect width="4.71789" height="28.2051" transform="translate(26.8467 25.5449)" fill="black"/>
+                        <rect width="4.71789" height="17.6282" transform="translate(31.5645 31.186)" fill="black"/>
+                        <rect width="4.71789" height="5.64103" transform="translate(36.2822 36.8271)" fill="black"/>
+                    </motion.g>
+                    
+                    {/* Deuxième groupe d'icônes play (droite) */}
+                    <motion.g
+                        variants={{
+                            rest: { y: 0, scale: 1 },
+                            hover: {
+                                y: [0, -3, 0, -8, 0],
+                                scale: [1, 1.01, 1, 1.06, 1],
+                                transition: { 
+                                    duration: 0.7,
+                                    ease: [0.68, -0.55, 0.265, 1.55],
+                                    delay: 0.15
+                                }
+                            }
+                        }}
+                    >
+                        <rect width="4.71789" height="38.7821" transform="translate(45.1279 21.3145)" fill="black"/>
+                        <rect width="4.71789" height="47.2436" transform="translate(41 17.0835)" fill="black"/>
+                        <rect width="4.71789" height="28.2051" transform="translate(49.8457 26.9556)" fill="black"/>
+                        <rect width="4.71789" height="17.6282" transform="translate(54.5635 32.5962)" fill="black"/>
+                        <rect width="4.71789" height="5.64103" transform="translate(59.2822 38.2373)" fill="black"/>
+                    </motion.g>
+                </motion.svg>
+            </div>
+        </button>
          <div id="sliderContainer" className={`${home.sliderContainer} mx-auto rounded-md`}>
-              <div className={`rounded-md ${home.sliderWrapper}`} ref={containerRef}>
+              <div className={`rounded-md ${home.sliderWrapper} relative overflow`} ref={containerRef}>
                   {/* Élément décoratif pour les transitions */}
-                  <div className={`rounded-md ${home.deco}`} ref={decoRef}></div>
-                  
+                  <div className={`rounded-md ${home.deco}`} ref={decoRef} ></div>
                   {projects.map((project, index) => (
                       <div
                           key={project.id}
@@ -343,7 +400,7 @@ export default function ProjectSlider({ projects, navRef }) {
             </div>
 
             <Section>
-                <motion.div className={`items-top lg:items-center ${home.projectFooter}`} variants={fadeInUp}>
+                <motion.div className={`items-top lg:items-start ${home.projectFooter}`} variants={fadeInUp}>
                     {['Team', 'Match Day', 'Game Plan', 'Perf'].map((field) => (
                         <div className={home.footerInfo} key={field}>
                             <div className="container-txt flex flex-col lg:flex-row items-center flex-wrap gap-2">
@@ -355,7 +412,7 @@ export default function ProjectSlider({ projects, navRef }) {
                         </div>
                     ))}
                     <div className={`${home.footerInfo}`}>
-                        <p className={home.slideCount}>
+                        <p className={`${home.slideCount} hidden md:block`}>
                             0
                             <motion.span key={idProject}>{idProject}</motion.span>.
                         </p>
