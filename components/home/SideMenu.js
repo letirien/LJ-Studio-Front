@@ -22,13 +22,13 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   return (
     <>
       <div
-        className={`fixed top-0 right-0 h-[100vh] w-[100vw] sm:w-[50vw] bg-white flex flex-col items-start py-[60px] px-[4vw] transition-transform duration-300 ease-in-out z-[500] ${
+        className={`fixed top-0 right-0 h-[100vh] w-[100vw] sm:w-[50vw] bg-[#fa6218] flex flex-col items-start py-[60px] px-[4vw] transition-transform duration-300 ease-in-out z-[500] ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="flex flex-col space-y-6 font-bold uppercase text-black my-auto">
           <a href="#services" className="text-[21vw] sm:text-[8vw] hover:text-white relative w-content hardbopBlack"><span className=''>SERVICES</span><span className='absolute text-200 mt-1 ml-2 text-[18pt]'>01</span></a>
-          <a href="#work" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">WORK<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>02</span></a>
+          <a href="#work" className="hardbopBlack text-[72pt] sm:text-[8vw] hover:text-white">WORK<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>02</span></a>
           <a href="#archive" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">ARCHIVE<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>03</span></a>
           <a href="#about" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">ABOUT<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>04</span></a>
           <a href="#contact" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">CONTACT<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>05</span></a>
