@@ -21,7 +21,7 @@ export default function Layout({ children, home }) {
   const [animationComplete, setAnimationComplete] = useState(false);
 
   return (
-    <div className="relative min-h-screen">
+    <div className={`relative ${!animationComplete ? 'h-screen overflow-hidden' : ''}`}>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="LJ Studio" />
@@ -30,7 +30,7 @@ export default function Layout({ children, home }) {
 
       <div className="relative">
         {/* Contenu principal, toujours visible */}
-        <main className="relative z-0">
+        <main className={`relative z-0`}>
           {children}
           <Footer />
         </main>

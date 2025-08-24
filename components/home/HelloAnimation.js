@@ -41,18 +41,15 @@ export default function AnimationPage({ onAnimationComplete }) {
       <div className="absolute inset-0 z-20">
         {/* Bloc 1 - Gauche */}
         <div
-          className={`absolute top-0 left-0 w-1/3 h-full bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+          className={`absolute top-0 left-0 w-1/3 h-full bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
             blocksDisappear ? '-translate-y-full' : ''
-          } after:content-[''] after:absolute after:inset-0 after:bg-[#fa6218] after:transform after:origin-bottom after:transition-all after:duration-1000 after:ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+          } after:content-[''] after:absolute after:inset-0 after:bg-[#fa6218] after:transform after:origin-bottom after:transition-all after:duration-1000 after:ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
             blocksDisappear ? 'after:-translate-y-full' : ''
           }`}
           style={{ transformOrigin: 'bottom center' }}
         >
           <div
-            className={`absolute inset-0 bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+            className={`absolute inset-0 bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
               blocksDisappear ? '-translate-y-full' : ''
             }`}
             style={{
@@ -64,15 +61,13 @@ export default function AnimationPage({ onAnimationComplete }) {
 
         {/* Bloc 2 - Centre */}
         <div
-          className={`absolute top-0 left-1/3 w-1/3 h-full bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+          className={`absolute top-0 left-1/3 w-1/3 h-full bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
             blocksDisappear ? '-translate-y-full' : ''
           }`}
           style={{ transformOrigin: 'bottom center', transitionDelay: '100ms' }}
         >
           <div
-            className={`absolute inset-0 bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+            className={`absolute inset-0 bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
               blocksDisappear ? '-translate-y-full' : ''
             }`}
             style={{
@@ -85,15 +80,13 @@ export default function AnimationPage({ onAnimationComplete }) {
 
         {/* Bloc 3 - Droite */}
         <div
-          className={`absolute top-0 right-0 w-1/3 h-full bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+          className={`absolute top-0 right-0 w-1/3 h-full bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
             blocksDisappear ? '-translate-y-full' : ''
           }`}
           style={{ transformOrigin: 'bottom center', transitionDelay: '200ms' }}
         >
           <div
-            className={`absolute inset-0 bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+            className={`absolute inset-0 bg-[#fa6218] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
               blocksDisappear ? '-translate-y-full' : ''
             }`}
             style={{
@@ -109,18 +102,15 @@ export default function AnimationPage({ onAnimationComplete }) {
       <div className="absolute inset-0 z-10">
         {/* Bloc 1 - Gauche */}
         <div
-          className={`absolute top-0 left-0 w-1/3 h-full bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+          className={`absolute top-0 left-0 w-1/3 h-full bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
             blocks2Disappear ? '-translate-y-full' : ''
-          } after:content-[''] after:absolute after:inset-0 after:bg-[#c74d11] after:transform after:origin-bottom after:transition-all after:duration-1000 after:ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+          } after:content-[''] after:absolute after:inset-0 after:bg-[#c74d11] after:transform after:origin-bottom after:transition-all after:duration-1000 after:ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
             blocks2Disappear ? 'after:-translate-y-full' : ''
           }`}
           style={{ transformOrigin: 'bottom center' }}
         >
           <div
-            className={`absolute inset-0 bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+            className={`absolute inset-0 bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
               blocks2Disappear ? '-translate-y-full' : ''
             }`}
             style={{
@@ -132,15 +122,13 @@ export default function AnimationPage({ onAnimationComplete }) {
 
         {/* Bloc 2 - Centre */}
         <div
-          className={`absolute top-0 left-1/3 w-1/3 h-full bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+          className={`absolute top-0 left-1/3 w-1/3 h-full bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
             blocks2Disappear ? '-translate-y-full' : ''
           }`}
           style={{ transformOrigin: 'bottom center', transitionDelay: '100ms' }}
         >
           <div
-            className={`absolute inset-0 bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+            className={`absolute inset-0 bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
               blocks2Disappear ? '-translate-y-full' : ''
             }`}
             style={{
@@ -153,15 +141,13 @@ export default function AnimationPage({ onAnimationComplete }) {
 
         {/* Bloc 3 - Droite */}
         <div
-          className={`absolute top-0 right-0 w-1/3 h-full bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+          className={`absolute top-0 right-0 w-1/3 h-full bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
             blocks2Disappear ? '-translate-y-full' : ''
           }`}
           style={{ transformOrigin: 'bottom center', transitionDelay: '200ms' }}
         >
           <div
-            className={`absolute inset-0 bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+            className={`absolute inset-0 bg-[#c74d11] transform origin-bottom transition-all duration-1000 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
               blocks2Disappear ? '-translate-y-full' : ''
             }`}
             style={{
@@ -181,8 +167,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             <div className="overflow-hidden">
               <p className="text-[22vw] md:text-[180pt] font-black text-black">
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line1 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -195,8 +180,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                 </span>
                 <span className="inline-block w-4"></span>
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line1 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -214,8 +198,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             <div className="overflow-hidden">
               <p className="text-[22vw] md:text-[180pt] font-black text-black">
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line2 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -228,8 +211,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                 </span>
                 <span className="inline-block w-4"></span>
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line2 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -247,8 +229,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             <div className="overflow-hidden">
               <p className="text-[22vw] md:text-[180pt] font-black text-black">
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line3 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -261,8 +242,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                 </span>
                 <span className="inline-block w-4"></span>
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[cubic-bezier(0.075, 0.820, 0.165, 1.000)
-] ${
+                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line3 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -284,11 +264,11 @@ export default function AnimationPage({ onAnimationComplete }) {
             }`}
           >
             <div className="flex items-center justify-center space-x-8 text-sm text-black">
-              <span>CREATIVE STUDIO</span>
+              <span className='robotoRegular text-[19pt]'>CREATIVE STUDIO</span>
               <div className="flex items-center space-x-2">
                 <span className="text-[92pt] hardbopBlack font-bold">100%</span>
               </div>
-              <span>FRENCH ACCENT</span>
+              <span className='robotoRegular text-[19pt]'>FRENCH ACCENT</span>
             </div>
           </div>
         </div>
