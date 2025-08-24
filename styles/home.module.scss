@@ -76,7 +76,7 @@
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  z-index: 5;
+  z-index: 3;
 }
 
 .slideInner {
@@ -140,7 +140,7 @@
   position: absolute;
   bottom: 100px;
   right:0%;
-  z-index: 100;
+  z-index: 3;
 }
 
 .cercleContainer {

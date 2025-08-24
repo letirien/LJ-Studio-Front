@@ -70,8 +70,16 @@ a{
   src: url("/typos/HARDBOP/hardbop-normal.otf");
   ascent-override: 90%;
 }
+@font-face {
+  font-family: HardbopLight;
+  src: url("/typos/HARDBOP/hardbop-light.otf");
+  ascent-override: 90%;
+}
 .hardbop-normal{
   font-family:HardbopNormal ;
+}
+.hardbop-light{
+  font-family:HardbopLight ;
 }
 @font-face {
   font-family: HardbopBold;
@@ -102,7 +110,7 @@ a{
   font-family: TenTwenty;
 }
 .tenTwentyThin{
-  font-family: TenTwentyThin;
+  font-family: TenTwentyThin!important
 }
 
 @font-face {
@@ -152,6 +160,12 @@ body {
   font-family: HelveticaRegular;
   background-color: #000000;
   color: white;
+}
+#socials svg path {
+  fill: black!important; /* Ensure default fill is black */
+}
+#socials svg:hover path {
+  fill: white!important; /* Change to white on hover */
 }
 .roboto{
   font-family: Roboto;
