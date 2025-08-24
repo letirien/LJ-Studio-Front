@@ -2,6 +2,9 @@
 body{
   scroll-behavior: smooth;
 }
+*{
+  font-synthesis: none;
+}
 nextjs-portal {
   display: none;
 }
