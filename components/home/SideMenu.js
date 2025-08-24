@@ -28,10 +28,10 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
       >
         <div className="flex flex-col space-y-6 font-bold uppercase text-black my-auto">
           <a href="#services" className="text-[21vw] sm:text-[8vw] hover:text-white relative w-content hardbopBlack"><span className=''>SERVICES</span><span className='absolute text-200 mt-1 ml-2 text-[18pt]'>01</span></a>
-          <a href="#work" className="hardbop-normal text-[21vw] sm:text-[8vw] hover:text-white">WORK<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>02</span></a>
-          <a href="#archive" className="hardbop-normal text-[21vw] sm:text-[8vw] hover:text-white">ARCHIVE<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>03</span></a>
-          <a href="#about" className="hardbop-normal text-[21vw] sm:text-[8vw] hover:text-white">ABOUT<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>04</span></a>
-          <a href="#contact" className="hardbop-normal text-[21vw] sm:text-[8vw] hover:text-white">CONTACT<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>05</span></a>
+          <a href="#work" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">WORK<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>02</span></a>
+          <a href="#archive" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">ARCHIVE<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>03</span></a>
+          <a href="#about" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">ABOUT<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>04</span></a>
+          <a href="#contact" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">CONTACT<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>05</span></a>
         </div>
         <div className="absolute top-[60px] right-[3vw] flex space-x-4">
           <button onClick={handleToggle} className="focus:outline-none !p-0 hover:cursor-pointer">

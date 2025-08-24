@@ -167,7 +167,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             <div className="flex flex-wrap items-center justify-center gap-x-4">
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[19vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line1 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -181,7 +181,7 @@ export default function AnimationPage({ onAnimationComplete }) {
               </div>
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[19vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line1 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -199,7 +199,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             <div className="flex flex-wrap items-center justify-center gap-x-4">
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[19vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line2 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -213,7 +213,7 @@ export default function AnimationPage({ onAnimationComplete }) {
               </div>
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[19vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line2 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -231,7 +231,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             <div className="flex flex-wrap items-center justify-center gap-x-4">
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[19vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line3 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -245,7 +245,7 @@ export default function AnimationPage({ onAnimationComplete }) {
               </div>
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[19vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line3 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
