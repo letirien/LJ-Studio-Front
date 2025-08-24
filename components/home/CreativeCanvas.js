@@ -12,6 +12,16 @@ const CreativeCanvas = ({ images }) => {
   
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+
+    checkMobile(); // appel initial
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   
   const [inViewRef, inView] = useInView({
     threshold: 0.2,
@@ -107,8 +117,8 @@ const CreativeCanvas = ({ images }) => {
                   whileHover={{ scale: 1.02 }}
                 >
                   <div className={`relative w-full rounded-lg`} style={{
-                      width: `${image.fields.IMAGE[0].width / 2}px`,
-                      height: `${image.fields.IMAGE[0].height / 2}px`
+                      width: !isMobile ? `${image.fields.IMAGE[0].width / 2}px`: `${image.fields.IMAGE[0].width / 4}px`,
+                      height: !isMobile ?`${image.fields.IMAGE[0].height / 2}px`: `${image.fields.IMAGE[0].height / 4}px`
                   }}>
                     <Image
                       src={image.fields.IMAGE[0].url}
@@ -126,12 +136,7 @@ const CreativeCanvas = ({ images }) => {
                           : 'grayscale(100%) brightness(0.75) sepia(0.1) hue-rotate(200deg)'
                       }}
                     />
-                    
-                    {/* Overlay avec le nom */}
                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                      <h3 className="text-white font-bold text-lg">
-                        {image.fields.Name}
-                      </h3>
                     </div>
                   </div>
                 </motion.div>

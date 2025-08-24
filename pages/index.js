@@ -330,14 +330,14 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages }) 
 }
 export async function getServerSideProps() {
   const API_KEY = "patf38NGwq1uuDExU.2a7d95a5d70fecef0fa606e5d327341ab1627e4c7129dcc3ffbcf844d0e3421c";
-    const ProjectsData = await fetcher(
+    const projectsData = await fetcher(
     `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/Projects`,{
       headers: {
         Authorization: `Bearer ${API_KEY}`
       }
     }    
   );
-  const GamePlanData = await fetcher(
+  const gamePlanData = await fetcher(
     `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/METIERS`,{
       headers: {
         Authorization: `Bearer ${API_KEY}`
@@ -360,8 +360,8 @@ export async function getServerSideProps() {
   );
   return {
     props: {
-      projects: ProjectsData.records,
-      gamePlan: GamePlanData.records.sort((a, b) => a.fields.id - b.fields.id),
+      projects: projectsData.records,
+      gamePlan: gamePlanData.records.sort((a, b) => a.fields.id - b.fields.id),
       logoClients : logoClientsData.records.sort((a, b) => a.fields.id - b.fields.id),
       sliderImages: sliderImagesData.records
     },

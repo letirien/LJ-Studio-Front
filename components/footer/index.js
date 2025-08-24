@@ -32,7 +32,7 @@ const Footer = () => {
         <div className="col-span-2 flex flex-col gap-24">
             <div className="flex flex-col sm:flex-row justify-between opacity-55 gap-6 sm:gap-0">
                 <p className='robotoBold text-[26pt]'><span className='tenTwentyThin text-[35pt]'>jean</span>@LJSTUDIO.xyz</p>
-                <div className="text-end text-white text-[25pt] robotoBold">
+                <div className="text-end text-white text-[25pt] leading-[23pt] robotoBold">
                     <span className="text-orange-500">thanks </span><span className="text-white/60"><span className='tenTwentyThin'>for</span><br></br> your visit</span>
                 </div>
             </div>
