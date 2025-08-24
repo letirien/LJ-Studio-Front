@@ -162,7 +162,7 @@ export default function AnimationPage({ onAnimationComplete }) {
       {/* Contenu texte - SOLUTION 1: Chaque mot dans son propre conteneur overflow-hidden */}
       <div className="absolute inset-0 flex items-center justify-center z-30">
         <div className="text-center space-y-4 px-8">
-          <h1 className="hardbopBlack leading-[0.8]">
+          <h1 className="hardbop-bold leading-[0.8]">
             {/* Ligne 1 */}
             <div className="flex flex-wrap items-center justify-center gap-x-4">
               <div className="overflow-hidden">
@@ -269,7 +269,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             <div className="flex items-center justify-center space-x-8 text-sm text-black">
               <span className='robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8]'>CREATIVE STUDIO</span>
               <div className="flex items-center space-x-2">
-                <span className="text-[12vw] sm:text-[92pt] hardbopBlack font-bold">100%</span>
+                <span className="text-[12vw] sm:text-[92pt] hardbop-bold font-bold">100%</span>
               </div>
               <span className='robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8]'>FRENCH ACCENT</span>
             </div>
