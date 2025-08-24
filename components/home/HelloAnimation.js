@@ -159,15 +159,15 @@ export default function AnimationPage({ onAnimationComplete }) {
         </div>
       </div>
 
-      {/* Contenu texte */}
+      {/* Contenu texte - SOLUTION 1: Chaque mot dans son propre conteneur overflow-hidden */}
       <div className="absolute inset-0 flex items-center justify-center z-30">
         <div className="text-center space-y-4 px-8">
           <h1 className="hardbopBlack leading-[0.8]">
             {/* Ligne 1 */}
-            <div className="overflow-hidden">
-              <p className="text-[22vw] md:text-[180pt] font-black text-black">
+            <div className="flex flex-wrap items-center justify-center gap-x-4">
+              <div className="overflow-hidden">
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line1 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -178,9 +178,10 @@ export default function AnimationPage({ onAnimationComplete }) {
                 >
                   TURNING
                 </span>
-                <span className="inline-block w-4"></span>
+              </div>
+              <div className="overflow-hidden">
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line1 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -191,14 +192,14 @@ export default function AnimationPage({ onAnimationComplete }) {
                 >
                   SPORT
                 </span>
-              </p>
+              </div>
             </div>
 
             {/* Ligne 2 */}
-            <div className="overflow-hidden">
-              <p className="text-[22vw] md:text-[180pt] font-black text-black">
+            <div className="flex flex-wrap items-center justify-center gap-x-4">
+              <div className="overflow-hidden">
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line2 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -209,9 +210,10 @@ export default function AnimationPage({ onAnimationComplete }) {
                 >
                   PASSION
                 </span>
-                <span className="inline-block w-4"></span>
+              </div>
+              <div className="overflow-hidden">
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line2 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -222,14 +224,14 @@ export default function AnimationPage({ onAnimationComplete }) {
                 >
                   INTO
                 </span>
-              </p>
+              </div>
             </div>
 
             {/* Ligne 3 */}
-            <div className="overflow-hidden">
-              <p className="text-[22vw] md:text-[180pt] font-black text-black">
+            <div className="flex flex-wrap items-center justify-center gap-x-4">
+              <div className="overflow-hidden">
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line3 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -240,9 +242,10 @@ export default function AnimationPage({ onAnimationComplete }) {
                 >
                   ARTISTIC
                 </span>
-                <span className="inline-block w-4"></span>
+              </div>
+              <div className="overflow-hidden">
                 <span
-                  className={`inline-block transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
+                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.95, 0.05, 0.795, 0.035)] ${
                     textVisible.line3 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -253,7 +256,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                 >
                   EXPRESSION
                 </span>
-              </p>
+              </div>
             </div>
           </h1>
 
@@ -264,11 +267,11 @@ export default function AnimationPage({ onAnimationComplete }) {
             }`}
           >
             <div className="flex items-center justify-center space-x-8 text-sm text-black">
-              <span className='robotoRegular text-[19pt]'>CREATIVE STUDIO</span>
+              <span className='robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8]'>CREATIVE STUDIO</span>
               <div className="flex items-center space-x-2">
-                <span className="text-[92pt] hardbopBlack font-bold">100%</span>
+                <span className="text-[12vw] sm:text-[92pt] hardbopBlack font-bold">100%</span>
               </div>
-              <span className='robotoRegular text-[19pt]'>FRENCH ACCENT</span>
+              <span className='robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8]'>FRENCH ACCENT</span>
             </div>
           </div>
         </div>

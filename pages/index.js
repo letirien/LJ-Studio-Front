@@ -234,7 +234,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages }) 
             <Projects projects={projects} navRef={sliderNavRef} />
       
           {/* Boutons de navigation positionnés relativement au parent bg-half-col */}
-          <div className={`absolute hidden lg:flex lg:-translate-y-1/2 lg:right-8 z-50 flex flex-col gap-3 top-${buttonTopPosition} md:top-1/2`} ref={sliderNavRef}>
+          {/* <div className={`absolute hidden lg:flex lg:-translate-y-1/2 lg:right-8 z-50 flex flex-col gap-3 top-${buttonTopPosition} md:top-1/2`} ref={sliderNavRef}>
             <button 
               className={`w-14 h-14 flex items-center justify-center border-2 border-black text-white rounded-xl hover:bg-white/20 transition-colors`}
               onClick={() => sliderNavRef.current?.handleNext()}
@@ -252,7 +252,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages }) 
               </svg>
             </button>
             
-          </div>
+          </div> */}
           </div>
         </section>
         {/*
