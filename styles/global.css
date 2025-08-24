@@ -452,6 +452,9 @@ body:has( [data-cursor]:hover) .cursor{
 .hardbopBlack{
   font-family: HardbopBlack;
   line-height: 0.8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 .collaborationTitle {
   font-family: HardbopBlack;
