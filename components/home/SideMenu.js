@@ -22,7 +22,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   return (
     <>
       <div
-        className={`fixed top-0 right-0 h-[100vh] w-[100vw] sm:w-[50vw] bg-[#fa6218] flex flex-col items-start py-[60px] px-[4vw] transition-transform duration-300 ease-in-out z-[500] ${
+        className={`fixed top-0 right-0 h-[100vh] w-[100vw] sm:w-[50vw] bg-white flex flex-col items-start py-[60px] px-[4vw] transition-transform duration-300 ease-in-out z-[500] ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
