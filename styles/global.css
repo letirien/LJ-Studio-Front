@@ -189,7 +189,7 @@ body {
     line-height: 217pt;
     /* font-size: 13vw;
     line-height: 10vw; */
-    /* text-transform: uppercase; */
+    text-transform: uppercase;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
