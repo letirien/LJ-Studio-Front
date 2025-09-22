@@ -127,7 +127,7 @@ export default function BrandingSection({ gamePlan }) {
         return (
           <motion.div
             key={index}
-            className={`flex flex-col md:flex-row items-stretch min-h-[400px] py-24 gap-6 md:gap-12 px-[3vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
+            className={`flex flex-col md:flex-row items-stretch min-h-[400px] py-12 sm:py-24 gap-3 sm:gap-6 md:gap-12 px-[3vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
             style={{
               position: 'sticky',
               top: 0,
@@ -143,7 +143,7 @@ export default function BrandingSection({ gamePlan }) {
               )
             }}
           >
-            <div className='md:w-1/2 w-full flex flex-col justify-around gap-6'>
+            <div className='md:w-1/2 w-full flex flex-col justify-around gap-3 sm:gap-6'>
                  <div className="inline-block">
                     <h2
                       ref={(el) => (titleRefs.current[index] = el)}

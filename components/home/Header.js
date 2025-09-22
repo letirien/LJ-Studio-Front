@@ -26,7 +26,7 @@ export function Header() {
                                 </span>
                         </div>
                     </h1>
-                    <div className={styles.currentInfoContainer}><div><Clock/></div></div>
+                    <div className={`${styles.currentInfoContainer} bottom-[0%] sm:bottom-[4%]`}><div><Clock/></div></div>
                     {/* <div className={`${styles.currentInfoContainer} font-light`}><div>GAME TIME : 17:47:22 UTC+2</div></div> */}
                     <div className={styles.headimg}>
                         <Image

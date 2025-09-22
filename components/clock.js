@@ -42,7 +42,7 @@ export const Clock = () => {
 
     return(
         <>
-            <p ref={clockRef} className="robotoRegular text-[14pt]">
+            <p ref={clockRef} className="robotoRegular text-[14pt] text-center">
                 game time:<span className="opacity-55">{hours}:{minutes}:{seconds} UTC+2</span>
             </p>
             
