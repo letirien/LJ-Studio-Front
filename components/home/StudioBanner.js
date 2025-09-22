@@ -14,7 +14,7 @@ const StudioBanner = () => {
       );
     
       return (
-        <div className="w-full overflow-hidden bg-white text-black py-6 rounded-b-xl">
+        <div className="w-full overflow-hidden bg-white text-black sm:py-6 rounded-b-xl">
           <div className="marquee whitespace-nowrap flex">
             {/* Deux fois pour boucler parfaitement */}
             <div className="flex shrink-0 animate-marquee">

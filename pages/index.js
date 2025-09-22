@@ -285,7 +285,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages }) 
         <BrandingSection gamePlan={gamePlan} />
         <section className="w-full bg-black">
           <div className="w-full h-[100vh] relative">
-            <div className="absolute -bottom-1 left-0 right-0 h-[30vh] bg-gradient-to-t from-black to-transparent z-10"></div>
+            <div className="absolute -bottom-1 left-0 right-0 h-[30vh] bg-gradient-to-t from-black to-transparent z-3"></div>
             <Image src="/images/lj-fcnante.png" fill={true}
               quality={100}
               style={{
@@ -294,7 +294,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages }) 
               }}>
             </Image>
           </div>
-          <div className="p-[4vw] flex flex-wrap gap-12 justify-around w-full items-center px-[3vw] relative z-20 pb-12 -mt-[35vh]">
+          <div className="p-[4vw] flex flex-wrap gap-12 justify-around w-full items-center px-[3vw] relative z-3 pb-12 -mt-[35vh]">
             <h2 className={`collaborationTitle text-[21vw] sm:text-[107pt] uppercase text-center`}>
               <p className="flex items-center gap-2"><span className="prefix">ON</span>Every Pitch...</p>
               <p>OUR CLIENT</p>

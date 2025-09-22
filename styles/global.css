@@ -509,10 +509,13 @@ body:has( [data-cursor]:hover) .cursor{
 
 @media screen and (max-width: 1620px) {
   .bigH2{
-    font-size: 22vw; /* Plus petit sur mobile mais toujours impactant */
+    font-size: 22vw;
     line-height: 19vw;
     /* Optionnel: ajuster l'espacement */
     /* letter-spacing: -0.02em; */
+  }
+  .bigH2 .gamePlan{
+    font-size: 21vw; 
   }
   .gallery{
     font-size: 20vw;

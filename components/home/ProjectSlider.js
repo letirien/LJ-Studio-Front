@@ -292,7 +292,7 @@ export default function ProjectSlider({ projects, navRef }) {
             ref={sectionRef} 
             className={`relative transition-all duration-500 ease-in-out ${isVisible ? "-mt-[6%]" : "mt-0"}`}
         > 
-        <button className="absolute inset-0 pointer-events-none z-20 cursor-pointer group" onClick={() => {handleNavigation(1)}}>
+        <button className="absolute inset-0 pointer-events-none z-3 cursor-pointer group" onClick={() => {handleNavigation(1)}}>
             <div className="absolute right-[2vw] bottom-[50%] sm:right-[-2vw] sm:bottom-[45%] md:right-[12vw] md:bottom-[20%] rotate-[-10deg] pointer-events-auto">
                 <motion.svg 
                     width="82" 
@@ -350,7 +350,7 @@ export default function ProjectSlider({ projects, navRef }) {
                 </motion.svg>
             </div>
         </button>
-         <div id="sliderContainer" className={`${home.sliderContainer} mx-auto rounded-md`}>
+         <div id="sliderContainer" className={`${home.sliderContainer} mx-auto rounded-md z-2`}>
               <div className={`rounded-md ${home.sliderWrapper} relative overflow`} ref={containerRef}>
                   {/* Élément décoratif pour les transitions */}
                   <div className={`rounded-md ${home.deco}`} ref={decoRef} ></div>
@@ -400,7 +400,7 @@ export default function ProjectSlider({ projects, navRef }) {
             </div>
 
             <Section>
-                <motion.div className={`items-top lg:items-start ${home.projectFooter}`} variants={fadeInUp}>
+                <motion.div className={`items-top lg:items-start ${home.projectFooter} mx-[0]`} variants={fadeInUp}>
                     {['Team', 'Match Day', 'Game Plan', 'Perf'].map((field) => (
                         <div className={home.footerInfo} key={field}>
                             <div className="container-txt flex flex-col lg:flex-row items-center flex-wrap gap-2">

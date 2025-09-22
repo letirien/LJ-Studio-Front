@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
+import { SeeMore } from '../SeeMoreResp';
 
 const Etiquette = ({ text }) => {
   // Calculer la durée basée sur la longueur du texte
@@ -147,7 +148,7 @@ export default function BrandingSection({ gamePlan }) {
                  <div className="inline-block">
                     <h2
                       ref={(el) => (titleRefs.current[index] = el)}
-                      className={`bigH2 md:!text-[172pt]/[142pt] !text-left mx-xl relative w-min ${getTitleColor(
+                      className={`bigH2 gamePlan md:!text-[172pt]/[142pt] !text-left mx-xl relative w-content ${getTitleColor(
                         index
                       )}`}
                     >
@@ -165,9 +166,9 @@ export default function BrandingSection({ gamePlan }) {
                     </h2>
                 </div>
               <p className={`${getTextColor(index)} defaultText ${index % 3 === 2 ? "!opacity-100": ""}`}>{item.fields['DESCRIPTION METIER']}</p>
-              <Link className={`${getTextColor(index)} roboto uppercase text-xs mt-4 ${index % 3 === 2 ? "!opacity-100": "opacity-55"}`} href="">› check more</Link>
+              <Link className={`${getTextColor(index)} hidden sm:block roboto uppercase text-xs mt-4 ${index % 3 === 2 ? "!opacity-100": "opacity-55"}`} href="">› check more</Link>
             </div>
-            <div className='md:w-1/2'>
+            <div className='md:w-1/2 relative'>
               <Image 
                 src={item.fields.Image[0].url} 
                 alt={item.fields.Image[0].filename || 'Game plan image'}
@@ -175,6 +176,7 @@ export default function BrandingSection({ gamePlan }) {
                 height={item.fields.Image[0].height}
                 objectFit='cover'
               />
+              <SeeMore/>
             </div>
 
           </motion.div>

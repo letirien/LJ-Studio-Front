@@ -38,7 +38,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div id={styles.navbar} className="mainContainer">
+      <div id={styles.navbar} className="mainContainer pt-[4vh] px-[3vw]">
         <div className={`${styles.logo} ${styles[logoColor]}`}>
           <Image
             width={98}
