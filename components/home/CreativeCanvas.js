@@ -3,25 +3,14 @@ import Image from 'next/image';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-const preloadImages = (images) => {
-  return Promise.all(
-    images.map(img =>
-      new Promise(resolve => {
-        const image = new window.Image();
-        image.src = img.fields.IMAGE[0].url;
-        image.onload = resolve;
-        image.onerror = resolve;
-      })
-    )
-  );
-};
-
 const CreativeCanvas = ({ images }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [randomPositions, setRandomPositions] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Pour suivre le chargement individuel des images
+  const [loadedImages, setLoadedImages] = useState({});
 
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
@@ -53,13 +42,23 @@ const CreativeCanvas = ({ images }) => {
     }
   }, [images]);
 
+  // Précharge en tâche de fond, mais ne bloque pas l'affichage
   useEffect(() => {
-    if (images && images.length > 0) {
-      preloadImages(images).then(() => setIsLoaded(true));
-    }
+    if (!images || images.length === 0) return;
+    images.forEach((img) => {
+      const url = img.fields.IMAGE[0].url;
+      if (!loadedImages[url]) {
+        const image = new window.Image();
+        image.src = url;
+        image.onload = () => setLoadedImages(prev => ({ ...prev, [url]: true }));
+        image.onerror = () => setLoadedImages(prev => ({ ...prev, [url]: false }));
+      }
+    });
+    // eslint-disable-next-line
   }, [images]);
 
-useEffect(() => {
+  const lastDragRef = useRef({ time: 0, pos: 0, velocity: 0 });
+  useEffect(() => {
     let Draggable, gsap;
     let draggableInstance;
     let ctx;
@@ -78,9 +77,16 @@ useEffect(() => {
           draggableInstance = Draggable.create(scrollContainerRef.current, {
             type: "scrollLeft",
             edgeResistance: 0.85,
-            inertia: false,
+            inertia: true,
             allowNativeTouchScrolling: false,
             cursor: "grab",
+            dragClickables: false,
+            onPress: function() {
+              scrollContainerRef.current.style.overflowX = 'hidden';
+            },
+            onRelease: function() {
+              scrollContainerRef.current.style.overflowX = 'auto';
+            },
             onDragStart: function() {
               setIsDragging(true);
               this.target.style.cursor = "grabbing";
@@ -88,14 +94,18 @@ useEffect(() => {
               lastScrollLeft = this.scrollLeft;
               lastTime = Date.now();
               if (momentumRef.current) cancelAnimationFrame(momentumRef.current);
+              velocityVisualRef.current = 0;
+              setVelocityVisual(0);
             },
             onDrag: function() {
               const now = Date.now();
               const dt = now - lastTime;
               if (dt > 0) {
-                velocityRef.current = (this.scrollLeft - lastScrollLeft) / dt;
-                lastScrollLeft = this.scrollLeft;
-                lastTime = now;
+                // velocityRef.current = (this.scrollLeft - lastScrollLeft) / dt;
+                // lastScrollLeft = this.scrollLeft;
+                // lastTime = now;
+                velocityVisualRef.current = velocityRef.current * 120;
+                setVelocityVisual(velocityVisualRef.current);
               }
             },
             onDragEnd: function() {
@@ -107,17 +117,29 @@ useEffect(() => {
                 transition: { type: "spring", stiffness: 300, damping: 20 }
               });
 
-              // Momentum: continue le scroll selon la velocity
-              let momentum = velocityRef.current * 30; // facteur pour ressentir la vitesse
-              let currentScroll = this.scrollLeft;
+              // Momentum custom
+            const velocity = lastDragRef.current.velocity;
+            const maxScroll = scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth;
+            const endScroll = Math.max(0, Math.min(this.x + velocity * 0.5, maxScroll));
+
+              function velocityStep() {
+                if (Math.abs(velocityVisualRef.current) > 1) {
+                  velocityVisualRef.current *= 0.92;
+                  setVelocityVisual(velocityVisualRef.current);
+                  requestAnimationFrame(velocityStep);
+                } else {
+                  setVelocityVisual(0);
+                }
+              }
+              velocityStep();
 
               function step() {
-                if (Math.abs(momentum) > 0.1) {
-                  currentScroll += momentum;
+                if (Math.abs(momentum) > 0.5) {
+                  currentScroll += momentum * 0.016; // 0.016 ~ 60fps
                   // Clamp scroll
                   currentScroll = Math.max(0, Math.min(currentScroll, scrollContainerRef.current.scrollWidth - scrollContainerRef.current.clientWidth));
                   scrollContainerRef.current.scrollLeft = currentScroll;
-                  momentum *= 0.95; // friction, plus proche de 1 = plus long
+                  momentum *= 0.92; // friction
                   momentumRef.current = requestAnimationFrame(step);
                 }
               }
@@ -137,7 +159,7 @@ useEffect(() => {
     return () => {
       if (ctx) ctx.revert();
     };
-  }, [isLoaded, controls]);
+  }, [images, controls]);
 
   return (
     <section ref={containerRef} className="bg-black text-white py-24">
@@ -160,58 +182,76 @@ useEffect(() => {
           >
             <motion.div
               style={{
-                x: velocityVisual // translation X selon la vitesse
+                x: velocityVisual
               }}
               transition={{ type: "spring", stiffness: 200, damping: 30 }}
             >
               <div className="flex gap-3 py-8" style={{ minWidth: 'max-content' }}>
-                {isLoaded && images && images.map((image, index) => (
-                  <motion.div
-                    key={image.id}
-                    className="relative flex-shrink-0 group"
-                    initial={{
-                      y: randomPositions[index] || 0
-                    }}
-                    animate={{
-                      y: inView ? 0 : (randomPositions[index] || 0)
-                    }}
-                    transition={{
-                      duration: 0.4,
-                      delay: index * 0.02,
-                      ease: "easeInOut"
-                    }}
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    <div className={`relative w-full rounded-lg`} style={{
-                      width: !isMobile ? `${image.fields.IMAGE[0].width / 2}px` : `${image.fields.IMAGE[0].width / 4}px`,
-                      height: !isMobile ? `${image.fields.IMAGE[0].height / 2}px` : `${image.fields.IMAGE[0].height / 4}px`
-                    }}>
-                      <Image
-                        src={image.fields.IMAGE[0].url}
-                        alt={image.fields.Name}
-                        fill
-                        className={`transition-all duration-300 cover ${
-                          hoveredIndex === index
-                            ? 'filter-none'
-                            : 'filter grayscale brightness-75'
-                        }`}
-                        style={{
-                          objectFit: 'contain',
-                          filter: hoveredIndex === index
-                            ? 'none'
-                            : 'grayscale(100%) brightness(0.75) sepia(0.1) hue-rotate(200deg)'
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                {images && images.map((image, index) => {
+                  const url = image.fields.IMAGE[0].url;
+                  const isLoadedImg = loadedImages[url];
+                  return (
+                    <motion.div
+                      key={image.id}
+                      className="relative flex-shrink-0 group"
+                      initial={{
+                        y: randomPositions[index] || 0
+                      }}
+                      animate={{
+                        y: inView ? 0 : (randomPositions[index] || 0)
+                      }}
+                      transition={{
+                        duration: 0.4,
+                        delay: index * 0.02,
+                        ease: "easeInOut"
+                      }}
+                      onMouseEnter={() => setHoveredIndex(index)}
+                      onMouseLeave={() => setHoveredIndex(null)}
+                      whileHover={{ scale: 1.02 }}
+                    >
+                      <div className={`relative w-full rounded-lg`} style={{
+                        width: !isMobile ? `${image.fields.IMAGE[0].width / 2}px` : `${image.fields.IMAGE[0].width / 4}px`,
+                        height: !isMobile ? `${image.fields.IMAGE[0].height / 2}px` : `${image.fields.IMAGE[0].height / 4}px`,
+                        background: !isLoadedImg ? "#222" : undefined // couleur de fond si pas chargé
+                      }}>
+                        {isLoadedImg ? (
+                          <Image
+                            src={url}
+                            alt={image.fields.Name}
+                            fill
+                            className={`transition-all duration-300 cover ${
+                              hoveredIndex === index
+                                ? 'filter-none'
+                                : 'filter grayscale brightness-75'
+                            }`}
+                            style={{
+                              objectFit: 'contain',
+                              filter: hoveredIndex === index
+                                ? 'none'
+                                : 'grayscale(100%) brightness(0.75) sepia(0.1) hue-rotate(200deg)'
+                            }}
+                          />
+                        ) : (
+                          // Placeholder (fond sombre ou skeleton)
+                          <div style={{
+                            width: "100%",
+                            height: "100%",
+                            background: "#222",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "#444",
+                            fontSize: 18
+                          }}>
+                            {/* Optionnel : <span>...</span> */}
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
-                {!isLoaded && (
-                  <div className="w-full flex items-center justify-center text-lg text-gray-400">Chargement...</div>
-                )}
+                    </motion.div>
+                  );
+                })}
               </div>
             </motion.div>
           </motion.div>
