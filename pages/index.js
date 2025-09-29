@@ -25,7 +25,7 @@ import CreativeCanvas from "../components/home/CreativeCanvas.js";
 
 
 
-export default function Home({ projects, gamePlan, logoClients, sliderImages }) {
+export default function Home({ projects, gamePlan, logoClients, sliderImages, headerImages }) {
   const { scrollYProgress } = useScroll();
   console.log(sliderImages)
   const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
@@ -107,7 +107,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages }) 
           <title>{siteTitle}</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Header/>
+        <Header headerImages={headerImages}/>
         <section className={`${home.black} bg-red sm:text-[269pt]/[208pt]`} data-scroll ref={sectionRef}>
           <div>
             <h2>
@@ -358,12 +358,20 @@ export async function getServerSideProps() {
       }
     }    
   );
+   const headerImages = await fetcher(
+      `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/HEADER%20IMGS`,{
+        headers: {
+          Authorization: `Bearer ${API_KEY}`
+        }
+      } 
+   );
   return {
     props: {
       projects: projectsData.records,
       gamePlan: gamePlanData.records.sort((a, b) => a.fields.id - b.fields.id),
       logoClients : logoClientsData.records.sort((a, b) => a.fields.id - b.fields.id),
-      sliderImages: sliderImagesData.records
+      sliderImages: sliderImagesData.records,
+      headerImages: headerImages.records
     },
   };
 }

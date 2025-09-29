@@ -6,11 +6,19 @@ import Image from "next/image";
 import utilStyles from "../../styles/utils.module.css";
 import Link from "next/link";
 import {Clock} from "../clock";
+// import WebGLImageTransition from "../WebGLImageTransition";
+import dynamic from "next/dynamic";
 
-export function Header() {
+export function Header({headerImages}) {
+    console.log("img",headerImages);
+
+    const imagesArray = headerImages.map(img => img.fields.IMAGE[0].url);
+    const WebGLImageTransition = dynamic(
+        () => import("../WebGLImageTransition"),
+        { ssr: false }
+    );
     return (
         <header className={`${styles.header} intersectLogo header` }>
-            (
                 <>
                     <Navbar/>
                     <h1 className={`${styles.mainTitle} text-[30vw] sm:text-[158px] top-[45%] md:top-[inherit] mainContainer`}>
@@ -28,7 +36,13 @@ export function Header() {
                     </h1>
                     <div className={`${styles.currentInfoContainer} -bottom-[4%] sm:bottom-[4%]`}><div><Clock/></div></div>
                     {/* <div className={`${styles.currentInfoContainer} font-light`}><div>GAME TIME : 17:47:22 UTC+2</div></div> */}
-                    <div className={styles.headimg}>
+                    <WebGLImageTransition
+                        images={imagesArray}
+                        displacementImage={"/img/disp1.jpg"}
+                        transitionDuration={1.2}
+                        intensity={0.35}
+                    />
+                    {/* <div className={styles.headimg}>
                         <Image
                             src="/images/HEADER.webp"
                             alt="Footbal Cover Design"
@@ -38,7 +52,7 @@ export function Header() {
                                 objectFit: 'cover'
                             }}
                         />
-                    </div>
+                    </div> */}
                     <div className={styles.tiltedContainer}>
                         <div className={styles.tiltedDiv1}></div>
                         <div className={styles.tiltedDiv2}></div>
