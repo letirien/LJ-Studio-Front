@@ -292,7 +292,7 @@ export default function ProjectSlider({ projects, navRef }) {
             ref={sectionRef} 
             className={`relative transition-all duration-500 ease-in-out ${isVisible ? "-mt-[6%]" : "mt-0"}`}
         > 
-        <button className="absolute inset-0 pointer-events-none z-3 cursor-pointer group" onClick={() => {handleNavigation(1)}}>
+        <button className="absolute inset-0 pointer-events-none z-3 group" onClick={() => {handleNavigation(1)}}>
             <div className="absolute right-[2vw] bottom-[50%] sm:right-[-2vw] sm:bottom-[45%] md:right-[12vw] md:bottom-[20%] rotate-[-10deg] pointer-events-auto">
                 <motion.svg 
                     width="82" 
@@ -388,12 +388,12 @@ export default function ProjectSlider({ projects, navRef }) {
                             Nb={totalProjects}
                             idProject={idProject}
                             home={home}
-                            onButtonClick={(id) => {
-                                if (isAnimating) return;
-                                const dir = id > idProject ? 1 : -1;
-                                setDirection(dir);
-                                handleNavigation(dir);
-                            }}
+                            // onButtonClick={(id) => {
+                            //     if (isAnimating) return;
+                            //     const dir = id > idProject ? 1 : -1;
+                            //     setDirection(dir);
+                            //     handleNavigation(dir);
+                            // }}
                         />
                     </div>
                 </Section>
