@@ -10,12 +10,11 @@ import {Clock} from "../clock";
 import dynamic from "next/dynamic";
 
 export function Header({headerImages}) {
-    console.log("img",headerImages);
 
     const imagesArray = headerImages.map(img => img.fields.IMAGE[0].url);
     const WebGLImageTransition = dynamic(
         () => import("../WebGLImageTransition"),
-        { ssr: false }
+        { ssr: true }
     );
     return (
         <header className={`${styles.header} intersectLogo header` }>

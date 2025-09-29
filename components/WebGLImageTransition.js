@@ -6,15 +6,14 @@ import gsap from "gsap";
 
 export default function WebGLImageTransitionDemo5({
   images,
-  transitionDuration = 1.0, // même ordre de grandeur que demo5
-  intensity = 0.3,           // valeur par défaut de demo5 (sketch.js)
+  transitionDuration = 1.0,
+  intensity = 0.3,
   autoplay = true,
-  autoplayDelay = 2500,       // ms
+  autoplayDelay = 2000,
   pauseOnHover = true,
   className
 }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [isReady, setIsReady] = useState(false);
 
   const containerRef = useRef(null);
   const rendererRef = useRef(null);
@@ -70,7 +69,6 @@ export default function WebGLImageTransitionDemo5({
     }
   `;
 
-  // Init
   useEffect(() => {
     if (!containerRef.current || !Array.isArray(images) || images.length < 2) return;
 
@@ -102,8 +100,17 @@ export default function WebGLImageTransitionDemo5({
 
       // Textures
       const loader = new THREE.TextureLoader();
-      const loaded = images.map((src) => {
-        const t = loader.load(src);
+      let loadedCount = 0;
+      let ready = false;
+      const loaded = images.map((src, idx) => {
+        const t = loader.load(src, () => {
+          loadedCount++;
+          // Quand la première image est chargée, on peut afficher la scène
+          if (!ready && loadedCount > 0) {
+            setIsReady(true);
+            ready = true;
+          }
+        });
         t.minFilter = THREE.LinearFilter;
         t.magFilter = THREE.LinearFilter;
         t.generateMipmaps = false;
@@ -112,6 +119,12 @@ export default function WebGLImageTransitionDemo5({
       });
       texturesRef.current = loaded;
 
+      let savedIndex = 0;
+      try {
+        savedIndex = Number(sessionStorage.getItem("image-transition-index") || 0);
+        if (isNaN(savedIndex) || savedIndex >= images.length) savedIndex = 0;
+      } catch {}
+      currentIndexRef.current = savedIndex;
       // Uniforms comme sketch.js
       const uniforms = {
         time:        { value: 0.0 },
@@ -124,8 +137,8 @@ export default function WebGLImageTransitionDemo5({
         swipe:       { value: 0.0 },
         width:       { value: 0.0 },
         radius:      { value: 0.0 },
-        texture1:    { value: loaded[0] },
-        texture2:    { value: loaded[1] },
+        texture1:    { value: loaded[savedIndex]},
+        texture2:    { value: loaded[(savedIndex + 1) % loaded.length] },
         resolution:  { value: new THREE.Vector4() }, // x,y,a1,a2
       };
 
@@ -183,12 +196,14 @@ export default function WebGLImageTransitionDemo5({
       // si l’image est déjà dispo
       if (texturesRef.current[0]?.image?.width) {
         updateResolution();
+        setIsReady(true);
       } else {
         // attend le chargement de la 1ère
         const check = setInterval(() => {
           if (texturesRef.current[0]?.image?.width) {
             clearInterval(check);
             updateResolution();
+            setIsReady(true);
           }
         }, 16);
       }
@@ -203,9 +218,6 @@ export default function WebGLImageTransitionDemo5({
         window.addEventListener("resize", onResize);
         cleanupResize = () => window.removeEventListener("resize", onResize);
       }
-
-      // boucle minimale (seulement nécessaire si tu animes time)
-      // renderer.render(scene, camera);
 
       return () => {
         cleanupResize();
@@ -250,6 +262,7 @@ export default function WebGLImageTransitionDemo5({
       },
       onComplete: () => {
         currentIndexRef.current = nextIndex;
+        sessionStorage.setItem("image-transition-index", nextIndex);
         material.uniforms.texture1.value = nextTex;
         material.uniforms.progress.value = 0;
         isRunningRef.current = false;
@@ -296,6 +309,13 @@ export default function WebGLImageTransitionDemo5({
     };
   }, [autoplay, autoplayDelay, transitionDuration]);
 
+  // Fallback image index (toujours cohérent avec sessionStorage)
+  let fallbackIndex = 0;
+  try {
+    fallbackIndex = Number(sessionStorage.getItem("image-transition-index") || 0);
+    if (isNaN(fallbackIndex) || fallbackIndex >= images.length) fallbackIndex = 0;
+  } catch {}
+
   return (
     <div
       ref={containerRef}
@@ -310,6 +330,23 @@ export default function WebGLImageTransitionDemo5({
       }}
       aria-label="WebGL Image Transition (demo5)"
       role="img"
-    />
+    >
+      {!isReady && images[fallbackIndex] && (
+        <img
+          src={images[fallbackIndex]}
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 1,
+            pointerEvents: "none",
+            transition: "opacity 0.3s"
+          }}
+        />
+      )}
+    </div>
   );
 }

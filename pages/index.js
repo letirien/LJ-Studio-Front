@@ -37,7 +37,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   const sliderNavRef = useRef(null);
   // Référence pour la section entière
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
+  const isInView = useInView(sectionRef, { once: true, amount: 0.32 });
   
   // Animations simples
   const titleAnimation = {
@@ -108,7 +108,16 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Header headerImages={headerImages}/>
-        <section className={`${home.black} bg-red sm:text-[269pt]/[208pt]`} data-scroll ref={sectionRef}>
+        <section
+          className={`${home.black} bg-red sm:text-[269pt]/[208pt]`}
+          data-scroll
+          ref={sectionRef}
+          style={{
+            opacity: isInView ? 1 : 0,
+            pointerEvents: isInView ? 'auto' : 'none',
+            transition: 'opacity 0.6s cubic-bezier(0.4,0,0.2,1)'
+          }}
+        >
           <div>
             <h2>
               <div className="flex gap-6 md:gap-12 justify-center">
@@ -164,13 +173,12 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-12`}
             >
               LJ is a French creative studio based in Paris with an exclusive focus on the sports sector. Driven by a profound passion of sports and the emotion they provide, our studio prides itself on capturing and translating that into captivating visual narratives.
-              <br></br>
-              <br></br>
+              <br />
+              <br />
               From digital branding to creative direction, motion, print layouts and graphic creation, we offer a wide spectrum of services.               
             </motion.p>
           </div>
-          
-        <CreativeCanvas images={sliderImages}/>
+          <CreativeCanvas images={sliderImages}/>
         </section>
         {/* <section className={`${home.introSection}`} data-scroll>
           <div className={`${home.white} intersectLogo white`}>
