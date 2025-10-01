@@ -244,6 +244,7 @@ const CreativeCanvas = ({ images }) => {
                       }}>
                         {isLoadedImg ? (
                           <Image
+                            quality={70}
                             src={url}
                             alt={image.fields.Name}
                             fill
