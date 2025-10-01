@@ -35,6 +35,9 @@ importers:
       react-intersection-observer:
         specifier: ^9.5.2
         version: 9.16.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      three:
+        specifier: ^0.180.0
+        version: 0.180.0
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.0.8
@@ -1628,6 +1631,9 @@ packages:
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
+
+  three@0.180.0:
+    resolution: {integrity: sha512-o+qycAMZrh+TsE01GqWUxUIKR1AL0S8pq7zDkYOQw8GqfX8b8VoCKYUoHbhiX5j+7hr8XsuHDVU6+gkQJQKg9w==}
 
   tiny-emitter@1.2.0:
     resolution: {integrity: sha512-rWjF00inHeWtT5UbQYAXoMI4hL6TRMqohuKCsODyPYYmfAxqfMnXLsIeNrbdPEkNxlk++rojVilTnI9IVmEBtA==}
@@ -3315,6 +3321,8 @@ snapshots:
   tailwindcss@4.0.15: {}
 
   tapable@2.2.1: {}
+
+  three@0.180.0: {}
 
   tiny-emitter@1.2.0: {}
 
