@@ -26,8 +26,8 @@ export default function WebGLImageTransitionDemo5({
   const isRunningRef = useRef(false);
   const autoplayTimerRef = useRef(null);
   const isHoveredRef = useRef(false);
+  const renderLoopRef = useRef(null);
 
-  // Vertex identique à sketch.js
   const vertexShader = `
     varying vec2 vUv;
     void main() {
@@ -36,7 +36,6 @@ export default function WebGLImageTransitionDemo5({
     }
   `;
 
-  // Fragment identique à demo5.js (displacement dérivé des deux images)
   const fragmentShader = `
     uniform float time;
     uniform float progress;
@@ -46,15 +45,36 @@ export default function WebGLImageTransitionDemo5({
     uniform float transition;
     uniform float radius;
     uniform float intensity;
-
+    uniform float hover;
     uniform sampler2D texture1;
     uniform sampler2D texture2;
     uniform vec4 resolution;
+    uniform vec2 mouse;
+    uniform float hoverRadius;
+    uniform float circleFade;
 
     varying vec2 vUv;
 
     void main() {
       vec2 newUV = (vUv - vec2(0.5)) * resolution.zw + vec2(0.5);
+
+      // Correction pour cercle parfait
+      float aspect = resolution.x / resolution.y;
+      vec2 mouseNorm = vec2(mouse.x, mouse.y);
+      vec2 uvNorm = vec2(vUv.x, vUv.y);
+      uvNorm.x = (uvNorm.x - 0.5) * aspect + 0.5;
+      mouseNorm.x = (mouseNorm.x - 0.5) * aspect + 0.5;
+
+      float dist = distance(uvNorm, mouseNorm);
+      
+      // Masque du cercle : 1.0 au centre, 0.0 loin
+      float circleMask = 1.0 - smoothstep(hoverRadius * 0.5, hoverRadius, dist);
+      // Ajoute un fondu progressif
+      circleMask *= circleFade;
+
+      // Zone de déformation sur les bords
+      float edgeMask = smoothstep(hoverRadius, hoverRadius * 0.5, dist) * 
+                       (1.0 - smoothstep(hoverRadius * 0.3, hoverRadius * 0.5, dist));
 
       vec4 d1 = texture2D(texture1, newUV);
       vec4 d2 = texture2D(texture2, newUV);
@@ -62,10 +82,23 @@ export default function WebGLImageTransitionDemo5({
       float displace1 = (d1.r + d1.g + d1.b) * 0.33;
       float displace2 = (d2.r + d2.g + d2.b) * 0.33;
 
-      vec4 t1 = texture2D(texture1, vec2(newUV.x, newUV.y + progress * (displace2 * intensity)));
-      vec4 t2 = texture2D(texture2, vec2(newUV.x, newUV.y + (1.0 - progress) * (displace1 * intensity)));
+      // Intensité de déformation amplifiée sur les bords
+      float deformStrength = intensity * (1.0 + edgeMask * hover * 4.0);
 
-      gl_FragColor = mix(t1, t2, progress);
+      // Progress local : pendant transition OU dans le cercle en hover
+      float localProgress = progress;
+      if (hover > 0.1 && progress < 0.01) {
+        // Mode hover sans transition : afficher texture2 dans le cercle
+        localProgress = circleMask * hover;
+      } else if (progress > 0.01) {
+        // Pendant transition : amplifier dans le cercle
+        localProgress = mix(progress, 1.0, circleMask * hover * 0.5);
+      }
+
+      vec4 t1 = texture2D(texture1, vec2(newUV.x, newUV.y + localProgress * (displace2 * deformStrength)));
+      vec4 t2 = texture2D(texture2, vec2(newUV.x, newUV.y + (1.0 - localProgress) * (displace1 * deformStrength)));
+
+      gl_FragColor = mix(t1, t2, localProgress);
     }
   `;
 
@@ -86,7 +119,6 @@ export default function WebGLImageTransitionDemo5({
       const scene = new THREE.Scene();
       sceneRef.current = scene;
 
-      // Caméra perspective comme l’original
       const camera = new THREE.PerspectiveCamera(
         70,
         (container.clientWidth || 1) / (container.clientHeight || 1),
@@ -98,14 +130,12 @@ export default function WebGLImageTransitionDemo5({
 
       const geometry = new THREE.PlaneGeometry(1, 1, 2, 2);
 
-      // Textures
       const loader = new THREE.TextureLoader();
       let loadedCount = 0;
       let ready = false;
       const loaded = images.map((src, idx) => {
         const t = loader.load(src, () => {
           loadedCount++;
-          // Quand la première image est chargée, on peut afficher la scène
           if (!ready && loadedCount > 0) {
             setIsReady(true);
             ready = true;
@@ -125,7 +155,7 @@ export default function WebGLImageTransitionDemo5({
         if (isNaN(savedIndex) || savedIndex >= images.length) savedIndex = 0;
       } catch {}
       currentIndexRef.current = savedIndex;
-      // Uniforms comme sketch.js
+
       const uniforms = {
         time:        { value: 0.0 },
         progress:    { value: 0.0 },
@@ -139,7 +169,12 @@ export default function WebGLImageTransitionDemo5({
         radius:      { value: 0.0 },
         texture1:    { value: loaded[savedIndex]},
         texture2:    { value: loaded[(savedIndex + 1) % loaded.length] },
-        resolution:  { value: new THREE.Vector4() }, // x,y,a1,a2
+        resolution:  { value: new THREE.Vector4() },
+        hover:       { value: 0.0 },
+        mouse:       { value: new THREE.Vector2(0.5, 0.5) },
+        hoverRadius: { value: 0.25 },
+        circleFade:  { value: 0.0 } // Ajouté
+
       };
 
       const material = new THREE.ShaderMaterial({
@@ -162,7 +197,6 @@ export default function WebGLImageTransitionDemo5({
 
         camera.aspect = w / h;
 
-        // cover calc identique à sketch.js
         const img = texturesRef.current[0]?.image;
         const imageAspect = img && img.width ? img.height / img.width : 1.0;
 
@@ -175,30 +209,23 @@ export default function WebGLImageTransitionDemo5({
           a2 = (h / w) / imageAspect;
         }
 
-        // resolution: x=w, y=h, z=a1, w=a2
         material.uniforms.resolution.value.set(w, h, a1, a2);
 
-        // FOV pour que le plan remplisse l’écran
         const dist = camera.position.z;
         const planeHeight = 1.0;
         camera.fov = (2 * (180 / Math.PI)) * Math.atan(planeHeight / (2 * dist));
 
-        // scale du plan selon aspect (comme l’original)
         plane.scale.x = camera.aspect;
         plane.scale.y = 1.0;
 
         camera.updateProjectionMatrix();
-
-        // premier rendu
         renderer.render(scene, camera);
       };
 
-      // si l’image est déjà dispo
       if (texturesRef.current[0]?.image?.width) {
         updateResolution();
         setIsReady(true);
       } else {
-        // attend le chargement de la 1ère
         const check = setInterval(() => {
           if (texturesRef.current[0]?.image?.width) {
             clearInterval(check);
@@ -221,6 +248,9 @@ export default function WebGLImageTransitionDemo5({
 
       return () => {
         cleanupResize();
+        if (renderLoopRef.current) {
+          cancelAnimationFrame(renderLoopRef.current);
+        }
         try {
           scene.clear();
           geometry.dispose();
@@ -235,10 +265,8 @@ export default function WebGLImageTransitionDemo5({
     } catch (e) {
       console.error("[WebGLImageTransitionDemo5] init error:", e);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images.join("|"), intensity]);
 
-  // next() fidèle à demo5: anime uniforms.progress 0->1 et swap
   const next = () => {
     if (isRunningRef.current) return;
     const material = materialRef.current;
@@ -247,7 +275,8 @@ export default function WebGLImageTransitionDemo5({
     const count = texturesRef.current.length;
     const nextIndex = (currentIndexRef.current + 1) % count;
     const nextTex = texturesRef.current[nextIndex];
-    material.uniforms.texture2.value = nextTex;
+    // material.uniforms.texture2.value = nextTex;
+    // material.uniforms.hoverRadius.value = 0.0
 
     isRunningRef.current = true;
 
@@ -265,12 +294,33 @@ export default function WebGLImageTransitionDemo5({
         sessionStorage.setItem("image-transition-index", nextIndex);
         material.uniforms.texture1.value = nextTex;
         material.uniforms.progress.value = 0;
+        
+        // Mettre à jour texture2 pour la PROCHAINE image
+        const followingIndex = (nextIndex + 1) % count;
+        material.uniforms.texture2.value = texturesRef.current[followingIndex];
+        
         isRunningRef.current = false;
+        if (isHoveredRef.current) {
+          gsap.to(materialRef.current.uniforms.circleFade, {
+            value: 1,
+            duration: 0.3,
+            ease: "power2.out"
+          });
+          gsap.fromTo(
+            materialRef.current.uniforms.hoverRadius,
+            { value: 0.0 },
+            {
+              value: 0.25, // rayon final (ajuste si besoin)
+              duration: 0.4,
+              ease: "power2.out"
+            }
+          );
+        }
       }
     });
   };
 
-  // clic -> next
+  // Clic -> next
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -279,7 +329,102 @@ export default function WebGLImageTransitionDemo5({
     return () => el.removeEventListener("click", handleClick);
   }, []);
 
-  // pause au survol (optionnel)
+  // Hover : anime l'uniform hover et démarre la boucle de rendu
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const startRenderLoop = () => {
+      const render = () => {
+        if (isHoveredRef.current && materialRef.current && rendererRef.current && sceneRef.current && cameraRef.current) {
+          rendererRef.current.render(sceneRef.current, cameraRef.current);
+          renderLoopRef.current = requestAnimationFrame(render);
+        }
+      };
+      render();
+    };
+
+    const onEnter = () => {
+      isHoveredRef.current = true;
+      startRenderLoop();
+      if (materialRef.current) {
+        gsap.to(materialRef.current.uniforms.hover, {
+          value: 1,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+        gsap.to(materialRef.current.uniforms.circleFade, {
+          value: 1,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+        gsap.fromTo(
+          materialRef.current.uniforms.hoverRadius,
+          { value: 0.0 },
+          {
+            value: 0.25, // rayon final (ajuste si besoin)
+            duration: 0.4,
+            ease: "power2.out"
+          }
+        );
+      }
+    };
+
+    const onLeave = () => {
+      isHoveredRef.current = false;
+      if (renderLoopRef.current) {
+        cancelAnimationFrame(renderLoopRef.current);
+        renderLoopRef.current = null;
+      }
+      if (materialRef.current && rendererRef.current && sceneRef.current && cameraRef.current) {
+        gsap.to(materialRef.current.uniforms.hover, {
+          value: 0,
+          duration: 0.3,
+          ease: "power2.out",
+          onUpdate: () => {
+            rendererRef.current.render(sceneRef.current, cameraRef.current);
+          }
+        });
+        gsap.to(materialRef.current.uniforms.circleFade, {
+          value: 0,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+        gsap.to(materialRef.current.uniforms.hoverRadius, {
+          value: 0.0,
+          duration: 0.4,
+          ease: "power2.in"
+        });
+      }
+    };
+
+    el.addEventListener("mouseenter", onEnter);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  // MAJ position curseur
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = 1.0 - (e.clientY - rect.top) / rect.height;
+      if (materialRef.current) {
+        materialRef.current.uniforms.mouse.value.set(x, y);
+      }
+    };
+
+    el.addEventListener("mousemove", handleMove);
+    return () => el.removeEventListener("mousemove", handleMove);
+  }, []);
+
+  // Pause au survol
   useEffect(() => {
     if (!pauseOnHover) return;
     const el = containerRef.current;
@@ -294,7 +439,7 @@ export default function WebGLImageTransitionDemo5({
     };
   }, [pauseOnHover]);
 
-  // autoplay cyclique
+  // Autoplay
   useEffect(() => {
     if (!autoplay) return;
     const tick = () => {
@@ -309,7 +454,6 @@ export default function WebGLImageTransitionDemo5({
     };
   }, [autoplay, autoplayDelay, transitionDuration]);
 
-  // Fallback image index (toujours cohérent avec sessionStorage)
   let fallbackIndex = 0;
   try {
     fallbackIndex = Number(sessionStorage.getItem("image-transition-index") || 0);
