@@ -109,7 +109,7 @@ export default function BrandingSection({ gamePlan }) {
   };
 
   const hasRadius = (index) => {
-    return index % 2 === 0 ? 'rounded-t-3xl' : '';
+    return 'rounded-t-3xl'
   };
   
   return (

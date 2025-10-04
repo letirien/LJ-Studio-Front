@@ -22,6 +22,7 @@ import Collab from "../components/home/Collab.js";
 import StudioBanner from "../components/home/StudioBanner.js";
 import AnimatedField from "../components/home/AnimatedField.js";
 import CreativeCanvas from "../components/home/CreativeCanvas.js";
+import { ImagesTrails } from "../components/home/ImagesTrail.js";
 
 
 
@@ -313,17 +314,18 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             <div className="flex flex-col sm:flex-row gap-8 justify-around flex-1">
               <div className="">
                 <p className="uppercase hardbopBlack text-[12vw] sm:text-[53pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
-                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[25pt]">Creativity</p>
+                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[20pt]">Creativity</p>
               </div>
               <div className="">
                 <p className="uppercase hardbopBlack text-[12vw] sm:text-[53pt] leading-[0.8]">WINNING STRATEGY</p>
-                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[25pt]">Mixing pixels and passion</p>
+                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[20pt]">Mixing pixels and passion</p>
               </div>
             </div>
           </div>
           <Collab logos={logoClients} />
         </section>
         <section className="relative bg-white py-42 intersectLogo white px-[4vw]">
+          <ImagesTrails/>
           <h2 className="text-center gallery mx-xl text-black">
             <p className="flex items-center gap-3 justify-center">BEYOND <span className="tenTwentyThin text-[125pt]">THE</span> SURFACE...</p>
             <p>STEP INSIDE OUR</p>
