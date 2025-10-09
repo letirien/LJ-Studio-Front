@@ -1,14 +1,5 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-// Import dynamique de ScrollTrigger uniquement côté client
-let ScrollTrigger = null;
-if (typeof window !== 'undefined') {
-    // charge le plugin dynamiquement pour Next.js SSR
-    import('gsap/dist/ScrollTrigger').then((mod) => {
-        ScrollTrigger = mod.ScrollTrigger;
-        gsap.registerPlugin(ScrollTrigger);
-    }).catch(() => {});
-}
 
 const FIELD_PATHS = [
     'Penalty_area_line',
@@ -98,31 +89,56 @@ export default function AnimatedField() {
         const svg = svgRef.current;
         if (!svg) return;
 
-        // Récupérer tous les paths/arcs à animer
-        const pathIds = [...FIELD_PATHS];
-        for (let i = pathIds.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [pathIds[i], pathIds[j]] = [pathIds[j], pathIds[i]];
-        }
-        const animationOrder = [
-            ...pathIds,
-            'Centre_line',
-            'Centre_circle',
-            ...ALL_POINTS,
-            'Corner_arcs',
-        ];
-
-        // Fonction d'animation séquentielle (apparition)
-        const animateNext = (i) => {
-            if (i >= animationOrder.length) return;
-            const id = animationOrder[i];
-            const el = svg.querySelector(`#${id}`);
-            if (!el) {
-                animateNext(i + 1);
-                return;
+        const init = async () => {
+            let ScrollTriggerLocal = null;
+            if (typeof window !== 'undefined') {
+                try {
+                    const mod = await import('gsap/dist/ScrollTrigger');
+                    ScrollTriggerLocal = mod.ScrollTrigger;
+                    gsap.registerPlugin(ScrollTriggerLocal);
+                } catch {}
             }
-            if (el.tagName === 'circle') {
-                if (id === 'Centre_circle') {
+
+            // Récupérer tous les paths/arcs à animer
+            const pathIds = [...FIELD_PATHS];
+            for (let i = pathIds.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pathIds[i], pathIds[j]] = [pathIds[j], pathIds[i]];
+            }
+            const animationOrder = [
+                ...pathIds,
+                'Centre_line',
+                'Centre_circle',
+                ...ALL_POINTS,
+                'Corner_arcs',
+            ];
+
+            // Fonction d'animation séquentielle (apparition)
+            const animateNext = (i) => {
+                if (i >= animationOrder.length) return;
+                const id = animationOrder[i];
+                const el = svg.querySelector(`#${id}`);
+                if (!el) {
+                    animateNext(i + 1);
+                    return;
+                }
+                if (el.tagName === 'circle') {
+                    if (id === 'Centre_circle') {
+                        const length = el.getTotalLength();
+                        gsap.to(el, {
+                            strokeDashoffset: 0,
+                            duration: 0.5,
+                            ease: 'power1.inOut',
+                            onComplete: () => animateNext(i + 1),
+                        });
+                    } else {
+                        gsap.to(el, {
+                            opacity: 1,
+                            duration: 0.3,
+                            onComplete: () => animateNext(i + 1),
+                        });
+                    }
+                } else {
                     const length = el.getTotalLength();
                     gsap.to(el, {
                         strokeDashoffset: 0,
@@ -130,50 +146,40 @@ export default function AnimatedField() {
                         ease: 'power1.inOut',
                         onComplete: () => animateNext(i + 1),
                     });
-                } else {
-                    gsap.to(el, {
-                        opacity: 1,
-                        duration: 0.3,
-                        onComplete: () => animateNext(i + 1),
-                    });
                 }
-            } else {
-                const length = el.getTotalLength();
-                gsap.to(el, {
-                    strokeDashoffset: 0,
-                    duration: 0.5,
-                    ease: 'power1.inOut',
-                    onComplete: () => animateNext(i + 1),
-                });
-            }
+            };
+
+            // Initialisation à l'état caché au premier rendu
+            resetSVGInstant(svg, animationOrder);
+
+            // Créer le ScrollTrigger une fois le plugin chargé
+            const trigger = ScrollTriggerLocal && ScrollTriggerLocal.create({
+                trigger: sectionRef.current,
+                start: 'top 80%',
+                end: 'bottom 80%',
+                once: false,
+                onEnter: () => {
+                    animateNext(0);
+                },
+                onEnterBack: () => {
+                    animateNext(0);
+                },
+                onLeave: () => {
+                    resetSVGAnimated(svg, animationOrder);
+                },
+                onLeaveBack: () => {
+                    resetSVGAnimated(svg, animationOrder);
+                },
+            });
+
+            return () => {
+                trigger && trigger.kill();
+            };
         };
 
-        // ScrollTrigger pour lancer l'animation à chaque entrée/sortie de la section
-        const trigger = ScrollTrigger && ScrollTrigger.create({
-            trigger: sectionRef.current,
-            start: 'top 80%',
-            end: 'bottom 80%',
-            once: false,
-            onEnter: () => {
-                animateNext(0);
-            },
-            onEnterBack: () => {
-                animateNext(0);
-            },
-            onLeave: () => {
-                resetSVGAnimated(svg, animationOrder);
-            },
-            onLeaveBack: () => {
-                resetSVGAnimated(svg, animationOrder);
-            },
-        });
-
-        // Initialisation à l'état caché au premier rendu
-        resetSVGInstant(svg, animationOrder);
-
-        return () => {
-            trigger && trigger.kill();
-        };
+        let cleanupFn;
+        init().then((fn) => { cleanupFn = fn; });
+        return () => { if (typeof cleanupFn === 'function') cleanupFn(); };
     }, []);
 
     return (

@@ -2,27 +2,22 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-// Import dynamique pour ScrollTrigger côté client uniquement
-let ScrollTrigger = null;
-if (typeof window !== 'undefined') {
-  import('gsap/dist/ScrollTrigger').then((mod) => {
-    ScrollTrigger = mod.ScrollTrigger;
-    gsap.registerPlugin(ScrollTrigger);
-  }).catch(() => {});
-}
 
 export const ImagesTrails = ({ speed = 1 }) => {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    // Vérifier si on est côté client
     if (typeof window === 'undefined') return;
     
-    // Enregistrer le plugin ScrollTrigger si dispo (client-only)
-    if (ScrollTrigger) {
-      gsap.registerPlugin(ScrollTrigger);
-      ScrollTrigger.refresh();
-    }
+    let ScrollTriggerLocal = null;
+    let triggers = [];
+    
+    const init = async () => {
+      try {
+        const mod = await import('gsap/dist/ScrollTrigger');
+        ScrollTriggerLocal = mod.ScrollTrigger;
+        gsap.registerPlugin(ScrollTriggerLocal);
+      } catch {}
     
     // config + defaults
     const options = {
@@ -167,15 +162,18 @@ export const ImagesTrails = ({ speed = 1 }) => {
     }
 
     // Initialize ScrollTrigger
-    ScrollTrigger && ScrollTrigger.create({
-      trigger: wrapper,
-      start: "top bottom",
-      end: "bottom top",
-      onEnter: startTrail,
-      onEnterBack: startTrail,
-      onLeave: stopTrail,
-      onLeaveBack: stopTrail,
-    });
+    if (ScrollTriggerLocal) {
+      const t = ScrollTriggerLocal.create({
+        trigger: wrapper,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: startTrail,
+        onEnterBack: startTrail,
+        onLeave: stopTrail,
+        onLeaveBack: stopTrail,
+      });
+      triggers.push(t);
+    }
 
     // Clean up on window resize
     const handleResize = () => {
@@ -188,10 +186,14 @@ export const ImagesTrails = ({ speed = 1 }) => {
 
     window.addEventListener("resize", handleResize);
 
+    };
+
+    let inited = false;
+    init().then(() => { inited = true; });
+
     return () => {
       stopTrail();
-      ScrollTrigger && ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      window.removeEventListener("resize", handleResize);
+      if (triggers.length) triggers.forEach(t => t.kill());
     };
   }, [speed]);
 
