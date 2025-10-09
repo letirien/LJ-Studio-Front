@@ -2,7 +2,14 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+// Import dynamique pour ScrollTrigger côté client uniquement
+let ScrollTrigger = null;
+if (typeof window !== 'undefined') {
+  import('gsap/dist/ScrollTrigger').then((mod) => {
+    ScrollTrigger = mod.ScrollTrigger;
+    gsap.registerPlugin(ScrollTrigger);
+  }).catch(() => {});
+}
 
 export const ImagesTrails = ({ speed = 1 }) => {
   const wrapperRef = useRef(null);
@@ -11,9 +18,11 @@ export const ImagesTrails = ({ speed = 1 }) => {
     // Vérifier si on est côté client
     if (typeof window === 'undefined') return;
     
-    // Enregistrer le plugin ScrollTrigger
-    gsap.registerPlugin(ScrollTrigger);
-    ScrollTrigger.refresh();
+    // Enregistrer le plugin ScrollTrigger si dispo (client-only)
+    if (ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      ScrollTrigger.refresh();
+    }
     
     // config + defaults
     const options = {
@@ -158,7 +167,7 @@ export const ImagesTrails = ({ speed = 1 }) => {
     }
 
     // Initialize ScrollTrigger
-    ScrollTrigger.create({
+    ScrollTrigger && ScrollTrigger.create({
       trigger: wrapper,
       start: "top bottom",
       end: "bottom top",
@@ -181,7 +190,7 @@ export const ImagesTrails = ({ speed = 1 }) => {
 
     return () => {
       stopTrail();
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger && ScrollTrigger.getAll().forEach(trigger => trigger.kill());
       window.removeEventListener("resize", handleResize);
     };
   }, [speed]);

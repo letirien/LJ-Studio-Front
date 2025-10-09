@@ -3,14 +3,20 @@ import { AnimatePresence } from 'framer-motion';
 import { ReactLenis } from 'lenis/react';
 import { useEffect } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import dynamic from 'next/dynamic';
 
 const Cursor = dynamic(() => import('../components/Cursor'), {
   ssr: false
 });
 
-gsap.registerPlugin(ScrollTrigger);
+// Enregistre ScrollTrigger côté client uniquement
+if (typeof window !== 'undefined') {
+  // import dynamique pour éviter SSR des modules ESM
+  import('gsap/dist/ScrollTrigger').then((mod) => {
+    const ScrollTrigger = mod.ScrollTrigger;
+    gsap.registerPlugin(ScrollTrigger);
+  }).catch(() => {});
+}
 
 function App({ Component, pageProps }) {
   useEffect(() => {

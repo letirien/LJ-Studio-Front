@@ -1,8 +1,14 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+// Import dynamique de ScrollTrigger uniquement côté client
+let ScrollTrigger = null;
+if (typeof window !== 'undefined') {
+    // charge le plugin dynamiquement pour Next.js SSR
+    import('gsap/dist/ScrollTrigger').then((mod) => {
+        ScrollTrigger = mod.ScrollTrigger;
+        gsap.registerPlugin(ScrollTrigger);
+    }).catch(() => {});
+}
 
 const FIELD_PATHS = [
     'Penalty_area_line',
@@ -143,7 +149,7 @@ export default function AnimatedField() {
         };
 
         // ScrollTrigger pour lancer l'animation à chaque entrée/sortie de la section
-        const trigger = ScrollTrigger.create({
+        const trigger = ScrollTrigger && ScrollTrigger.create({
             trigger: sectionRef.current,
             start: 'top 80%',
             end: 'bottom 80%',
