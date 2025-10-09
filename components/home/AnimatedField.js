@@ -16,13 +16,53 @@ const ALL_POINTS = ['Centre_mark', 'Penalty_mark', 'Penalty_mark1'];
 export default function AnimatedField() {
     const svgRef = useRef(null);
     const sectionRef = useRef(null);
+    const animatingRef = useRef(false);
+    const leavePendingRef = useRef(false);
+    const resettingRef = useRef(false);
+    const playTlRef = useRef(null);
+    const resetTlRef = useRef(null);
+    // Facteurs de vitesse
+    const PLAY_SPEED = 0.8; // vitesse globale lecture
+    const RESET_SPEED = 1; // vitesse globale reset
+
+    // Tuer tous les tweens actifs sur les éléments d'animation
+    const killAllTweens = (svg, animationOrder) => {
+        if (!svg || !animationOrder) return;
+        animationOrder.forEach((id) => {
+            const el = svg.querySelector(`#${id}`);
+            if (el) gsap.killTweensOf(el);
+        });
+    };
+
+    // Helpers d'état
+    const isAlmost = (a, b, eps = 0.5) => Math.abs(parseFloat(a) - parseFloat(b)) <= eps;
+    const isElementVisible = (el, id) => {
+        if (!el) return false;
+        const cs = typeof window !== 'undefined' ? window.getComputedStyle(el) : null;
+        if (el.tagName === 'circle') {
+            if (id === 'Centre_circle') {
+                // visible si dashoffset ~ 0
+                const off = cs ? parseFloat(cs.strokeDashoffset || el.style.strokeDashoffset || 0) : 0;
+                return isAlmost(off, 0);
+            }
+            const op = cs ? parseFloat(cs.opacity || el.style.opacity || 0) : 0;
+            return op >= 0.99;
+        }
+        // path: visible si dashoffset ~ 0
+        const off = cs ? parseFloat(cs.strokeDashoffset || el.style.strokeDashoffset || 0) : 0;
+        return isAlmost(off, 0);
+    };
 
     // Fonction pour réinitialiser tous les éléments SVG à l'état caché (animé, sens inverse)
     const resetSVGAnimated = (svg, animationOrder, onComplete) => {
+        // Empêche conflit avec play: marquer reset en cours et tuer les tweens
+        resettingRef.current = true;
+        killAllTweens(svg, animationOrder);
         // On anime dans l'ordre inverse
         const reversed = [...animationOrder].reverse();
         const resetNext = (i) => {
             if (i >= reversed.length) {
+                resettingRef.current = false;
                 if (onComplete) onComplete();
                 return;
             }
@@ -113,40 +153,98 @@ export default function AnimatedField() {
                 'Corner_arcs',
             ];
 
-            // Fonction d'animation séquentielle (apparition)
-            const animateNext = (i) => {
-                if (i >= animationOrder.length) return;
-                const id = animationOrder[i];
-                const el = svg.querySelector(`#${id}`);
-                if (!el) {
-                    animateNext(i + 1);
+            // Construit une timeline de lecture complète
+            const buildPlayTimeline = () => {
+                const tl = gsap.timeline({ paused: true, defaults: { ease: 'power1.inOut' } });
+                animationOrder.forEach((id) => {
+                    const el = svg.querySelector(`#${id}`);
+                    if (!el) return;
+                    // Si déjà visible (après reset partiel), on saute
+                    if (isElementVisible(el, id)) return;
+                    if (el.tagName === 'circle') {
+                        if (id === 'Centre_circle') {
+                            tl.to(el, { strokeDashoffset: 0, duration: 0.35 });
+                        } else {
+                            tl.to(el, { opacity: 1, duration: 0.2 });
+                        }
+                    } else {
+                        tl.to(el, { strokeDashoffset: 0, duration: 0.35 });
+                    }
+                });
+                return tl;
+            };
+
+            // Construit une timeline de reset (sens inverse)
+            const buildResetTimeline = () => {
+                const reversed = [...animationOrder].reverse();
+                const tl = gsap.timeline({ paused: true, defaults: { ease: 'power1.inOut' } });
+                reversed.forEach((id) => {
+                    const el = svg.querySelector(`#${id}`);
+                    if (!el) return;
+                    if (el.tagName === 'circle') {
+                        if (id === 'Centre_circle') {
+                            const length = el.getTotalLength();
+                            tl.to(el, { strokeDashoffset: length, duration: 0.25 });
+                        } else {
+                            tl.to(el, { opacity: 0, duration: 0.15 });
+                        }
+                    } else {
+                        const length = el.getTotalLength();
+                        tl.to(el, { strokeDashoffset: length, duration: 0.25 });
+                    }
+                });
+                return tl;
+            };
+
+            // Lance play en annulant tout reset en cours
+            const playAnimation = () => {
+                if (animatingRef.current) return;
+                // stop reset si en cours
+                if (resetTlRef.current && resetTlRef.current.isActive()) {
+                    resetTlRef.current.kill();
+                    resettingRef.current = false;
+                }
+                // nettoyer les tweens, mais NE PAS remettre à zéro: on reprend là où on en est
+                killAllTweens(svg, animationOrder);
+                // créer et jouer la timeline
+                playTlRef.current && playTlRef.current.kill();
+                playTlRef.current = buildPlayTimeline();
+                // Si tout était déjà visible (timeline vide), rien à jouer
+                if (!playTlRef.current || playTlRef.current.duration() === 0) {
+                    if (leavePendingRef.current) {
+                        leavePendingRef.current = false;
+                        startReset();
+                    }
                     return;
                 }
-                if (el.tagName === 'circle') {
-                    if (id === 'Centre_circle') {
-                        const length = el.getTotalLength();
-                        gsap.to(el, {
-                            strokeDashoffset: 0,
-                            duration: 0.5,
-                            ease: 'power1.inOut',
-                            onComplete: () => animateNext(i + 1),
-                        });
-                    } else {
-                        gsap.to(el, {
-                            opacity: 1,
-                            duration: 0.3,
-                            onComplete: () => animateNext(i + 1),
-                        });
+                animatingRef.current = true;
+                playTlRef.current.eventCallback('onComplete', () => {
+                    animatingRef.current = false;
+                    if (leavePendingRef.current) {
+                        leavePendingRef.current = false;
+                        // démarrer reset immédiatement
+                        startReset();
                     }
-                } else {
-                    const length = el.getTotalLength();
-                    gsap.to(el, {
-                        strokeDashoffset: 0,
-                        duration: 0.5,
-                        ease: 'power1.inOut',
-                        onComplete: () => animateNext(i + 1),
-                    });
+                });
+                playTlRef.current.timeScale(PLAY_SPEED).play(0);
+            };
+
+            const startReset = () => {
+                // ne pas doubler
+                if (resettingRef.current) return;
+                // si play actif, marquer pending et attendre fin
+                if (playTlRef.current && playTlRef.current.isActive()) {
+                    leavePendingRef.current = true;
+                    return;
                 }
+                resettingRef.current = true;
+                killAllTweens(svg, animationOrder);
+                resetTlRef.current && resetTlRef.current.kill();
+                resetTlRef.current = buildResetTimeline();
+                resetTlRef.current.eventCallback('onComplete', () => {
+                    resettingRef.current = false;
+                });
+                resetTlRef.current.timeScale(RESET_SPEED).play(0);
             };
 
             // Initialisation à l'état caché au premier rendu
@@ -158,18 +256,10 @@ export default function AnimatedField() {
                 start: 'top 80%',
                 end: 'bottom 80%',
                 once: false,
-                onEnter: () => {
-                    animateNext(0);
-                },
-                onEnterBack: () => {
-                    animateNext(0);
-                },
-                onLeave: () => {
-                    resetSVGAnimated(svg, animationOrder);
-                },
-                onLeaveBack: () => {
-                    resetSVGAnimated(svg, animationOrder);
-                },
+                onEnter: playAnimation,
+                onEnterBack: playAnimation,
+                onLeave: startReset,
+                onLeaveBack: startReset,
             });
 
             return () => {
