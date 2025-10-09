@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -11,15 +13,16 @@ export const ImagesTrails = ({ speed = 1 }) => {
     
     // Enregistrer le plugin ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.refresh();
     
     // config + defaults
     const options = {
       minWidth: 992,
-      moveDistance: 0, // Réduit pour plus d'espacement
+      moveDistance: 2,
       stopDuration: 450,
       trailLength: 15,
     };
-
+    
     const wrapper = wrapperRef.current;
     if (!wrapper || window.innerWidth < options.minWidth) {
       return;
@@ -108,7 +111,9 @@ export const ImagesTrails = ({ speed = 1 }) => {
         state.last.y
       );
 
-      if (distanceFromLast > window.innerWidth / (options.moveDistance * 8)) {
+      const divisor = Math.max(0.0001, options.moveDistance * 8);
+      const threshold = window.innerWidth / divisor;
+      if (distanceFromLast > threshold) {
         const lead = state.trailImages[state.globalIndex % state.trailImages.length];
         const tail =
           state.trailImages[
