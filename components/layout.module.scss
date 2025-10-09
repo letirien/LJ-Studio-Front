@@ -31,22 +31,32 @@
     position: absolute;
     z-index: 1;
 
-    div:last-child {
+    .linesViewport {
       transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1) 1.15s;
       overflow: hidden;
       margin-top: 0.05em;
       line-height: 0.8;
       height: calc(1em * 0.8);
-      span {
-        display: inline-block;
-        animation: cycleText 8s cubic-bezier(0.23, 1, 0.32, 1) infinite;
-        
-        p {
-            height: calc(1em * 0.8);
-            margin: 0;
-            padding: 0;
-        }
-      }
+    }
+
+    .linesTrack {
+      display: inline-block;
+      animation: cycleText 8s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+    }
+
+    .linesTrack p {
+      height: calc(1em * 0.8);
+      margin: 0;
+      padding: 0;
+    }
+
+    .centerIcon {
+      position: absolute;
+      left: 60%;
+      top: 60%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
     }
     // letter-spacing: -2.62px;
     // font-family: HelveticaRegular;

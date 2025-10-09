@@ -23,6 +23,7 @@ import StudioBanner from "../components/home/StudioBanner.js";
 import AnimatedField from "../components/home/AnimatedField.js";
 import CreativeCanvas from "../components/home/CreativeCanvas.js";
 import { ImagesTrails } from "../components/home/ImagesTrail.js";
+import RoundedIcon from "../components/RoundedIcon.js";
 
 
 
@@ -162,8 +163,12 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 animate={isInView ? "visible" : "hidden"}
                 variants={titleAnimation}
                 custom={4}
+                className="relative"
               >
                 CREATIVE CANVAS.
+                <div className="absolute right-[29%] bottom-[-45px]">
+                  <RoundedIcon icon="" size={120} rotationFactor={0.45} />
+                </div>
               </motion.p>
             </h2>
             <motion.p 
@@ -325,6 +330,9 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <Collab logos={logoClients} />
         </section>
         <section className="relative bg-white py-42 intersectLogo white px-[4vw]">
+          <div className="absolute right-[4%] top-[-60px]">
+            <RoundedIcon icon="yeux" size={120} rotationFactor={0.45} />
+          </div>
           <ImagesTrails/>
           <h2 className="text-center gallery mx-xl text-black">
             <p className="flex items-center gap-3 justify-center">BEYOND <span className="tenTwentyThin text-[125pt]">THE</span> SURFACE...</p>

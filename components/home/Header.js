@@ -5,6 +5,7 @@ import Navbar from "../navbar";
 import Image from "next/image";
 import utilStyles from "../../styles/utils.module.css";
 import Link from "next/link";
+import RoundedIcon from "../RoundedIcon";
 import {Clock} from "../clock";
 // import WebGLImageTransition from "../WebGLImageTransition";
 import dynamic from "next/dynamic";
@@ -20,19 +21,29 @@ export function Header({headerImages}) {
         <header className={`${styles.header} intersectLogo header` }>
                 <>
                     <Navbar/>
-                    <h1 className={`${styles.mainTitle} text-[30vw] sm:text-[158px] top-[45%] md:top-[inherit] mainContainer`}>
-                        <p>LJ STUDIO</p>
-                        <p>WELCOME ON</p>
-                        <div className='flex h-full'>
-                                <span className=''>
-                                    <p>OUR PITCH</p>
-                                    <p>OUR GAME</p>
-                                    <p>OUR CRAFT</p>
-                                    <p>BOARD</p>
-                                    <p>OUR PITCH</p>
-                                </span>
-                        </div>
-                    </h1>
+            
+					<h1 className={`${styles.mainTitle} text-[30vw] sm:text-[158px] top-[45%] md:top-[inherit] mainContainer`}>
+                                <p>LJ STUDIO</p>
+                                <p>WELCOME ON</p>
+							<div className={`flex h-full ${styles.linesViewport}`}>
+									<span className={`${styles.linesTrack}`}>
+                                            <p>OUR PITCH</p>
+                                            <p>OUR GAME</p>
+                                            <p>OUR CRAFT</p>
+                                            <p>BOARD</p>
+                                            <p>OUR PITCH</p>
+                                        </span>
+                                </div>
+							<div className={styles.centerIcon}>
+                                <RoundedIcon icon="main" size={120} rotationFactor={0.45} />
+								{/* <Image
+									src="/images/roundedSVG/Mickey.svg"
+									alt="centre"
+									width={100}
+									height={100}
+								/> */}
+							</div>
+                        </h1>
                     <div className={`${styles.currentInfoContainer} -bottom-[4%] sm:bottom-[4%]`}><div><Clock/></div></div>
                     {/* <div className={`${styles.currentInfoContainer} font-light`}><div>GAME TIME : 17:47:22 UTC+2</div></div> */}
                     <WebGLImageTransition
