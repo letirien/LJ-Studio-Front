@@ -53,7 +53,7 @@ a{
 }
 @font-face {
   font-family: robotoRegular;
-  src: url("/typos/ROBOTO/roboto-Regular.ttf");
+  src: url("/typos/ROBOTO/Roboto-Regular.ttf");
 }
 .robotoReg {
   font-family: robotoRegular;
