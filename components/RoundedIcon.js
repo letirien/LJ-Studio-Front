@@ -7,7 +7,7 @@ import Image from "next/image";
  * - Icône principale: "main" | "lj" | "yeux"
  * - Texte circulaire (constant) qui tourne selon la vitesse de scroll
  */
-export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 0.15, className = "" }) {
+export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 0.15, className = "", circularContinue = false}) {
     const circularRef = useRef(null);
     const [angle, setAngle] = useState(0);
 
@@ -22,6 +22,7 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
     const circularSrc = "/images/roundedSVG/CIRCULAR_TXT.svg";
 
     useEffect(() => {
+        if(circularContinue) return;
         if (typeof window === "undefined") return;
 
         let lastScrollY = window.scrollY;
@@ -67,6 +68,7 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
         transform: `rotate(${angle}deg)`,
         transformOrigin: "50% 50%",
         willChange: "transform",
+        animation: circularContinue ? "spin 20s linear infinite" : "none",
     };
 
     return (
@@ -85,6 +87,12 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
             <div ref={circularRef} style={circularStyle}>
                 <Image src={circularSrc} alt="circular" fill={true} style={{ objectFit: "contain" }} />
             </div>
+            <style jsx>{`
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
         </div>
     );
 }
