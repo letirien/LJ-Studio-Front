@@ -282,6 +282,7 @@ export const ImagesTrails = ({ speed = 1 }) => {
           display: flex;
           position: absolute;
           z-index: 1;
+          left: 0
         }
 
         .trail-heading {

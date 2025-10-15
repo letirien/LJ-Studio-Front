@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import RoundedIcon from '../RoundedIcon.js';
+import { motion } from 'framer-motion';
 
 const FIELD_PATHS = [
     'Penalty_area_line',
@@ -10,6 +12,30 @@ const FIELD_PATHS = [
     'Penalty_arc1',
     'Border',
 ];
+
+const Etiquette = ({ text }) => {
+  // Calculer la durée basée sur la longueur du texte
+  // Plus le texte est long, plus la durée est longue pour garder une vitesse constante
+  const duration = Math.max(8, text.length * 0.15); // Minimum 8s, +0.15s par caractère
+  
+  return (
+    <div className="absolute top-[25%] left-[24%] rotate-[-6deg] w-[180px] h-[25px] overflow-hidden bg-[#fa6218] roboto text-black text-xs flex items-center">
+      <motion.div
+        className="whitespace-nowrap flex"
+        animate={{ x: ["0%", "-50%"] }} // Aller jusqu'à -50% au lieu de -100%
+        transition={{
+          repeat: Infinity,
+          ease: "linear",
+          duration: duration,
+          repeatType: "loop", // Assure une boucle parfaite
+        }}
+      >
+        <span className="px-2">{text}</span>
+        <span className="px-2">{text}</span>
+      </motion.div>
+    </div>
+  );
+};
 
 const ALL_POINTS = ['Centre_mark', 'Penalty_mark', 'Penalty_mark1'];
 
@@ -274,12 +300,17 @@ export default function AnimatedField() {
 
     return (
         <section ref={sectionRef} className="overflow-hidden relative">
-            <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center'>
-                <h2 className='text-center bigH2'>
+            <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none'>
+                <h2 className='text-center bigH2 relative'>
                     <p>whenever</p>
                     <p>you play, we're</p> 
                     <p>by your side</p>
+                    <div className="absolute bottom-[-4%] right-[22%]">
+                        <RoundedIcon icon="main" size={150} circularContinue={true} />
+                    </div>
+                    <Etiquette text="DESIGN / MOTION / 3D / DEVELOPMENT" />
                 </h2>
+                <p className='absolute uppercase robotoReg text-center bottom-[120px] text-[22px] hidden md:block'>Game Plan Deployed</p>
             </div>
             <svg
                 ref={svgRef}

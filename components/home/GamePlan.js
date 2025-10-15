@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useLayoutEffect } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -32,6 +32,8 @@ const Etiquette = ({ text }) => {
 export default function BrandingSection({ gamePlan }) {
   const titleRefs = useRef([]);
   const labelPositions = useRef({});
+  const labelRatios = useRef({}); // conserve un ratio aléatoire stable par index
+  const [positionsVersion, setPositionsVersion] = useState(0); // force un rerender après mesure
   
   // Fonction pour calculer la position d'une étiquette basée sur la taille réelle du titre
   const calculateLabelPosition = (index) => {
@@ -43,34 +45,63 @@ export default function BrandingSection({ gamePlan }) {
     }
     const title = titleRef.getBoundingClientRect();
     // Mesurer la largeur réelle de l'élément h2
-    const titleWidth = titleRef.offsetWidth / 1.5
+    const titleWidth = titleRef.offsetWidth;
     
     // Adapter les pourcentages selon la taille du titre
     let minPercent, maxPercent;
     
     if (titleWidth < 768) {
       // Mobile : position plus centrée
-      minPercent = 0.1;
-      maxPercent = 0.2
+      minPercent = 0.15;
+      maxPercent = 0.35;
     } else {
       // Desktop : position plus étendue
       minPercent = 0.1;
-      maxPercent = 0.4;
+      maxPercent = 0.5;
     }
     
-    // Calculer une position entre les pourcentages adaptés
-    const minPosition = titleWidth * minPercent;
-    const maxPosition = titleWidth * maxPercent;
-    
-    // Position aléatoire dans cette plage
-    const randomPosition = minPosition + Math.random() * (maxPosition - minPosition);
-    const finalPosition = Math.floor(randomPosition);
+    // Choisir (et mémoriser) un ratio aléatoire stable dans la plage
+    if (labelRatios.current[index] === undefined) {
+      const ratio = minPercent + Math.random() * (maxPercent - minPercent);
+      labelRatios.current[index] = ratio;
+    }
+    const ratio = labelRatios.current[index];
+    const finalPosition = Math.floor(titleWidth * ratio);
     
     // Stocker la position pour cet index
     labelPositions.current[index] = finalPosition;
     
     return finalPosition;
   };
+
+  // Recalcule toutes les positions après rendu/layout et au resize
+  useLayoutEffect(() => {
+    const recalc = () => {
+      if (!titleRefs.current) return;
+      labelPositions.current = {};
+      // recalcul simple, les ratios restent stables
+      titleRefs.current.forEach((_, idx) => {
+        calculateLabelPosition(idx);
+      });
+      setPositionsVersion((v) => v + 1);
+    };
+
+    // attendre la fin du layout courant
+    const raf = requestAnimationFrame(recalc);
+
+    // recalcul au resize (debounce léger)
+    let resizeRaf = 0;
+    const onResize = () => {
+      if (resizeRaf) cancelAnimationFrame(resizeRaf);
+      resizeRaf = requestAnimationFrame(recalc);
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      if (resizeRaf) cancelAnimationFrame(resizeRaf);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [gamePlan]);
 
   useEffect(() => {
     console.log(gamePlan)

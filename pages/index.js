@@ -122,7 +122,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         >
           <div>
             <h2>
-              <div className="flex gap-6 md:gap-12 justify-center">
+              <div className="flex gap-6 md:gap-26 justify-center">
                 <motion.p 
                   initial="hidden"
                   animate={isInView ? "visible" : "hidden"}
@@ -166,8 +166,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 className="relative"
               >
                 CREATIVE CANVAS.
-                <div className="absolute right-[29%] bottom-[-45px]">
-                  <RoundedIcon icon="" size={120} rotationFactor={0.45} />
+                <div className="absolute right-[32%] bottom-[-50px]">
+                  <RoundedIcon icon="" size={150} rotationFactor={0.45} />
                 </div>
               </motion.p>
             </h2>
@@ -176,7 +176,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               animate={isInView ? "visible" : "hidden"}
               variants={textAnimation}
               custom={5}
-              className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-12`}
+              className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-32`}
             >
               LJ is a French creative studio based in Paris with an exclusive focus on the sports sector. Driven by a profound passion of sports and the emotion they provide, our studio prides itself on capturing and translating that into captivating visual narratives.
               <br />
@@ -330,7 +330,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <Collab logos={logoClients} />
         </section>
         <section className="relative bg-white py-42 intersectLogo white px-[4vw]">
-          <div className="absolute right-[4%] top-[-60px]">
+          <div className="absolute right-[10%] top-[-60px]">
             <RoundedIcon icon="yeux" size={120} rotationFactor={0.45} />
           </div>
           <ImagesTrails/>

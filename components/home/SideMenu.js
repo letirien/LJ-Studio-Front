@@ -28,13 +28,13 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
       >
         <div className="flex w-full items-top my-auto">
           <div className='flex flex-1 flex-col space-y-6 font-bold uppercase text-black my-auto pl-[3vw]'>
-            <a href="#services" className="text-[21vw] sm:text-[8vw] hover:text-white relative w-content hardbopBlack"><span className=''>SERVICES</span><span className='absolute text-200 mt-1 ml-2 text-[18pt]'>01</span></a>
-            <a href="#work" className="hardbopBlack text-[72pt] sm:text-[8vw] hover:text-white">WORK<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>02</span></a>
-            <a href="#archive" className="hardbopBlack text-[19vw] leading-[0.8] sm:text-[8vw] hover:text-white">ARCHIVE<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>03</span></a>
-            <a href="#about" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">ABOUT<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>04</span></a>
-            <a href="#contact" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">CONTACT<span className='absolute text-200 mt-1 ml-2 text-[21pt]'>05</span></a>
+            <a href="#services" className="text-[21vw] sm:text-[8vw] hover:text-white relative w-content hardbopBlack"><span className=''>SERVICES</span><span className='absolute text-200 mt-1 ml-2 text-[16pt] tracking-tighter robotoRegular'>01</span></a>
+            <a href="#work" className="hardbopBlack text-[72pt] sm:text-[8vw] hover:text-white">WORK<span className='absolute text-200 mt-1 ml-2 text-[16pt] tracking-tighter robotoRegular'>02</span></a>
+            <a href="#archive" className="hardbopBlack text-[19vw] leading-[0.8] sm:text-[8vw] hover:text-white">ARCHIVE<span className='absolute text-200 mt-1 ml-2 text-[16pt] tracking-tighter robotoRegular'>03</span></a>
+            <a href="#about" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">ABOUT<span className='absolute text-200 mt-1 ml-2 text-[16pt] tracking-tighter robotoRegular'>04</span></a>
+            <a href="#contact" className="hardbopBlack text-[21vw] sm:text-[8vw] hover:text-white">CONTACT<span className='absolute text-200 mt-1 ml-2 text-[16pt] tracking-tighter robotoRegular'>05</span></a>
           </div>
-          <ul id="socials" className="text-black flex flex-col items-end mr-[3.3vw] mt-[15vh]">
+          <ul id="socials" className="text-black flex flex-col items-end mr-[3.3vw] md:mt-[15vh]">
             <li className='!mb-2'>
               <a href="https://www.instagram.com/jean_luc_studio/" target="_blank" rel="noopener noreferrer" className="hover:text-white hardbop-bold text-[17pt]">
                 <LinkedInIcon width={24} height={24} className="inline-block mb-1" />
@@ -55,7 +55,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
                 <BehanceIcon width={24} height={24} className="inline-block mb-1" />
               </a>
             </li>
-            <p className='uppercase robotoBold text-[10pt] text-black/55 -rotate-90 origin-bottom-right border-r-2 pr-10'>creative studio with a french accent</p>
+            <p className='w-full uppercase robotoBold text-[10pt] text-black/55 -rotate-90 origin-bottom-right border-r-2 pr-10 hidden 2xl:block'>creative studio with a french accent</p>
 
           </ul>
 
