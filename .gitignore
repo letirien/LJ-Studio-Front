@@ -1,3 +1,4 @@
 node_modules/
 .next/
 *.msi
+public/images/roundedSVG/*.msi
