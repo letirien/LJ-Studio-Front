@@ -7,7 +7,7 @@ import Image from "next/image";
  * - Icône principale: "main" | "lj" | "yeux"
  * - Texte circulaire (constant) qui tourne selon la vitesse de scroll
  */
-export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 0.15, className = "", circularContinue = false}) {
+export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 0.15, className = "", circularContinue = false, menu = false}) {
     const circularRef = useRef(null);
     const [angle, setAngle] = useState(0);
 
@@ -20,6 +20,7 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
     // FOND + CIRCULAR constants
     const backgroundSrc = "/images/roundedSVG/FOND_ORANGE.svg";
     const circularSrc = "/images/roundedSVG/CIRCULAR_TXT.svg";
+    const iconCross = "/images/roundedSVG/ICONE_CROSS.svg";
 
     useEffect(() => {
         if(circularContinue) return;
@@ -74,14 +75,20 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
     return (
         <div className={className} style={containerStyle}>
             {/* Fond */}
-            <div style={layerStyle}>
-                <Image src={backgroundSrc} alt="fond" fill={true} style={{ objectFit: "contain" }} />
+            {!menu &&
+            <div>
+                <div style={layerStyle}>
+                    <Image src={backgroundSrc} alt="fond" fill={true} style={{ objectFit: "contain" }} />
+                </div>
+                <div style={layerStyle}>
+                    <Image src={iconSrc} alt={`icone-${icon}`} fill={true} style={{ objectFit: "contain" }} />
+                </div>
             </div>
+            }
+            {menu && 
+                <Image src={iconCross} alt={`icone-${icon}`} fill={true} style={{ objectFit: "contain" }} />
 
-            {/* Icône principale */}
-            <div style={layerStyle}>
-                <Image src={iconSrc} alt={`icone-${icon}`} fill={true} style={{ objectFit: "contain" }} />
-            </div>
+            }
 
             {/* Texte circulaire tournant */}
             <div ref={circularRef} style={circularStyle}>
