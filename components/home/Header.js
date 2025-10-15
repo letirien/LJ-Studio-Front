@@ -40,17 +40,14 @@ export function Header({headerImages}) {
             const durStr = stylesComputed.animationDuration || stylesComputed.webkitAnimationDuration || "8s";
             const durNum = parseFloat(durStr);
             const durationMs = (isNaN(durNum) ? 8 : durNum) * (durStr.includes("ms") ? 1 : 1000);
-            console.log('[Header] animation duration (ms):', durationMs);
             const fractions = [0.2, 0.4, 0.6, 0.8];
             stepCounter = 0;
             fractions.forEach((f) => {
                 const id = setTimeout(() => {
                     stepCounter += 1;
-                    console.log('[Header] step', stepCounter, 'fraction', f);
                     if (stepCounter % 2 === 1) {
                         try {
                             const api = webglApiRef.current;
-                            console.log('[Header] trigger WebGL next(), api?', !!api);
                             api && api.next && api.next();
                         } catch (e) { console.warn('[Header] next() error', e); }
                     }
@@ -65,7 +62,6 @@ export function Header({headerImages}) {
         el.addEventListener('animationstart', onAnimStart);
         el.addEventListener('animationiteration', onAnimIter);
 
-        console.log('[Header] setupSync mounted');
         scheduleStepTriggers();
 
         return () => {
@@ -77,7 +73,6 @@ export function Header({headerImages}) {
 
     const onWebGLReady = () => {
         // Une fois le shader prêt, on branche la synchro
-        console.log('[Header] onWebGLReady received');
         setupSync();
     };
     return (
