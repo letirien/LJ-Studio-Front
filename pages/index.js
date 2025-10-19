@@ -346,50 +346,73 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
     </Layout>
   );
 }
+
 export async function getServerSideProps() {
-  const API_KEY = "patf38NGwq1uuDExU.2a7d95a5d70fecef0fa606e5d327341ab1627e4c7129dcc3ffbcf844d0e3421c";
-    const projectsData = await fetcher(
-    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/Projects`,{
-      headers: {
-        Authorization: `Bearer ${API_KEY}`
-      }
-    }    
-  );
-  const gamePlanData = await fetcher(
-    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/METIERS`,{
-      headers: {
-        Authorization: `Bearer ${API_KEY}`
-      }
-    }    
-  );
-  const logoClientsData = await fetcher(
-    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/Logo%20clients`,{
-      headers: {
-        Authorization: `Bearer ${API_KEY}`
-      }
-    }    
-  );
-  const sliderImagesData = await fetcher(
-    `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/SLIDER%20IMAGES`,{
-      headers: {
-        Authorization: `Bearer ${API_KEY}`
-      }
-    }    
-  );
-   const headerImages = await fetcher(
-      `https://api.airtable.com/v0/appdnb8sgJdfIdsYT/HEADER%20IMGS`,{
-        headers: {
-          Authorization: `Bearer ${API_KEY}`
-        }
-      } 
-   );
-  return {
-    props: {
-      projects: projectsData.records,
-      gamePlan: gamePlanData.records.sort((a, b) => a.fields.id - b.fields.id),
-      logoClients : logoClientsData.records.sort((a, b) => a.fields.id - b.fields.id),
-      sliderImages: sliderImagesData.records,
-      headerImages: headerImages.records
-    },
+  const API_KEY = process.env.AIRTABLE_API_KEY || "patf38NGwq1uuDExU.2a7d95a5d70fecef0fa606e5d327341ab1627e4c7129dcc3ffbcf844d0e3421c";
+  
+  // Base principale (limitée)
+  const PRIMARY_BASE = "appdnb8sgJdfIdsYT";
+  // Base de backup
+  const BACKUP_BASE = "appbZ4NcZBsBi6rXy";
+  
+  const fetchConfig = {
+    headers: {
+      Authorization: `Bearer ${API_KEY}`
+    }
   };
+
+  // Fonction pour essayer la base principale, puis la backup
+  async function fetchWithFallback(tableName) {
+    try {
+      const data = await fetcher(
+        `https://api.airtable.com/v0/${PRIMARY_BASE}/${tableName}`,
+        fetchConfig
+      );
+      return data;
+    } catch (error) {
+      console.log(`Primary base failed for ${tableName}, trying backup...`);
+      try {
+        const data = await fetcher(
+          `https://api.airtable.com/v0/${BACKUP_BASE}/${tableName}`,
+          fetchConfig
+        );
+        return data;
+      } catch (backupError) {
+        console.error(`Both bases failed for ${tableName}:`, backupError);
+        return { records: [] };
+      }
+    }
+  }
+
+  try {
+    const [projectsData, gamePlanData, logoClientsData, sliderImagesData, headerImages] = await Promise.all([
+      fetchWithFallback('Projects'),
+      fetchWithFallback('METIERS'),
+      fetchWithFallback('Logo%20clients'),
+      fetchWithFallback('SLIDER%20IMAGES'),
+      fetchWithFallback('HEADER%20IMGS')
+    ]);
+
+    return {
+      props: {
+        projects: projectsData?.records || [],
+        gamePlan: (gamePlanData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
+        logoClients: (logoClientsData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
+        sliderImages: sliderImagesData?.records || [],
+        headerImages: headerImages?.records || []
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching Airtable data:', error);
+    
+    return {
+      props: {
+        projects: [],
+        gamePlan: [],
+        logoClients: [],
+        sliderImages: [],
+        headerImages: []
+      },
+    };
+  }
 }
