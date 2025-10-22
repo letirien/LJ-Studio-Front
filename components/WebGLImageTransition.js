@@ -101,7 +101,6 @@ function WebGLImageTransitionDemo5Internal({
       let ready = false;
       const loaded = images.map((src, idx) => {
         const t = loader.load(src, () => {
-          console.log("[WebGL] texture loaded", { idx, src });
           loadedCount++;
           if (!ready && loadedCount > 0) {
             setIsReady(true);
@@ -228,7 +227,7 @@ function WebGLImageTransitionDemo5Internal({
 
   useEffect(() => {
     if (isReady && typeof onReady === 'function') {
-      try { console.log("[WebGL] onReady()"); onReady(); } catch {}
+      try { onReady(); } catch {}
     }
   }, [isReady, onReady]);
 
@@ -242,7 +241,6 @@ function WebGLImageTransitionDemo5Internal({
     const nextTex = texturesRef.current[nextIndex];
 
     isRunningRef.current = true;
-    console.log("[WebGL] next()", { from: currentIndexRef.current, to: nextIndex });
 
     gsap.to(material.uniforms.progress, {
       value: 1,
@@ -263,7 +261,6 @@ function WebGLImageTransitionDemo5Internal({
         material.uniforms.texture2.value = texturesRef.current[followingIndex];
         
         isRunningRef.current = false;
-        console.log("[WebGL] transition complete", { current: currentIndexRef.current, next: followingIndex });
       }
     });
   };

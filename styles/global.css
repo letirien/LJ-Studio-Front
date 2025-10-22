@@ -158,6 +158,7 @@ li{
   margin: 0!important;
 }
 body {
+  overflow: hidden;
   padding: 0;
   margin: 0;
   font-family: HelveticaRegular;
