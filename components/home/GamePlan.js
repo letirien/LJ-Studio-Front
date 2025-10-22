@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
 import { SeeMore } from '../SeeMoreResp';
-
+import GifDemo from "../../public/images/demo_gif.gif"
 const Etiquette = ({ text }) => {
   // Calculer la durée basée sur la longueur du texte
   // Plus le texte est long, plus la durée est longue pour garder une vitesse constante
@@ -34,7 +34,7 @@ export default function BrandingSection({ gamePlan }) {
   const labelPositions = useRef({});
   const labelRatios = useRef({}); // conserve un ratio aléatoire stable par index
   const [positionsVersion, setPositionsVersion] = useState(0); // force un rerender après mesure
-  
+  const [showGif, setShowGif] = useState(null)
   // Fonction pour calculer la position d'une étiquette basée sur la taille réelle du titre
   const calculateLabelPosition = (index) => {
     const titleRef = titleRefs.current[index];
@@ -105,8 +105,12 @@ export default function BrandingSection({ gamePlan }) {
 
   useEffect(() => {
     console.log(gamePlan)
+    console.log(showGif)
   },[]);
 
+  const setGif = (index) => {
+    setShowGif(index)
+  }
   const [containerRef, inView] = useInView({
     threshold: 0.1,
     triggerOnce: false
@@ -207,7 +211,9 @@ export default function BrandingSection({ gamePlan }) {
             </div>
             <div className='md:w-1/2 relative md:my-auto xl:my-0'>
               <Image 
-                src={item.fields.Image[0].url} 
+                onMouseOver={()=>setGif(index)}
+                onMouseLeave={()=> setShowGif(null)}
+                src={showGif === index ? GifDemo: item.fields.Image[0].url} 
                 alt={item.fields.Image[0].filename || 'Game plan image'}
                 width={item.fields.Image[0].width}
                 height={item.fields.Image[0].height}
