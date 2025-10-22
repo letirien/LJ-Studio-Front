@@ -378,7 +378,7 @@ export async function getServerSideProps() {
         );
         return data;
       } catch (backupError) {
-        console.error(`Both bases failed for ${tableName}:`, backupError);
+        console.log(`Both bases failed for ${tableName}:`, backupError);
         return { records: [] };
       }
     }
@@ -403,7 +403,7 @@ export async function getServerSideProps() {
       },
     };
   } catch (error) {
-    console.error('Error fetching Airtable data:', error);
+    console.log('Error fetching Airtable data:', error);
     
     return {
       props: {
