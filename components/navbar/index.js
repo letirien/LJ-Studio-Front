@@ -11,30 +11,49 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = document.querySelectorAll('.intersectLogo.white');
+      const sectionsWhite = document.querySelectorAll('.intersectLogo.white');
+      const sectionsBlack = document.querySelectorAll('.intersectLogo.black');
       const navbar = document.getElementById(styles.navbar);
-      
       if (!navbar) return;
-      
+  
       const navbarRect = navbar.getBoundingClientRect();
-      const navbarBottom = navbarRect.bottom;
-      let isOverlapping = false;
-
-      sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= navbarBottom && rect.bottom >= navbarBottom) {
-          isOverlapping = true;
-        }
+      const navbarCenter = navbarRect.top + (navbarRect.height / 2); // Centre du navbar
+      
+      let currentColor = 'white'; // Couleur par défaut
+  
+      // Vérifier toutes les sections et trouver celle qui est visible au centre du navbar
+      const allSections = [
+        ...Array.from(sectionsWhite).map(s => ({ el: s, color: 'dark' })),
+        ...Array.from(sectionsBlack).map(s => ({ el: s, color: 'white' }))
+      ];
+  
+      // Trier par z-index pour gérer les sticky sections
+      allSections.sort((a, b) => {
+        const zIndexA = parseInt(window.getComputedStyle(a.el).zIndex) || 0;
+        const zIndexB = parseInt(window.getComputedStyle(b.el).zIndex) || 0;
+        return zIndexB - zIndexA; // Plus grand z-index en premier
       });
-
-      setLogoColor(isOverlapping ? 'dark' : 'white');
+  
+      // Trouver la première section visible qui intersecte le navbar
+      for (const { el, color } of allSections) {
+        const rect = el.getBoundingClientRect();
+        
+        // Vérifier si la section est visible et intersecte le navbar
+        if (rect.top <= navbarCenter && rect.bottom >= navbarCenter) {
+          currentColor = color;
+          break; // Prendre la première (plus haute z-index)
+        }
+      }
+  
+      setLogoColor(currentColor);
     };
-
+  
     window.addEventListener('scroll', handleScroll);
     handleScroll();
-
+  
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
 
   return (
     <>

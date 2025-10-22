@@ -119,7 +119,13 @@ export default function BrandingSection({ gamePlan }) {
 
   const getBackgroundColor = (index) => {
     const colors = ['bg-white', 'bg-black', 'bg-[#fa6218]'];
-    return colors[index % colors.length];
+    const bgColor = colors[index % colors.length];
+    
+    // Pour white : logo doit être dark (noir)
+    // Pour black/orange : logo doit être white
+    const logoClass = bgColor === 'bg-white' ? 'white' : 'black';
+    
+    return `intersectLogo ${logoClass} ${bgColor}`;
   };
 
   const getTextColor = (index) => {
@@ -144,7 +150,7 @@ export default function BrandingSection({ gamePlan }) {
   };
   
   return (
-    <section ref={containerRef} className="bg-white intersectLogo">
+    <section ref={containerRef} className="">
       {gamePlan && gamePlan.map((item, index) => {
         // Calculer la position pour cette étiquette spécifique
         const labelLeft = calculateLabelPosition(index);
@@ -159,7 +165,7 @@ export default function BrandingSection({ gamePlan }) {
         return (
           <motion.div
             key={index}
-            className={`flex flex-col md:flex-row items-stretch min-h-[400px] py-12 sm:py-24 gap-3 sm:gap-6 md:gap-12 px-[3vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
+            className={`flex flex-col md:flex-row items-stretch min-h-[400px] py-12 sm:py-24 gap-3 sm:gap-0 px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
             style={{
               position: 'sticky',
               top: 0,
@@ -179,7 +185,7 @@ export default function BrandingSection({ gamePlan }) {
                  <div className="inline-block">
                     <h2
                       ref={(el) => (titleRefs.current[index] = el)}
-                      className={`bigH2 gamePlan md:!text-[172pt]/[142pt] !text-left mx-xl relative w-content ${getTitleColor(
+                      className={`bigH2 z-20 gamePlan md:!text-[172pt]/[142pt] !text-left mx-xl relative ${item.fields["TITRE METIER"].length > 13 ? 'text-wrap': 'text-nowrap'} w-min ${getTitleColor(
                         index
                       )}`}
                     >
@@ -196,10 +202,10 @@ export default function BrandingSection({ gamePlan }) {
                     </div>
                     </h2>
                 </div>
-              <p className={`${getTextColor(index)} defaultText ${index % 3 === 2 ? "!opacity-100": ""}`}>{item.fields['DESCRIPTION METIER']}</p>
+              <p className={`w-full lg:w-3/4 ${getTextColor(index)} defaultText ${index % 3 === 2 ? "!opacity-100": ""}`}>{item.fields['DESCRIPTION METIER']}</p>
               <Link className={`${getTextColor(index)} hidden sm:block roboto uppercase text-xs mt-4 ${index % 3 === 2 ? "!opacity-100": "opacity-55"}`} href="">› check more</Link>
             </div>
-            <div className='md:w-1/2 relative'>
+            <div className='md:w-1/2 relative md:my-auto xl:my-0'>
               <Image 
                 src={item.fields.Image[0].url} 
                 alt={item.fields.Image[0].filename || 'Game plan image'}
