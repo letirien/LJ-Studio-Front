@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react';
 import { useEffect } from 'react';
 
@@ -16,7 +17,14 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-black text-white text-sm font-mono">
+    <footer className="bg-black text-white text-sm font-mono relative">
+      <Image
+        src="/images/ICONE_LJ-STUDIO_BLACK.svg"
+        alt="LJ Studio Logo"
+        width={800}
+        height={300}
+        className="absolute left-[-350px] top-[50px] object-cover invert opacity-5">
+      </Image>
       {/* Top section */}
       <div className="grid grid-cols-1 md:grid-cols-3 relative">
         {/* Left block with video or badge */}
@@ -29,7 +37,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="hidden md:block absolute right-0 top-0 bottom-0 w-[3px] bg-gray-700"></div>
-          <div className="hidden md:block absolute bottom-0 left-0 bottom-0 h-[3px] w-[97%] bg-gray-700"></div>
+          <div className="md:block absolute bottom-0 left-0 bottom-0 h-[3px] w-full lg:w-[97%] bg-gray-700"></div>
         </div>
 
 
@@ -74,7 +82,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-            <div className="hidden md:block absolute bottom-0 right-0 bottom-0 h-[3px] w-[98.5%] bg-gray-700"></div>
+            <div className=" md:block absolute bottom-0 right-0 bottom-0 h-[3px] w-[100%] lg:w-[98.5%] bg-gray-700"></div>
         </div>
       </div>
       <div className="w-full overflow-hidden bg-black py-8">
