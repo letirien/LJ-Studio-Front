@@ -10,8 +10,7 @@ const Collab = ({logos}) => {
   bottomRowLogos.forEach((logo)=>{
     console.log(logo)
   })
-  console.log(topRowLogos)
-  console.log(bottomRowLogos)
+
   useEffect(() => {
     const initMarquees = async () => {
       // Dynamically import GSAP to avoid SSR issues
@@ -120,14 +119,14 @@ const Collab = ({logos}) => {
   }, []);
 
   return (
-    <div className="section-collab" ref={containerRef}>
+    <div className="section-collab mt-16 my-32" ref={containerRef}>
       {/* Marquee pour la rangée du haut */}
       <div 
         className="marquee-advanced" 
         data-marquee-scroll-direction 
         data-marquee-direction="left" 
         data-marquee-status="normal" 
-        data-marquee-speed="15" 
+        data-marquee-speed="30" 
         data-marquee-scroll-speed="10"
       >
         <div className="marquee-advanced__scroll" data-marquee-scroll>
@@ -150,7 +149,7 @@ const Collab = ({logos}) => {
         </div>
       </div>
       
-      <div className="logo-divider"></div>
+      <div className="logo-divider my-8"></div>
       
       {/* Marquee pour la rangée du bas */}
       <div 
@@ -158,7 +157,7 @@ const Collab = ({logos}) => {
         data-marquee-scroll-direction 
         data-marquee-direction="right" 
         data-marquee-status="normal" 
-        data-marquee-speed="15" 
+        data-marquee-speed="30" 
         data-marquee-scroll-speed="10"
       >
         <div className="marquee-advanced__scroll" data-marquee-scroll>
@@ -185,7 +184,6 @@ const Collab = ({logos}) => {
         .section-collab {
           width: 100%;
           background-color: #000;
-          padding: 4rem 0;
           overflow: hidden;
         }
         
@@ -193,7 +191,6 @@ const Collab = ({logos}) => {
           width: 100%;
           position: relative;
           overflow: hidden;
-          padding: 1.5rem 0;
         }
         
         .marquee-advanced__scroll {
@@ -222,19 +219,21 @@ const Collab = ({logos}) => {
           position: relative;
           height: 80px;
           width: 150px;
+          opacity: 0.5;
           filter: grayscale(100%) brightness(0.8);
           transition: filter 0.3s ease;
         }
         
         .logo-wrapper:hover {
           filter: grayscale(0) brightness(1);
+           opacity: 1;
         }
         
         .logo-divider {
+
           width: 100%;
           height: 1px;
           background-color: rgba(255, 255, 255, 0.2);
-          margin: 0.5rem 0;
         }
         
         @media (max-width: 768px) {

@@ -35,7 +35,7 @@ const StudioBanner = () => {
               }
             }
             .animate-marquee {
-              animation: marquee 60s linear infinite;
+              animation: marquee 120s linear infinite;
             }
           `}</style>
         </div>

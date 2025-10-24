@@ -13,6 +13,33 @@ const CreativeCanvas = ({ images }) => {
 
   // Pour suivre le chargement individuel des images
   const [loadedImages, setLoadedImages] = useState({});
+  
+  // Précharger toutes les images dès le montage
+  useEffect(() => {
+    if (!images || images.length === 0) return;
+    
+    const preloadImages = async () => {
+      const loadPromises = images.map((img) => {
+        const url = img.fields.IMAGE[0].url;
+        return new Promise((resolve) => {
+          const image = new window.Image();
+          image.src = url;
+          image.onload = () => {
+            setLoadedImages(prev => ({ ...prev, [url]: true }));
+            resolve();
+          };
+          image.onerror = () => {
+            setLoadedImages(prev => ({ ...prev, [url]: false }));
+            resolve();
+          };
+        });
+      });
+      
+      await Promise.all(loadPromises);
+    };
+    
+    preloadImages();
+  }, [images]);
 
   // Refs principaux et contrôles d'animation
   const containerRef = useRef(null);
@@ -49,21 +76,6 @@ const CreativeCanvas = ({ images }) => {
     }
   }, [images]);
 
-  // Précharge en tâche de fond, mais ne bloque pas l'affichage
-  useEffect(() => {
-    if (!images || images.length === 0) return;
-    images.forEach((img) => {
-      const url = img.fields.IMAGE[0].url;
-      if (!loadedImages[url]) {
-        const image = new window.Image();
-        image.src = url;
-        image.onload = () => setLoadedImages(prev => ({ ...prev, [url]: true }));
-        image.onerror = () => setLoadedImages(prev => ({ ...prev, [url]: false }));
-      }
-    });
-    // eslint-disable-next-line
-  }, [images]);
-
   const lastDragRef = useRef({ time: 0, pos: 0, velocity: 0 }); // dernier échantillon vitesse
   useEffect(() => {
     let Draggable, gsap;
@@ -82,7 +94,7 @@ const CreativeCanvas = ({ images }) => {
       ctx = gsap.context(() => {
         if (scrollContainerRef.current) {
           isTouchRef.current = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-          // Sur mobile: désactiver Draggable et laisser l’inertie native
+          // Sur mobile: désactiver Draggable et laisser l'inertie native
           if (isTouchRef.current) {
             scrollContainerRef.current.style.overflowX = 'auto';
             scrollContainerRef.current.style.webkitOverflowScrolling = 'touch';
@@ -217,7 +229,10 @@ const CreativeCanvas = ({ images }) => {
               <div className="flex gap-3 py-8" style={{ minWidth: 'max-content' }}>
                 {images && images.map((image, index) => {
                   const url = image.fields.IMAGE[0].url;
+                  const thumbnailUrl = image.fields.IMAGE[0].thumbnails?.large?.url || 
+                                      image.fields.IMAGE[0].thumbnails?.small?.url;
                   const isLoadedImg = loadedImages[url];
+                  
                   return (
                     <motion.div
                       key={image.id}
@@ -237,18 +252,35 @@ const CreativeCanvas = ({ images }) => {
                       onMouseLeave={() => setHoveredIndex(null)}
                       whileHover={{ scale: 1.02 }}
                     >
-                      <div className={`relative w-full rounded-lg`} style={{
+                      <div className={`relative w-full rounded-lg overflow-hidden`} style={{
                         width: !isMobile ? `${image.fields.IMAGE[0].width / 2}px` : `${image.fields.IMAGE[0].width / 4}px`,
                         height: !isMobile ? `${image.fields.IMAGE[0].height / 2}px` : `${image.fields.IMAGE[0].height / 4}px`,
-                        background: !isLoadedImg ? "#222" : undefined // couleur de fond si pas chargé
+                        background: "#222"
                       }}>
+                        {/* Thumbnail en arrière-plan (chargement immédiat) */}
+                        {thumbnailUrl && !isLoadedImg && (
+                          <Image
+                            quality={30}
+                            src={thumbnailUrl}
+                            alt={image.fields.Name}
+                            fill
+                            className="blur-sm"
+                            style={{
+                              objectFit: 'contain',
+                              filter: 'grayscale(100%) brightness(0.75) blur(4px)'
+                            }}
+                            priority={index < 5} // Prioriser les 5 premières
+                          />
+                        )}
+                        
+                        {/* Image haute qualité */}
                         {isLoadedImg ? (
                           <Image
                             quality={50}
                             src={url}
                             alt={image.fields.Name}
                             fill
-                            className={`transition-all duration-300 cover ${
+                            className={`transition-all duration-300 ${
                               hoveredIndex === index
                                 ? 'filter-none'
                                 : 'filter grayscale brightness-75'
@@ -259,21 +291,17 @@ const CreativeCanvas = ({ images }) => {
                                 ? 'none'
                                 : 'grayscale(100%) brightness(0.75) sepia(0.1) hue-rotate(200deg)'
                             }}
+                            priority={index < 5}
                           />
                         ) : (
-                          // Placeholder (fond sombre ou skeleton)
-                          <div style={{
-                            width: "100%",
-                            height: "100%",
-                            background: "#fa6218",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: "#fa6218",
-                            fontSize: 18
-                          }}>
-                            {/* Optionnel : <span>...</span> */}
-                          </div>
+                          // Fallback si pas de thumbnail - fond orange uniquement
+                          !thumbnailUrl && (
+                            <div style={{
+                              width: "100%",
+                              height: "100%",
+                              background: "#fa6218"
+                            }} />
+                          )
                         )}
                         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                         </div>

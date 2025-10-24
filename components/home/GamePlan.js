@@ -170,7 +170,7 @@ export default function BrandingSection({ gamePlan }) {
         return (
           <motion.div
             key={index}
-            className={`flex flex-col md:flex-row items-stretch min-h-[400px] py-12 sm:py-24 gap-3 sm:gap-0 px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
+            className={`flex flex-col md:flex-row items-stretch min-h-[400px] py-12 sm:py-24 gap-3 sm:gap-0 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
             style={{
               position: 'sticky',
               top: 0,
@@ -190,7 +190,7 @@ export default function BrandingSection({ gamePlan }) {
                  <div className="inline-block">
                     <h2
                       ref={(el) => (titleRefs.current[index] = el)}
-                      className={`bigH2 z-20 gamePlan md:!text-[172pt]/[142pt] !text-left mx-xl relative ${item.fields["TITRE METIER"].length > 13 ? 'text-wrap': 'text-nowrap'} w-min ${getTitleColor(
+                      className={`bigH2 z-20 gamePlan md:!text-[172pt]/[142pt] !text-left mx-xl relative ${item.fields["TITRE METIER"].length > 13 ? 'text-nowrap sm:text-wrap': 'text-nowrap'} w-min ${getTitleColor(
                         index
                       )}`}
                     >

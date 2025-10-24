@@ -232,7 +232,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           </div>
         </section> */}
         <section className="bg-half-col py-42 relative" ref={sectionImageRef}>
-          <div className="mx-auto px-[4%]">
+          <div className="mx-auto px-[3vw]">
             <h2 className="bigH2 relative">
               <p className="flex justify-center gap-2 md:gap-12">
                 <span className={`${home.catHighlight} !text-black`}>
@@ -297,9 +297,11 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         */}
         <AnimatedField/>
         <BrandingSection gamePlan={gamePlan} />
-        <section className="w-full bg-black">
+        <section className="w-full h-full bg-black">
           <div className="w-full h-[100vh] relative">
-            <div className="absolute -bottom-1 left-0 right-0 h-[30vh] bg-gradient-to-t from-black to-transparent z-3"></div>
+            <div className="absolute -bottom-1 left-0 right-0 h-[60vh] z-3" style={{
+              background: 'linear-gradient(to top, #000000ff 12vh, transparent 100%)'
+            }}></div>
             <Image src="/images/lj-fcnante.png" fill={true}
               quality={100}
               style={{
@@ -308,21 +310,21 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               }}>
             </Image>
           </div>
-          <div className="p-[4vw] flex flex-wrap gap-12 justify-around w-full items-center px-[3vw] relative z-3 pb-12 -mt-[35vh]">
-            <h2 className={`collaborationTitle text-[21vw] sm:text-[107pt] uppercase text-center`}>
+          <div className="flex flex-wrap gap-[8vw] w-full items-center px-[3vw] relative z-3 pb-12 -mt-[40vh]">
+            <h2 className={`collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center ml-[4vw]`}>
               <p className="flex items-center gap-2"><span className="prefix">ON</span>Every Pitch...</p>
               <p>OUR CLIENT</p>
               <div className=''>
                 <p className="flex items-start"><span>COLLABORATIONS</span><span className="suffix flex items-center leading-[60px]"><span className="text-[47px]">(</span>*<span className="text-[47px]">)</span></span></p>                             
               </div>
             </h2>
-            <div className="flex flex-col sm:flex-row gap-8 justify-around flex-1">
-              <div className="">
-                <p className="uppercase hardbopBlack text-[12vw] sm:text-[53pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
+            <div className="flex flex-wrap flex-col gap-6 xl:justify-between sm:flex-row px-[3vw] flex-1">
+              <div className="w-max">
+                <p className="uppercase hardbopBlack text-[12vw] sm:text-[45pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
                 <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[20pt]">Creativity</p>
               </div>
-              <div className="">
-                <p className="uppercase hardbopBlack text-[12vw] sm:text-[53pt] leading-[0.8]">WINNING STRATEGY</p>
+              <div className="w-max">
+                <p className="uppercase hardbopBlack text-[12vw] sm:text-[45pt] leading-[0.8]">WINNING STRATEGY</p>
                 <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[20pt]">Mixing pixels and passion</p>
               </div>
             </div>
@@ -330,8 +332,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <Collab logos={logoClients} />
         </section>
         <section className="relative bg-white py-42 intersectLogo white px-[4vw]">
-          <div className="absolute right-[10%] top-[-60px]">
-            <RoundedIcon icon="yeux" size={120} rotationFactor={0.45} />
+          <div className="absolute right-[10%] top-[-90px]">
+            <RoundedIcon icon="yeux" size={180} rotationFactor={0.45} />
           </div>
           <ImagesTrails/>
           <h2 className="text-center gallery mx-xl text-black">
