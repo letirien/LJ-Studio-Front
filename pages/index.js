@@ -311,7 +311,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </Image>
           </div>
           <div className="flex flex-wrap gap-[8vw] w-full items-center px-[3vw] relative z-3 pb-12 -mt-[40vh]">
-            <h2 className={`collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center ml-[4vw]`}>
+            <h2 className={`collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center sm:ml-[4vw]`}>
               <p className="flex items-center gap-2"><span className="prefix">ON</span>Every Pitch...</p>
               <p>OUR CLIENT</p>
               <div className=''>
