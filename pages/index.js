@@ -319,11 +319,11 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               </div>
             </h2>
             <div className="flex flex-wrap flex-col gap-6 xl:justify-between sm:flex-row px-[3vw] flex-1">
-              <div className="w-max">
+              <div className="md:w-max">
                 <p className="uppercase hardbopBlack text-[12vw] sm:text-[45pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
                 <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[20pt]">Creativity</p>
               </div>
-              <div className="w-max">
+              <div className="md:w-max">
                 <p className="uppercase hardbopBlack text-[12vw] sm:text-[45pt] leading-[0.8]">WINNING STRATEGY</p>
                 <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[20pt]">Mixing pixels and passion</p>
               </div>
