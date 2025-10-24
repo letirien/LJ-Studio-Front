@@ -149,7 +149,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
               <a
                 ref={(el) => (menuLinksRef.current[i] = el)}
                 href={`#${label.toLowerCase()}`}
-                className={`hardbopBlack block relative w-min text-[${i === 1 || i === 2 ? "19vw" : "21vw"}] sm:text-[8vw] hover:text-white`}
+                className={`hardbopBlack block relative w-min text-[21vw] sm:text-[8vw] hover:text-white`}
                 onClick={handleToggle}
                 onMouseEnter={() => handleLinkHover(i, true)}
                 onMouseLeave={() => handleLinkHover(i, false)}
