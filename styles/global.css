@@ -228,7 +228,7 @@ html {
   scroll-behavior: cubic-bezier(0.23, 1, 0.32, 1);
 }
 *::selection {
-  background: #7357ff;
+  background: #fa6218;
 }
 a {
   text-decoration: none;
