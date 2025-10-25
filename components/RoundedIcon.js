@@ -8,6 +8,21 @@ import Image from "next/image";
  * - Texte circulaire (constant) qui tourne selon la vitesse de scroll
  */
 export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 0.15, className = "", circularContinue = false, menu = false}) {
+
+
+    function useIsMobile(maxWidth = 768) {
+        const [isMobile, setIsMobile] = useState(false);
+
+        useEffect(() => {
+            const check = () => setIsMobile(window.innerWidth <= maxWidth);
+            check();
+            window.addEventListener("resize", check);
+            return () => window.removeEventListener("resize", check);
+        }, [maxWidth]);
+
+        return isMobile;
+    }
+
     const circularRef = useRef(null);
     const [angle, setAngle] = useState(0);
 
@@ -52,11 +67,13 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
         };
     }, [rotationFactor]);
 
+    const isMobile = useIsMobile();
+    const shrinkFactor = isMobile ? 0.75 : 1; // par ex. 70% de la taille sur mobile
     // Style du conteneur (carré) + calques absolus
     const containerStyle = {
         position: "relative",
-        width: `${size}px`,
-        height: `${size}px`,
+        width: `${size * shrinkFactor}px`,
+        height: `${size * shrinkFactor}px`,
     };
 
     const layerStyle = {

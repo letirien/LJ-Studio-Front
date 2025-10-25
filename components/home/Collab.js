@@ -119,7 +119,7 @@ const Collab = ({logos}) => {
   }, []);
 
   return (
-    <div className="section-collab mt-16 my-32" ref={containerRef}>
+    <div className="section-collab mt-24 mb-32 relative z-3" ref={containerRef}>
       {/* Marquee pour la rangée du haut */}
       <div 
         className="marquee-advanced" 
@@ -149,7 +149,7 @@ const Collab = ({logos}) => {
         </div>
       </div>
       
-      <div className="logo-divider my-8"></div>
+    <div className="logo-divider my-8"></div>
       
       {/* Marquee pour la rangée du bas */}
       <div 

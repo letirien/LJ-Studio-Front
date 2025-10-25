@@ -310,15 +310,17 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               }}>
             </Image>
           </div>
-          <div className="flex flex-wrap gap-[8vw] w-full items-center px-[3vw] relative z-3 pb-12 -mt-[40vh]">
-            <h2 className={`collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center sm:ml-[4vw]`}>
-              <p className="flex items-center gap-2"><span className="prefix">ON</span>Every Pitch...</p>
-              <p>OUR CLIENT</p>
-              <div className=''>
-                <p className="flex items-start"><span>COLLABORATIONS</span><span className="suffix flex items-center leading-[60px]"><span className="text-[47px]">(</span>*<span className="text-[47px]">)</span></span></p>                             
-              </div>
-            </h2>
-            <div className="flex flex-wrap flex-col gap-6 xl:justify-between sm:flex-row px-[3vw] flex-1">
+          <div className="flex flex-wrap w-full items-center gap-8 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[40vh]">
+            <div className="md:w-1/3">
+              <h2 className={`flex flex-col items-center w-min collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
+                <p className="flex items-center gap-2"><span className="prefix">ON</span>Every Pitch...</p>
+                <p className="flex">OUR CLIENT</p>
+                <div className=''>
+                  <p className="flex items-start"><span>COLLABORATIONS</span><span className="suffix flex items-center leading-[60px]"><span className="text-[47px]">(</span>*<span className="text-[47px]">)</span></span></p>                             
+                </div>
+              </h2>
+            </div>
+            <div className="flex md:w-2/3 flex-wrap flex-col gap-6 xl:justify-between sm:flex-row pr-[3vw] flex-1">
               <div className="md:w-max">
                 <p className="uppercase hardbopBlack text-[12vw] sm:text-[45pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
                 <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[20pt]">Creativity</p>

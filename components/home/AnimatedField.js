@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import RoundedIcon from '../RoundedIcon.js';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 
 const FIELD_PATHS = [
     'Penalty_area_line',
@@ -14,12 +14,15 @@ const FIELD_PATHS = [
 ];
 
 const Etiquette = ({ text }) => {
-  // Calculer la durée basée sur la longueur du texte
+    const ref = useRef(null)
+    useInView
+    const isInView = useInView(ref)
+    
   // Plus le texte est long, plus la durée est longue pour garder une vitesse constante
   const duration = Math.max(8, text.length * 0.15); // Minimum 8s, +0.15s par caractère
   
   return (
-    <div className="absolute top-[25%] left-[24%] rotate-[-6deg] w-[180px] h-[25px] overflow-hidden bg-[#fa6218] roboto text-black text-xs flex items-center">
+    <div  ref={ref} className="absolute top-[25%] left-[24%] rotate-[-6deg] h-[25px] overflow-hidden bg-[#fa6218] roboto text-black text-xs flex items-center transition-[width] delay-150 ease-in-out duration-200" style={{width: isInView ? '180px' : '0px'}}>
       <motion.div
         className="whitespace-nowrap flex"
         animate={{ x: ["0%", "-50%"] }} // Aller jusqu'à -50% au lieu de -100%
@@ -305,12 +308,12 @@ export default function AnimatedField() {
                     <p>whenever</p>
                     <p>you play, we're</p> 
                     <p>by your side</p>
-                    <div className="absolute bottom-[-4%] right-[22%]">
+                    <div className="absolute max-[520px]:bottom-[-40%] bottom-[-4%] max-[520px]:right-[5%] right-[22%]">
                         <RoundedIcon icon="main" size={150} circularContinue={true} />
                     </div>
                     <Etiquette text="DESIGN / MOTION / 3D / DEVELOPMENT" />
                 </h2>
-                <p className='absolute uppercase robotoReg text-center bottom-[120px] text-[22px] hidden md:block'>Game Plan Deployed</p>
+                <p className='absolute uppercase robotoReg text-center bottom-[5%] text-[22px] hidden lg:block'>Game Plan Deployed</p>
             </div>
             <svg
                 ref={svgRef}
@@ -318,11 +321,19 @@ export default function AnimatedField() {
                 version="1.1"
                 viewBox={`0 0 1704.95 1110`}
                 preserveAspectRatio="xMidYMid meet"
+                className="
+                    transition-transform duration-500
+                    max-[520px]:rotate-90
+                    max-[520px]:h-screen
+                    max-[520px]:w-[150%]!
+                    max-[520px]:-ml-[25%]!
+                "
                 style={{
                     width: '106%',
                     maxWidth: 'none',
                     marginLeft: '-3%',
                     opacity: '0.5',
+                    transformOrigin: "center center",
                 }}
             >
                 <g id="Calque_15">
