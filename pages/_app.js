@@ -38,7 +38,9 @@ function App({ Component, pageProps }) {
     gestureDirection: 'vertical',
     smooth: true,
     smoothTouch: false,
-    touchMultiplier: 2
+    wheelMultiplier: 1,
+    touchMultiplier: 0.7,
+    
   };
 
   return (

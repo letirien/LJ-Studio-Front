@@ -24,6 +24,7 @@ import AnimatedField from "../components/home/AnimatedField.js";
 import CreativeCanvas from "../components/home/CreativeCanvas.js";
 import { ImagesTrails } from "../components/home/ImagesTrail.js";
 import RoundedIcon from "../components/RoundedIcon.js";
+import ProjectSection from "../components/home/ProjectSection.js";
 
 
 
@@ -231,7 +232,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </div>
           </div>
         </section> */}
-        <section className="bg-half-col py-42 relative" ref={sectionImageRef}>
+        <ProjectSection projects={projects} home={home} />
+        {/* <section className="bg-half-col py-42 relative" ref={sectionImageRef}>
           <div className="mx-auto px-[3vw]">
             <h2 className="bigH2 relative">
               <p className="flex justify-center gap-2 md:gap-12">
@@ -246,29 +248,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               <p>our recent games</p>
             </h2>
             <Projects projects={projects} navRef={sliderNavRef} />
-      
-          {/* Boutons de navigation positionnés relativement au parent bg-half-col */}
-          {/* <div className={`absolute hidden lg:flex lg:-translate-y-1/2 lg:right-8 z-50 flex flex-col gap-3 top-${buttonTopPosition} md:top-1/2`} ref={sliderNavRef}>
-            <button 
-              className={`w-14 h-14 flex items-center justify-center border-2 border-black text-white rounded-xl hover:bg-white/20 transition-colors`}
-              onClick={() => sliderNavRef.current?.handleNext()}
-            >
-              <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19.3279 6.54796C20.1177 5.34438 21.8822 5.34437 22.6721 6.54796L39.9674 32.9027C40.8402 34.2327 39.8861 36 38.2953 36H3.70468C2.11385 36 1.15976 34.2327 2.03258 32.9027L19.3279 6.54796Z" fill="black"/>
-              </svg>
-            </button>
-            <button 
-              className={`w-14 h-14 flex items-center justify-center border-2 border-[#fa6218] text-white rounded-xl hover:bg-white/20 transition-colors`}
-              onClick={() => sliderNavRef.current?.handlePrev()}
-            >
-              <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22.6721 35.452C21.8822 36.6556 20.1178 36.6556 19.3279 35.452L2.03262 9.09731C1.1598 7.7673 2.11388 6 3.70471 6L38.2953 6C39.8861 6 40.8402 7.7673 39.9674 9.09731L22.6721 35.452Z" fill="#FA6218"/>
-              </svg>
-            </button>
-            
-          </div> */}
           </div>
-        </section>
+        </section> */}
         {/*
           <section className="overflow-hidden bg-black">
             <div className="marquee-container relative w-full -mb-4 md:-mb-12">

@@ -39,7 +39,7 @@ export function SliderDot({ Nb, idProject, home, onButtonClick }) {
   return <div className={home.cercleContainer}>{circles}</div>;
 }
 
-export default function ProjectSlider({ projects, navRef }) {
+export default function ProjectSlider({ projects, navRef, onSlideChange }) {
     const [idProject, setIdProject] = useState(1);
     const [idProjectDelay, setDelayIdProject] = useState(1);
     const sectionRef = useRef(null);
@@ -116,11 +116,19 @@ export default function ProjectSlider({ projects, navRef }) {
             setIsAnimating(false);
             return;
         }
+        
         // Animation séquence avec GSAP
         setIdProject(newId);
+        
+        // ✨ AJOUTEZ CETTE LIGNE ICI ✨
+        // Notifier le parent du changement de slide
+        if (onSlideChange) {
+            onSlideChange(newId - 1); // newId - 1 car les index commencent à 0
+        }
+        
         anim()
         setTimeout(()=>{
-          setDelayIdProject(newId)
+        setDelayIdProject(newId)
         }, 300)
 
         if (!firstClickHandled) {
@@ -180,6 +188,7 @@ export default function ProjectSlider({ projects, navRef }) {
             rotation: 0
         }, 'middle');
     };
+
 
     // Navigation handlers
     const navigationHandler = useRef({
@@ -290,7 +299,7 @@ export default function ProjectSlider({ projects, navRef }) {
     return (
         <div 
             ref={sectionRef} 
-            className={`relative transition-all duration-500 ease-in-out ${isVisible ? "-mt-[6%]" : "mt-0"}`}
+            className={`relative transition-all duration-500 ease-in-out`}
         > 
         <button className="absolute inset-0 pointer-events-none z-3 group" onClick={() => {handleNavigation(1)}}>
             <div className="absolute right-[2vw] bottom-[50%] sm:right-[-2vw] sm:bottom-[45%] md:right-[12vw] md:bottom-[20%] rotate-[-10deg] pointer-events-auto">
@@ -350,7 +359,7 @@ export default function ProjectSlider({ projects, navRef }) {
                 </motion.svg>
             </div>
         </button>
-         <div id="sliderContainer" className={`${home.sliderContainer} mx-auto rounded-md z-2`}>
+         <div id="sliderContainer" className={`${home.sliderContainer} mx-auto rounded-md z-1`}>
               <div className={`rounded-md ${home.sliderWrapper} relative overflow`} ref={containerRef}>
                   {/* Élément décoratif pour les transitions */}
                   <div className={`rounded-md ${home.deco}`} ref={decoRef} ></div>
