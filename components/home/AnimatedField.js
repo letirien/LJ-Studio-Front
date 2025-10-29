@@ -282,7 +282,7 @@ export default function AnimatedField() {
             // Créer le ScrollTrigger une fois le plugin chargé
             const trigger = ScrollTriggerLocal && ScrollTriggerLocal.create({
                 trigger: sectionRef.current,
-                start: 'top 80%',
+                start: '-10% 80%',
                 end: 'bottom 80%',
                 once: false,
                 onEnter: playAnimation,
@@ -302,7 +302,7 @@ export default function AnimatedField() {
     }, []);
 
     return (
-        <section ref={sectionRef} className="w-screen overflow-hidden relative">
+        <section ref={sectionRef} className="w-screen overflow-hidden relative -mt-42">
             <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none'>
                 <h2 className='text-center bigH2 relative'>
                     <p>whenever</p>

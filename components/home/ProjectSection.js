@@ -1,17 +1,23 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLenis } from 'lenis/react';
+import gsap from 'gsap';
 import Projects from './ProjectSlider.js';
+import { useScrollTrigger } from '../../lib/useScrollTrigger.js';
 
 export default function ProjectSection({ projects, home }) {
   const sectionRef = useRef(null);
   const sliderNavRef = useRef(null);
   const slideMainContainer = useRef(null);
+  const titleRef = useRef(null);
+  const colorBlockRef = useRef(null);
+  const contentRef = useRef(null);
+
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [colorBlocks, setColorBlocks] = useState([]);
-  const [resetToDefault, setResetToDefault] = useState(false);
-  const [isSnapping, setIsSnapping] = useState(false);
+  
+  const lenis = useLenis();
+  const { ScrollTrigger, isReady } = useScrollTrigger(); // ✅ Utiliser le hook
 
-  const lenis = useLenis(); // ✅ Hook pour accéder à l'instance Lenis
   const defaultColor = '#FA6218';
 
   // --- Bloc initial de couleur ---
@@ -31,12 +37,7 @@ export default function ProjectSection({ projects, home }) {
   useEffect(() => {
     const handleSlideChange = (newIndex) => {
       const color = projects[newIndex]?.fields?.['#hexa'] || defaultColor;
-      const newBlock = {
-        id: Date.now(),
-        color,
-        entering: true,
-      };
-
+      const newBlock = { id: Date.now(), color, entering: true };
       setColorBlocks((prev) => [...prev, newBlock]);
       setCurrentSlideIndex(newIndex);
 
@@ -50,77 +51,76 @@ export default function ProjectSection({ projects, home }) {
     }
   }, [projects]);
 
-  // --- Gestion du scroll / snap avec Lenis ---
-  useEffect(() => {
-    if (!lenis) return; // ⚠️ attendre que l'instance Lenis soit prête
+useEffect(() => {
+    // ✅ Attendre que ScrollTrigger soit prêt
+    if (!isReady || !ScrollTrigger) return;
+    if (!sectionRef.current || !titleRef.current || !colorBlockRef.current || !slideMainContainer.current) {
+      return;
+    }
 
-    const handleScroll = () => {
-      if (!sectionRef.current || !slideMainContainer.current || isSnapping) return;
+    // Sécuriser l'appel à refresh
+    gsap.delayedCall(0.1, () => {
+      if (ScrollTrigger) ScrollTrigger.refresh();
+    });
 
-      const rect = sectionRef.current.getBoundingClientRect();
+    // Créer la timeline principale
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: '+=400vh',
+        scrub: 1.5,
+        pin: contentRef.current,
+        anticipatePin: 1,
+        markers: false,
+        id: 'project-section', // ✅ Ajouter un ID pour debug
+      },
+    });
 
-      // --- Reset si on sort vers le haut ---
-      if (rect.top > window.innerHeight * 0.1) {
-        if (!resetToDefault) setResetToDefault(true);
-      } else {
-        if (resetToDefault) {
-          setResetToDefault(false);
-          setIsSnapping(true);
+    tl.to(titleRef.current, { opacity: 0, y: -30, scale: 0.8, ease: 'power2.in' }, 0);
 
-          requestAnimationFrame(() => {
-            const slider = slideMainContainer.current;
-            const viewportHeight = window.innerHeight;
+    tl.fromTo(colorBlockRef.current, { opacity: 0 }, { opacity: 1, ease: 'power2.out' }, 0.15);
 
-            // --- 1. Position du slider SANS translateY(-25vh) ---
-            const sliderTopWithTransform = slider.getBoundingClientRect().top + window.scrollY;
-            const transformOffsetVh = -25; // ← ta valeur actuelle
-            const transformOffsetPx = (transformOffsetVh / 100) * viewportHeight;
+    tl.fromTo(
+      slideMainContainer.current,
+      { y: '50vh', opacity: 0 },
+      { y: '-50vh', opacity: 1, ease: 'power2.out' },
+      0.3
+    );
 
-            // Position "virtuelle" comme si translateY(0)
-            const sliderTopWithoutTransform = sliderTopWithTransform + transformOffsetPx;
+    tl.call(() => {
+      if (!slideMainContainer.current || !lenis) return;
+      
+      const rect = slideMainContainer.current.getBoundingClientRect();
+      const targetScroll =
+        rect.top + window.scrollY - window.innerHeight / 2 + rect.height / 2;
 
-            // --- 2. Hauteur du slider ---
-            const sliderHeight = slider.offsetHeight;
+      lenis.scrollTo(targetScroll, {
+        duration: 1,
+        easing: (t) => 1 - Math.pow(1 - t, 3),
+      });
+    }, null, 0.6);
 
-            // --- 3. Centrage vertical ---
-            const availableSpace = viewportHeight - sliderHeight;
-            const offsetToCenter = availableSpace > 0 ? availableSpace / 2 : 0;
-
-            // --- 4. Scroll cible ---
-            let targetScroll = sliderTopWithoutTransform - offsetToCenter;
-
-            // --- 5. Clamp ---
-            const maxScroll = document.body.scrollHeight - viewportHeight;
-            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
-
-            // --- 6. Scroll avec Lenis ---
-            lenis.scrollTo(targetScroll, {
-              duration: 0.8,
-              easing: (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t),
-              onComplete: () => setIsSnapping(false),
-            });
-          });
-
-          setTimeout(() => setIsSnapping(false), 1100);
-        }
+    // Cleanup
+    return () => {
+      tl.kill();
+      // ✅ Tuer uniquement le ScrollTrigger de cette timeline
+      if (tl.scrollTrigger) {
+        tl.scrollTrigger.kill();
       }
     };
+  }, [isReady, ScrollTrigger, lenis, projects]);
 
-    lenis.on('scroll', handleScroll);
-    handleScroll(); // trigger initial
-
-    return () => lenis.off('scroll', handleScroll);
-  }, [lenis, resetToDefault, isSnapping]);
-
-  return (
+    return (
     <section
-      className="bg-half-col py-42 relative overflow-hidden"
+      className="bg-half-col relative overflow-hidden"
       ref={sectionRef}
     >
-      {/* Bloc de couleur animé */}
+      {/* Bloc de couleur animé - EN DEHORS du padding */}
       <div
-        className="absolute inset-x-0 top-0 bottom-[50%] pointer-events-none overflow-hidden z-[1] transition-opacity duration-300"
-        style={{ opacity: resetToDefault ? 0 : 1 }}
+        ref={colorBlockRef}
+        className="absolute inset-x-0 top-0 h-1/2 pointer-events-none overflow-hidden z-[0]"
+        style={{ opacity: 0 }}
       >
         {colorBlocks.map((block, i) => (
           <div
@@ -156,36 +156,37 @@ export default function ProjectSection({ projects, home }) {
         }
       `}</style>
 
-      <div className="mx-auto px-[3vw] relative">
-        {/* === TITRE === */}
-        <h2
-          className="bigH2 relative z-0 transition-all duration-700 ease-in-out"
-          style={{
-            opacity: resetToDefault ? 1 : 0,
-            transform: resetToDefault ? 'translateY(0)' : 'translateY(-20px)',
-          }}
-        >
-          <p className="flex justify-center gap-2 md:gap-12">
-            <span className={`${home.catHighlight} !text-black`}>Pitch</span>
-            highlights of
-            <span className={`${home.catHighlight} !text-black`}>Vison</span>
-          </p>
-          <p>our recent games</p>
-        </h2>
+      <div ref={contentRef} className="relative min-h-screen pt-42 pb-0">
+        <div className="mx-auto px-[3vw] relative min-h-screen flex flex-col justify-center">
+          {/* === TITRE === */}
+          <h2
+            ref={titleRef}
+            className="bigH2 relative z-[1]"
+            style={{ opacity: 1 }}
+          >
+            <p className="flex justify-center gap-2 md:gap-12">
+              <span className={`${home.catHighlight} !text-black`}>Pitch</span>
+              highlights of
+              <span className={`${home.catHighlight} !text-black`}>Vison</span>
+            </p>
+            <p>our recent games</p>
+          </h2>
 
-        {/* === SLIDER === */}
-        <div
-          ref={slideMainContainer}
-          className="slider-container relative z-[2] transition-transform duration-700 ease-in-out"
-          style={{
-            transform: resetToDefault ? 'translateY(0)' : 'translateY(-25vh)',
-          }}
-        >
-          <Projects
-            projects={projects}
-            navRef={sliderNavRef}
-            onSlideChange={(index) => sectionRef.current?.onSlideChange?.(index)}
-          />
+          {/* === SLIDER === */}
+          <div
+            ref={slideMainContainer}
+            className="slider-container relative z-[2]"
+            style={{ 
+              transform: 'translateY(50vh)',
+              opacity: 0 
+            }}
+          >
+            <Projects
+              projects={projects}
+              navRef={sliderNavRef}
+              onSlideChange={(index) => sectionRef.current?.onSlideChange?.(index)}
+            />
+          </div>
         </div>
       </div>
     </section>
