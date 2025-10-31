@@ -10,6 +10,7 @@ const CreativeCanvas = ({ images }) => {
   const [randomPositions, setRandomPositions] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   // Pour suivre le chargement individuel des images
   const [loadedImages, setLoadedImages] = useState({});
@@ -75,6 +76,43 @@ const CreativeCanvas = ({ images }) => {
       setRandomPositions(positions);
     }
   }, [images]);
+
+  // Calcul de la progression du scroll (alignement progressif)
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const elementHeight = rect.height;
+
+      // Calculer quand l'élément est au centre de l'écran
+      // -1 = complètement en haut, 0 = centré, 1 = complètement en bas
+      const elementCenter = rect.top + elementHeight / 2;
+      const screenCenter = windowHeight / 2;
+      const distanceFromCenter = elementCenter - screenCenter;
+      
+      // Normaliser entre -1 et 1 (centré = 0)
+      const maxDistance = windowHeight / 2 + elementHeight / 2;
+      const normalizedDistance = Math.max(-1, Math.min(1, distanceFromCenter / maxDistance));
+      
+      // Inverser pour que 0 = pas centré, 1 = centré
+      const centerProgress = 1 - Math.abs(normalizedDistance);
+      
+      setScrollProgress(centerProgress);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
 
   const lastDragRef = useRef({ time: 0, pos: 0, velocity: 0 }); // dernier échantillon vitesse
   useEffect(() => {
@@ -237,16 +275,13 @@ const CreativeCanvas = ({ images }) => {
                     <motion.div
                       key={image.id}
                       className="relative flex-shrink-0 group"
-                      initial={{
-                        y: randomPositions[index] || 0
-                      }}
-                      animate={{
-                        y: inView ? 0 : (randomPositions[index] || 0)
+                      style={{
+                        y: randomPositions[index] * (1 - scrollProgress)
                       }}
                       transition={{
-                        duration: 0.4,
-                        delay: index * 0.02,
-                        ease: "easeInOut"
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 20
                       }}
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
@@ -264,7 +299,7 @@ const CreativeCanvas = ({ images }) => {
                             src={thumbnailUrl}
                             alt={image.fields.Name}
                             fill
-                            className="blur-sm"
+                            className="blur-sm rounded-lg"
                             style={{
                               objectFit: 'contain',
                               filter: 'grayscale(100%) brightness(0.75) blur(4px)'

@@ -25,6 +25,7 @@ import CreativeCanvas from "../components/home/CreativeCanvas.js";
 import { ImagesTrails } from "../components/home/ImagesTrail.js";
 import RoundedIcon from "../components/RoundedIcon.js";
 import ProjectSection from "../components/home/ProjectSection.js";
+import HighlightText from "../components/home/HighlightText.js";
 
 
 
@@ -115,15 +116,16 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           className={`${home.black} bg-red sm:text-[269pt]/[208pt]`}
           data-scroll
           ref={sectionRef}
-          style={{
-            opacity: isInView ? 1 : 0,
-            pointerEvents: isInView ? 'auto' : 'none',
-            transition: 'opacity 0.6s cubic-bezier(0.4,0,0.2,1)'
-          }}
+          // style={{
+          //   opacity: isInView ? 1 : 0,
+          //   pointerEvents: isInView ? 'auto' : 'none',
+          //   transition: 'opacity 0.6s cubic-bezier(0.4,0,0.2,1)'
+          // }}
         >
           <div>
             <h2>
               <div className="flex gap-6 md:gap-26 justify-center">
+                {/* GARDEZ motion.p pour catHighlight */}
                 <motion.p 
                   initial="hidden"
                   animate={isInView ? "visible" : "hidden"}
@@ -133,14 +135,17 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 >
                   French
                 </motion.p>
-                <motion.p 
+                
+                {/* REMPLACEZ motion.p par HighlightText */}
+                <HighlightText 
                   initial="hidden"
-                  animate={isInView ? "visible" : "hidden"}
                   variants={titleAnimation}
                   custom={1}
                 >
                   CRAFTING
-                </motion.p>
+                </HighlightText>
+                
+                {/* GARDEZ motion.p pour catHighlight */}
                 <motion.p 
                   initial="hidden"
                   animate={isInView ? "visible" : "hidden"}
@@ -151,26 +156,31 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                   Studio
                 </motion.p>
               </div>
-              <motion.p 
+              
+              {/* REMPLACEZ motion.p par HighlightText */}
+              <HighlightText 
                 initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
                 variants={titleAnimation}
                 custom={3}
+                fadedValue={0.2}           // Opacité de départ (0-1)
+                staggerValue={.04}         // Délai entre chaque caractère     
               >
                 SPORTS STORIES TROUGH
-              </motion.p>
-              <motion.p 
+              </HighlightText>
+              
+              {/* REMPLACEZ motion.p par HighlightText */}
+              <HighlightText 
                 initial="hidden"
-                animate={isInView ? "visible" : "hidden"}
                 variants={titleAnimation}
                 custom={4}
                 className="relative"
+                staggerValue={.05}         // Délai entre chaque caractère     
               >
                 CREATIVE CANVAS.
                 <div className="absolute right-[32%] bottom-[-50px]">
                   <RoundedIcon icon="" size={150} rotationFactor={0.45} />
                 </div>
-              </motion.p>
+              </HighlightText>
             </h2>
             <motion.p 
               initial="hidden"

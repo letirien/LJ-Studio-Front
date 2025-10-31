@@ -228,16 +228,27 @@ export default function AnimatedField() {
             // Lance play en annulant tout reset en cours
             const playAnimation = () => {
                 if (animatingRef.current) return;
-                // stop reset si en cours
-                if (resetTlRef.current && resetTlRef.current.isActive()) {
-                    resetTlRef.current.kill();
+                
+                // Si un reset est en cours, le tuer et marquer comme non-resetting
+                if (resettingRef.current) {
+                    if (resetTlRef.current && resetTlRef.current.isActive()) {
+                        resetTlRef.current.kill();
+                    }
                     resettingRef.current = false;
                 }
-                // nettoyer les tweens, mais NE PAS remettre à zéro: on reprend là où on en est
+                
+                // Nettoyer les anciens tweens
                 killAllTweens(svg, animationOrder);
-                // créer et jouer la timeline
-                playTlRef.current && playTlRef.current.kill();
+                
+                // Nettoyer l'ancienne timeline de play si elle existe
+                if (playTlRef.current) {
+                    playTlRef.current.kill();
+                    playTlRef.current = null;
+                }
+                
+                // Créer une nouvelle timeline basée sur l'état actuel
                 playTlRef.current = buildPlayTimeline();
+                
                 // Si tout était déjà visible (timeline vide), rien à jouer
                 if (!playTlRef.current || playTlRef.current.duration() === 0) {
                     if (leavePendingRef.current) {
@@ -246,33 +257,69 @@ export default function AnimatedField() {
                     }
                     return;
                 }
+                
                 animatingRef.current = true;
                 playTlRef.current.eventCallback('onComplete', () => {
                     animatingRef.current = false;
                     if (leavePendingRef.current) {
                         leavePendingRef.current = false;
-                        // démarrer reset immédiatement
                         startReset();
                     }
                 });
+                
                 playTlRef.current.timeScale(PLAY_SPEED).play(0);
             };
 
             const startReset = () => {
-                // ne pas doubler
+                // Ne pas doubler
                 if (resettingRef.current) return;
-                // si play actif, marquer pending et attendre fin
-                if (playTlRef.current && playTlRef.current.isActive()) {
+                
+                // Si play actif, marquer pending et attendre fin
+                if (animatingRef.current || (playTlRef.current && playTlRef.current.isActive())) {
                     leavePendingRef.current = true;
                     return;
                 }
+                
                 resettingRef.current = true;
+                
+                // Nettoyer les tweens actifs
                 killAllTweens(svg, animationOrder);
-                resetTlRef.current && resetTlRef.current.kill();
+                
+                // Nettoyer l'ancienne timeline de reset si elle existe
+                if (resetTlRef.current) {
+                    resetTlRef.current.kill();
+                    resetTlRef.current = null;
+                }
+                
+                // Créer une nouvelle timeline de reset basée sur l'état actuel
                 resetTlRef.current = buildResetTimeline();
+                
+                // Si rien à resetter, terminer immédiatement
+                if (!resetTlRef.current || resetTlRef.current.duration() === 0) {
+                    resettingRef.current = false;
+                    return;
+                }
+                
                 resetTlRef.current.eventCallback('onComplete', () => {
                     resettingRef.current = false;
+                    // S'assurer que tous les éléments sont bien cachés
+                    animationOrder.forEach((id) => {
+                        const el = svg.querySelector(`#${id}`);
+                        if (!el) return;
+                        if (el.tagName === 'circle') {
+                            if (id === 'Centre_circle') {
+                                const length = el.getTotalLength();
+                                gsap.set(el, { strokeDashoffset: length });
+                            } else {
+                                gsap.set(el, { opacity: 0 });
+                            }
+                        } else {
+                            const length = el.getTotalLength();
+                            gsap.set(el, { strokeDashoffset: length });
+                        }
+                    });
                 });
+                
                 resetTlRef.current.timeScale(RESET_SPEED).play(0);
             };
 
