@@ -234,6 +234,11 @@ html {
 * {
   box-sizing: border-box;
 }
+/* .slider-container {
+  position: relative;
+  top: 50vh;
+  transform: translateY(-50%);
+} */
 
 img {
   max-width: 100%;
