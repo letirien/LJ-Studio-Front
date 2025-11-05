@@ -59,7 +59,7 @@ export default function ProjectSection({ projects, home }) {
         trigger: scrollWrapperRef.current, // wrapper long
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1,
+        scrub: true,
         pin: sectionRef.current, // section fixe
         pinSpacing: true,
         anticipatePin: 1,
@@ -74,8 +74,8 @@ export default function ProjectSection({ projects, home }) {
         opacity: 0, 
         y: -100, 
         scale: 0.85, 
-        ease: 'power2.inOut',
-        duration: 0.35
+        // ease: 'power2.inOut',
+        duration: 0.4
       }, 
       0
     );
@@ -85,21 +85,24 @@ export default function ProjectSection({ projects, home }) {
       orangeBgRef.current,
       {
         height: '50vh',
-        ease: "power2.out",
+        // ease: "power2.out",
         // duration: 0.6
+        duration: 1
       },
-      0.2
+      0
     );
 
     // BLOC DE COULEUR : apparition douce (30% → 40%)
     tl.fromTo(
       colorBlockRef.current, 
-      { opacity: 0 }, 
-      { 
-        opacity: 1, 
-        ease: 'power2.out',
+      { y: "-100%", opacity: 1 }, 
+      {  
+        y: "0%",
+        opacity: 1,
+        ease: 'easeOut',
+        duration: 0.45
       }, 
-      0.55
+      0.35
     );
 
     // SLIDER : animation fluide du bas vers le centre (20% → 100%)
@@ -114,13 +117,14 @@ export default function ProjectSection({ projects, home }) {
         opacity: 1, 
         ease: 'none',
         // duration: 0.6
+        duration: 1
       },
-      0.1
+      0
     );
 
 
 
-    gsap.delayedCall(0.1, ScrollTrigger.refresh);
+    gsap.delayedCall(0, ScrollTrigger.refresh);
 
     return () => {
       tl.kill();
