@@ -52,14 +52,14 @@ export default function ProjectSection({ projects, home }) {
       }
     };
 
-    updateLenis({ wheelMultiplier: 0.25, lerp: 0.06 });
+    // updateLenis({ wheelMultiplier: 0.25, lerp: 0.06 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: scrollWrapperRef.current, // wrapper long
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 1.5,
+        scrub: 1,
         pin: sectionRef.current, // section fixe
         pinSpacing: true,
         anticipatePin: 1,
@@ -120,17 +120,17 @@ export default function ProjectSection({ projects, home }) {
 
 
 
-    gsap.delayedCall(0.2, ScrollTrigger.refresh);
+    gsap.delayedCall(0.1, ScrollTrigger.refresh);
 
     return () => {
       tl.kill();
       ScrollTrigger.getAll().forEach((t) => t.kill());
-      updateLenis({ wheelMultiplier: 1, lerp: 0.25 });
+      // updateLenis({ wheelMultiplier: 1, lerp: 0.25 });
     };
   }, [isReady, ScrollTrigger, lenis, projects]);
 
   return (
-    <div ref={scrollWrapperRef} className="relative min-h-[200vh]">
+    <div ref={scrollWrapperRef} className="relative min-h-[150vh]">
       <section
         ref={sectionRef}
         className="bg-half-col relative overflow-hidden h-screen flex items-center justify-center"
