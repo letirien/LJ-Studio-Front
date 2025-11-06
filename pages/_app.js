@@ -4,6 +4,7 @@ import { ReactLenis } from 'lenis/react';
 import { useEffect } from 'react';
 import gsap from 'gsap';
 import dynamic from 'next/dynamic';
+import CustomCursor from "../components/CustomCursor";
 
 const Cursor = dynamic(() => import('../components/Cursor'), {
   ssr: false
@@ -48,6 +49,7 @@ function App({ Component, pageProps }) {
       <AnimatePresence mode="wait" initial={false}>
       <Cursor />
       <Component {...pageProps} />
+      <CustomCursor />
       </AnimatePresence>
     </ReactLenis>
   );

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import RoundedIcon from '../RoundedIcon.js';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useTransform, useScroll } from 'framer-motion';
 
 const FIELD_PATHS = [
     'Penalty_area_line',
@@ -50,6 +50,12 @@ export default function AnimatedField() {
     const resettingRef = useRef(false);
     const playTlRef = useRef(null);
     const resetTlRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["center center", "end start"], // "in view" -> "sortie"
+    });
+    const rightx = useTransform(scrollYProgress, [0, 1], [0, 80]);
+    const leftx = useTransform(scrollYProgress, [1, 0], [-80, 0]);
     // Facteurs de vitesse
     const PLAY_SPEED = 0.8; // vitesse globale lecture
     const RESET_SPEED = 1; // vitesse globale reset
@@ -352,9 +358,9 @@ export default function AnimatedField() {
         <section ref={sectionRef} className="w-screen overflow-hidden relative">
             <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none'>
                 <h2 className='text-center bigH2 relative'>
-                    <p>whenever</p>
-                    <p>you play, we're</p> 
-                    <p>by your side</p>
+                    <motion.p style={{ x: rightx }}>whenever</motion.p>
+                    <motion.p >you play, we're</motion.p> 
+                    <motion.p style={{ x: leftx }}>by your side</motion.p>
                     <div className="absolute max-[520px]:bottom-[-40%] bottom-[-4%] max-[520px]:right-[5%] right-[22%]">
                         <RoundedIcon icon="main" size={150} circularContinue={true} />
                     </div>

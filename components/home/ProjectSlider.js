@@ -364,8 +364,12 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                   {/* Élément décoratif pour les transitions */}
                   <div className={`rounded-md ${home.deco}`} ref={decoRef} ></div>
                   {projects.map((project, index) => (
-                      <div
+                      <Link
+                          href="/"
+                          id="projectContainer"
                           key={project.id}
+                          onMouseEnter={() => window.dispatchEvent(new Event("cursor-show"))}
+                          onMouseLeave={() => window.dispatchEvent(new Event("cursor-hide"))}
                           className={
                               index + 1 === idProject
                                   ? `${home.projectSlide} ${home.active}`
@@ -386,7 +390,7 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                                   className={`${home.slideImg} rounded-xs`}
                               />
                           </div>
-                      </div>
+                      </Link>
                   ))}
               </div>
           </div>

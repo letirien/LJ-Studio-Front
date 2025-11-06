@@ -199,6 +199,11 @@ body {
     text-rendering: optimizeLegibility;
     /* z-index: 5; */
 }
+#projectContainer{
+  &:hover{
+    cursor: none;
+  }
+}
 .gallery{
   text-align: center;
   font-family: hardbopBlack;

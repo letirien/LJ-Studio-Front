@@ -6,6 +6,7 @@ import {
   motion,
   useScroll,
   useTransform,
+  useMotionValue,
   useAnimation,
   useSpring,
   delay,
@@ -33,12 +34,33 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   const { scrollYProgress } = useScroll();
   console.log(sliderImages)
   const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const leftx = useTransform(scrollYProgress, [1, 0], [-100, 0]);
-  const rightx = useTransform(scrollYProgress, [0, 1], [-100, 0]);
-  const newx = useTransform(scrollYProgress, [1, 0], [50, 0]);
-  const [buttonTopPosition, setButtonTopPosition] = useState('');
+  // Map scroll progress to a parallax range
+  const mappedParallax = useTransform(scrollYProgress, [0, 1], [-1500, 500]);
+  // We'll clamp the parallax so it appears from top and stops at finalStop (0)
+  const FINAL_STOP = 0;
+  const MIN_STOP = -1500;
+  // MotionValue used directly in the style (y)
+  const parallaxSection = useMotionValue(Math.max(Math.min(mappedParallax.get(), FINAL_STOP), MIN_STOP));
+
+  useEffect(() => {
+    return mappedParallax.on("change", (v) => {
+      // Clamp between MIN_STOP and FINAL_STOP so it never goes past the final position
+      const clamped = Math.max(Math.min(v, FINAL_STOP), MIN_STOP);
+      parallaxSection.set(clamped);
+    });
+  }, [mappedParallax, parallaxSection]);
+
   const sectionImageRef = useRef(null);
-  const sliderNavRef = useRef(null);
+  const galerySection = useRef(null);
+
+ const { scrollYProgress: scrollYGalleryProgress } = useScroll({
+    target: galerySection,
+    offset: ["start end", "end start"], // du moment où la section entre jusqu’à ce qu’elle sorte
+  });
+
+  // On fait varier le line-height progressivement
+  const lineHeight = useTransform(scrollYGalleryProgress, [0, 1], ["0.9", "0.7"]);
+  
   // Référence pour la section entière
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.32 });
@@ -288,7 +310,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         */}
         <AnimatedField/>
         <BrandingSection gamePlan={gamePlan} />
-        <section className="w-full h-full bg-black">
+        <motion.section className="w-full h-full bg-black" style={{ y: parallaxSection }}>
           <div className="w-full h-[100vh] relative">
             <div className="absolute -bottom-1 left-0 right-0 h-[60vh] z-3" style={{
               background: 'linear-gradient(to top, #000000ff 12vh, transparent 100%)'
@@ -323,19 +345,19 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </div>
           </div>
           <Collab logos={logoClients} />
-        </section>
-        <section className="relative bg-white py-42 intersectLogo white px-[4vw]">
+        </motion.section>
+        <motion.section className="relative bg-white py-42 intersectLogo white px-[4vw]">
           <div className="absolute right-[10%] top-[-90px]">
             <RoundedIcon icon="yeux" size={180} rotationFactor={0.45} />
           </div>
           <ImagesTrails/>
-          <h2 className="text-center gallery mx-xl text-black">
+          <motion.h2 ref={galerySection} style={{lineHeight}} className="text-center gallery mx-xl text-black">
             <p className="flex items-center gap-3 justify-center">BEYOND <span className="tenTwentyThin text-[125pt]">THE</span> SURFACE...</p>
             <p>STEP INSIDE OUR</p>
             <p className="flex items-center gap-3 justify-center"><span className="tenTwentyThin text-[125pt]">VISUAL</span>GALLERY AND</p>
             <p className="flex items-center gap-3 justify-center">EXPLORE<span className="tenTwentyThin text-[125pt]">ARCHIVES</span></p>
-          </h2>
-        </section>
+          </motion.h2>
+        </motion.section>
         <StudioBanner/>
       </div>
     </Layout>

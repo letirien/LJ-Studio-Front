@@ -19,11 +19,11 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white text-sm font-mono relative">
       <Image
-        src="/images/ICONE_LJ-STUDIO_BLACK.svg"
+        src="/images/ICONE_LJ-STUDIO_BLACK_OUTLINE.svg"
         alt="LJ Studio Logo"
         width={800}
         height={300}
-        className="absolute left-[-350px] top-[50px] object-cover invert opacity-5">
+        className="absolute left-[-300px] top-[50px] object-cover invert">
       </Image>
       {/* Top section */}
       <div className="grid grid-cols-1 md:grid-cols-3 relative">
@@ -85,11 +85,11 @@ const Footer = () => {
             <div className=" md:block absolute bottom-0 right-0 bottom-0 h-[3px] w-[100%] lg:w-[98.5%] bg-gray-700"></div>
         </div>
       </div>
-      <div className="w-full overflow-hidden bg-black py-8">
+      <div className="w-full overflow-hidden bg-black">
         <img
           src="/images/TYPO_LJ-STUDIO_BLACK.svg"
           alt="LJ Studio Logo"
-          className="w-full object-cover invert"
+          className="w-full object-cover invert mb-[-60px]"
         />
       </div>
 
