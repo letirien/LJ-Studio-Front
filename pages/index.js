@@ -62,8 +62,17 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   const lineHeight = useTransform(scrollYGalleryProgress, [0, 1], ["0.9", "0.7"]);
   
   // Référence pour la section entière
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.32 });
+  const studioRef = useRef(null);
+  const paraphRef = useRef(null);
+  const isParaphInView = useInView(paraphRef, { 
+    once: true, 
+    amount: 0.35,  // Plus bas pour iOS
+  });
+
+    const isStudioInView = useInView(studioRef, { 
+    once: true, 
+    // amount: 0.4,  // Plus bas pour iOS
+  });
   
   // Animations simples
   const titleAnimation = {
@@ -137,7 +146,6 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         <section
           className={`${home.black} bg-red sm:text-[269pt]/[208pt]`}
           data-scroll
-          ref={sectionRef}
           // style={{
           //   opacity: isInView ? 1 : 0,
           //   pointerEvents: isInView ? 'auto' : 'none',
@@ -150,7 +158,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 {/* GARDEZ motion.p pour catHighlight */}
                 <motion.p 
                   initial="hidden"
-                  animate={isInView ? "visible" : "hidden"}
+                  animate={isStudioInView ? "visible" : "hidden"}
                   variants={titleAnimation}
                   custom={0}
                   className={home.catHighlight}
@@ -170,7 +178,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 {/* GARDEZ motion.p pour catHighlight */}
                 <motion.p 
                   initial="hidden"
-                  animate={isInView ? "visible" : "hidden"}
+                  animate={isStudioInView ? "visible" : "hidden"}
                   variants={titleAnimation}
                   custom={2}
                   className={home.catHighlight}
@@ -191,6 +199,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               </HighlightText>
               
               {/* REMPLACEZ motion.p par HighlightText */}
+              <div ref={studioRef}></div>
               <HighlightText 
                 initial="hidden"
                 variants={titleAnimation}
@@ -206,13 +215,14 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </h2>
             <motion.p 
               initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
+              animate={!isParaphInView ? "visible" : "hidden"}
               variants={textAnimation}
               custom={5}
               className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-32`}
             >
               LJ is a French creative studio based in Paris with an exclusive focus on the sports sector. Driven by a profound passion of sports and the emotion they provide, our studio prides itself on capturing and translating that into captivating visual narratives.
-              <br />
+              <div></div>
+              <br/>
               <br />
               From digital branding to creative direction, motion, print layouts and graphic creation, we offer a wide spectrum of services.               
             </motion.p>
