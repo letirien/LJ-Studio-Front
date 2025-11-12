@@ -355,7 +355,7 @@ export default function AnimatedField() {
     }, []);
 
     return (
-        <section ref={sectionRef} className="w-screen overflow-hidden relative">
+        <section ref={sectionRef} className="w-screen overflow-hidden relative bg-black">
             <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none'>
                 <h2 className='text-center bigH2 relative'>
                     <motion.p style={{ x: rightx }}>whenever</motion.p>

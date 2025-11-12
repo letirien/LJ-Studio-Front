@@ -17,7 +17,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-black text-white text-sm font-mono relative">
+    <footer id="footer" className="bg-black text-white text-sm font-mono fixed fixed bottom-0 w-full z-[-5000]">
       <Image
         src="/images/ICONE_LJ-STUDIO_BLACK_OUTLINE.svg"
         alt="LJ Studio Logo"

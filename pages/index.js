@@ -71,7 +71,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
 
     const isStudioInView = useInView(studioRef, { 
     once: true, 
-    // amount: 0.4,  // Plus bas pour iOS
+    amount: 0.4,  // Plus bas pour iOS
   });
   
   // Animations simples
@@ -144,7 +144,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         </Head>
         <Header headerImages={headerImages}/>
         <section
-          className={`${home.black} bg-red sm:text-[269pt]/[208pt]`}
+          className={`${home.black} bg-black sm:text-[269pt]/[208pt]`}
           data-scroll
           // style={{
           //   opacity: isInView ? 1 : 0,
@@ -356,8 +356,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           </div>
           <Collab logos={logoClients} />
         </motion.section>
-        <motion.section className="relative bg-white py-42 intersectLogo white px-[4vw]">
-          <div className="absolute right-[10%] top-[-90px]">
+        <motion.section className="relative bg-white py-42 intersectLogo white px-[4vw] bg-black">
+          <div className="absolute right-[10%] top-[-90px] z-[3]">
             <RoundedIcon icon="yeux" size={180} rotationFactor={0.45} />
           </div>
           <ImagesTrails/>
