@@ -22,8 +22,9 @@ export default function Layout({ children, home }) {
 
   useEffect(() => {
     const footer = window.document.querySelector('footer');
+    
     if (footer) {
-      setFooterHeight(footer.getBoundingClientRect().height);
+      setFooterHeight(footer.offsetHeight);
     }
   }, []);
 
