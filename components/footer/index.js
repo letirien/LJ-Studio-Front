@@ -17,7 +17,7 @@ const Footer = () => {
   };
 
   return (
-    <footer id="footer" className="bg-black text-white text-sm font-mono fixed fixed bottom-0 w-full z-[-5000]">
+    <footer id="footer" className="bg-black text-white text-sm font-mono relative sm:fixed sm:bottom-0 sm:w-full sm:z-[-5000]">
       <Image
         src="/images/ICONE_LJ-STUDIO_BLACK_OUTLINE.svg"
         alt="LJ Studio Logo"
@@ -42,10 +42,10 @@ const Footer = () => {
 
 
         {/* Contact */}
-        <div className="col-span-2 flex flex-col gap-16 py-20 pr-[12vw] pl-[6vw] relative">
+        <div className="col-span-2 flex flex-col gap-8 sm:gap-16 py-6 sm:py-20 pr-[12vw] pl-[6vw] relative">
             <div className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-0">
-                <p className='robotoBold text-[26pt] !text-white'><span className='tenTwentyThin text-[35pt] opacity-55'>jean</span>@LJSTUDIO.xyz</p>
-                <div className="text-end text-white text-[25pt] leading-[23pt] robotoBold">
+                <p className='robotoBold text-[20pt] sm:text-[26pt] !text-white'><span className='tenTwentyThin text-[29pt] sm:text-[35pt] opacity-55'>jean</span>@LJSTUDIO.xyz</p>
+                <div className="text-end text-white text-[19pt] leading-[18pt] sm:text-[25pt] sm:leading-[23pt] robotoBold">
                     <span className="text-orange-500">thanks </span><span className="text-[#474b4e]"><span className='tenTwentyThin'>for</span><br></br> your visit</span>
                 </div>
             </div>
@@ -89,7 +89,7 @@ const Footer = () => {
         <img
           src="/images/TYPO_LJ-STUDIO_BLACK.svg"
           alt="LJ Studio Logo"
-          className="w-full object-cover invert mb-[-60px]"
+          className="w-full object-cover invert mb-[-12px] sm:mb-[-60px]"
         />
       </div>
 

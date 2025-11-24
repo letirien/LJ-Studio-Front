@@ -240,7 +240,7 @@ const CreativeCanvas = ({ images }) => {
   }, [images, controls]);
 
   return (
-    <section ref={containerRef} className="bg-black text-white py-24">
+    <section ref={containerRef} className="bg-black text-white py-12 sm:py-24">
       <div ref={inViewRef}>
         <motion.div className="max-w-none">
           <motion.div

@@ -8,7 +8,11 @@ export default function Navbar() {
   const [logoColor, setLogoColor] = useState('white');
   const [isBetweenSections, setIsBetweenSections] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [isMobille, setIsMobille] = useState(false);
+  
+  useEffect(() => {
+    setIsMobille(window.innerWidth <= 768);
+  }, );
   useEffect(() => {
     const handleScroll = () => {
       const sectionsWhite = document.querySelectorAll('.intersectLogo.white');
@@ -57,11 +61,11 @@ export default function Navbar() {
 
   return (
     <>
-      <div id={styles.navbar} className="mainContainer pt-[4vh] px-[3vw]">
+      <div id={styles.navbar} className="mainContainer pt-[2vh] sm:pt-[4vh] px-[3vw]">
         <div className={`${styles.logo} ${styles[logoColor]}`}>
           <Image
-            width={98}
-            height={98}
+            width={isMobille ? 48 : 98}
+            height={isMobille ? 48 : 98}
             src="/images/LOGO.svg"
             alt="LJ Studio LOGO"
             style={{ objectFit: 'cover' }}
@@ -71,7 +75,7 @@ export default function Navbar() {
           className={styles.menuBTN}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="74" height="35" viewBox="0 0 74 35">
+          <svg xmlns="http://www.w3.org/2000/svg" width={isMobille ? 48 : 74} height="35" viewBox="0 0 74 35">
             <g>
               <g>
                 <g>

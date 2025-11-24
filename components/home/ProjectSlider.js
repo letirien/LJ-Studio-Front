@@ -232,14 +232,6 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                 setTimeout(() => {
                     setSliderReady(true);
                 }, 200);
-                // Initialiser l'Observer pour le scroll et les interactions tactiles
-                observer = gsapLib.Observer.create({
-                    type: "touch,pointer",
-                    onDown: () => navigationHandler.current.handlePrev(),
-                    onUp: () => navigationHandler.current.handleNext(),
-                    wheelSpeed: -1,
-                    tolerance: 10,
-                });
             } catch (error) {
                 console.error("Erreur lors du chargement de GSAP:", error);
             }
@@ -413,7 +405,7 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
             </div>
 
             <Section>
-                <motion.div className={`items-top lg:items-start ${home.projectFooter} mx-[0]`} variants={fadeInUp}>
+                <motion.div className={`items-top lg:items-start ${home.projectFooter} mx-auto mt-[60px] sm:mt-[32px]`} variants={fadeInUp}>
                     {['Team', 'Match Day', 'Game Plan', 'Perf'].map((field) => (
                         <div className={home.footerInfo} key={field}>
                             <div className="container-txt flex flex-col lg:flex-row items-center flex-wrap gap-2">

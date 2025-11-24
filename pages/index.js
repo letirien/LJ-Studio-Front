@@ -144,7 +144,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         </Head>
         <Header headerImages={headerImages}/>
         <section
-          className={`${home.black} bg-black sm:text-[269pt]/[208pt]`}
+          className={`${home.black} bg-black sm:text-[269pt]/[208pt] pt-12 sm:pt-32`}
           data-scroll
           // style={{
           //   opacity: isInView ? 1 : 0,
@@ -218,7 +218,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               animate={!isParaphInView ? "visible" : "hidden"}
               variants={textAnimation}
               custom={5}
-              className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-32`}
+              className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto  mt-12 md:mt-32`}
             >
               LJ is a French creative studio based in Paris with an exclusive focus on the sports sector. Driven by a profound passion of sports and the emotion they provide, our studio prides itself on capturing and translating that into captivating visual narratives.
               <div></div>
@@ -336,10 +336,10 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <div className="flex flex-wrap w-full items-center gap-8 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[40vh]">
             <div className="md:w-1/3">
               <h2 className={`flex flex-col items-center w-min collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
-                <p className="flex items-center gap-2"><span className="prefix">ON</span>Every Pitch...</p>
+                <p className="flex items-center gap-2"><span className="prefix text-[38px] sm:[54pt]">ON</span>Every Pitch...</p>
                 <p className="flex">OUR CLIENT</p>
                 <div className=''>
-                  <p className="flex items-start"><span>COLLABORATIONS</span><span className="suffix flex items-center leading-[60px]"><span className="text-[47px]">(</span>*<span className="text-[47px]">)</span></span></p>                             
+                  <p className="flex items-start"><span>COLLABORATIONS</span><span className="flex items-center leading-[60px] text-[24px] !sm:text-[96pt] roboto"><span className="">(</span>*<span className="">)</span></span></p>                             
                 </div>
               </h2>
             </div>
