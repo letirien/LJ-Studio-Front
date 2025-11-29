@@ -83,7 +83,7 @@ export function Header({headerImages}) {
 					<h1 className={`${styles.mainTitle} text-[30vw] sm:text-[158px] top-[45%] md:top-[inherit] mainContainer`}>
                                 <p>LJ STUDIO</p>
                                 <p>WELCOME ON</p>
-							<div className={`flex h-full ${styles.linesViewport}`}>
+							    <div className={`flex h-full ${styles.linesViewport}`}>
 									<span className={`${styles.linesTrack}`} ref={linesRef}>
                                             <p>OUR PITCH</p>
                                             <p>OUR GAME</p>
@@ -101,8 +101,9 @@ export function Header({headerImages}) {
 									height={100}
 								/> */}
 							</div>
+                            <div className="bgContrastFix bg-[radial-gradient(circle,_rgba(0,0,0,1)_0%,_rgba(0,0,0,0)_70%)] rounded-full backdrop-blur-[2px] absolute w-[500px] h-[500px] -bottom-18 -left-8 -z-1"> </div>
                         </h1>
-                    <div className={`${styles.currentInfoContainer} -bottom-[0%] sm:bottom-[4%]`}><div><Clock/></div></div>
+                    <div className={`${styles.clock} w-full -bottom-[0%] sm:bottom-[4%]`}><div><Clock/></div></div>
                     {/* <div className={`${styles.currentInfoContainer} font-light`}><div>GAME TIME : 17:47:22 UTC+2</div></div> */}
                     <WebGLImageTransition
                         ref={webglRef}
