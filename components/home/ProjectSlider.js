@@ -8,35 +8,39 @@ import home from "../../styles/home.module.scss";
 import Section from './Section.js';
 import dynamic from 'next/dynamic';
 import {
-  fadeInRight,
-  fadeInUp,
-  fadeInLeft
+    fadeInRight,
+    fadeInUp,
+    fadeInLeft
 } from "../../lib/animation/variant";
 
 // Bibliothèque GSAP externe - chargée dynamiquement
 const gsapLib = {
-  gsap: null,
-  Observer: null,
-  loaded: false
+    gsap: null,
+    Observer: null,
+    loaded: false
 };
 
 export function SliderDot({ Nb, idProject, home, onButtonClick }) {
-  const handleDotClick = (index) => {
-    onButtonClick(index);
-  };
-  
-  const circles = Array.from({ length: Nb }, (_, index) => (
-    <motion.div
-      key={index}
-      variants={fadeInRight}
-      className={`${home.cercle} ${
-        index === idProject - 1 ? home.current : ""
-      }`}
-      onClick={() => handleDotClick(index + 1)}
-    />
-  ));
+    const handleDotClick = (index) => {
+        onButtonClick(index);
+    };
 
-  return <div className={home.cercleContainer}>{circles}</div>;
+    const circles = Array.from({ length: Nb }, (_, index) => (
+        <motion.div
+            key={index}
+            variants={fadeInRight}
+            className={`${home.cercle} ${index === idProject - 1 ? home.current : ""
+                }`}
+            onClick={() => handleDotClick(index + 1)}
+        />
+    ));
+
+    return <div className={`${home.cercleContainer} justify-center items-center sm:justify-start mt-4 sm:mt-0 !flex-row sm:!flex-col`}>{circles}<div>
+        <p className={`${home.slideCount} sm:hidden block ml-2 !text-[16px]`}>
+            0
+            <motion.span key={idProject}>{idProject}</motion.span>.
+        </p>
+    </div></div>;
 }
 
 export default function ProjectSlider({ projects, navRef, onSlideChange }) {
@@ -52,6 +56,14 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
     const decoRef = useRef(null);
     const totalProjects = projects.length;
 
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
     // Initialiser les refs pour chaque slide
     useEffect(() => {
         // Créer des références DOM réelles pour tous les slides dès le début
@@ -59,30 +71,30 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
             const existing = slideRefs.current[i];
             return existing || React.createRef();
         });
-        
+
         slideInnerRefs.current = Array(totalProjects).fill().map((_, i) => {
             const existing = slideInnerRefs.current[i];
             return existing || React.createRef();
         });
-        
+
         // Force un re-render pour s'assurer que les refs sont attachées
         // aux éléments DOM avant la première animation
         setIdProject(idProject);
     }, [totalProjects]);
 
     const anim = () => {
-      const secondParagraph = document.querySelectorAll(".container-txt p:nth-of-type(2)");
-    
-      // Vérifier si le deuxième <p> existe
-      if (secondParagraph) {
-        // Appliquer l'animation à ses enfants
-        Array.from(secondParagraph).forEach(el=>el.classList.add("slideUpInfoImg"))
+        const secondParagraph = document.querySelectorAll(".container-txt p:nth-of-type(2)");
 
-        // Après l'animation, enlever la classe d'animation
-        setTimeout(() => {
-          Array.from(secondParagraph).forEach(el=> el.classList.remove("slideUpInfoImg"))
-        }, 1600);
-      }
+        // Vérifier si le deuxième <p> existe
+        if (secondParagraph) {
+            // Appliquer l'animation à ses enfants
+            Array.from(secondParagraph).forEach(el => el.classList.add("slideUpInfoImg"))
+
+            // Après l'animation, enlever la classe d'animation
+            setTimeout(() => {
+                Array.from(secondParagraph).forEach(el => el.classList.remove("slideUpInfoImg"))
+            }, 1600);
+        }
     };
     const [firstClickHandled, setFirstClickHandled] = useState(false);
 
@@ -99,9 +111,9 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                     ? previousId + 1
                     : 1
                 : previousId > 1
-                ? previousId - 1
-                : totalProjects;
-        
+                    ? previousId - 1
+                    : totalProjects;
+
         // Effectuer l'animation de transition
         const currentSlide = slideRefs.current[previousId - 1].current;
         const currentInner = slideInnerRefs.current[previousId - 1].current;
@@ -116,19 +128,19 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
             setIsAnimating(false);
             return;
         }
-        
+
         // Animation séquence avec GSAP
         setIdProject(newId);
-        
+
         // ✨ AJOUTEZ CETTE LIGNE ICI ✨
         // Notifier le parent du changement de slide
         if (onSlideChange) {
             onSlideChange(newId - 1); // newId - 1 car les index commencent à 0
         }
-        
+
         anim()
-        setTimeout(()=>{
-        setDelayIdProject(newId)
+        setTimeout(() => {
+            setDelayIdProject(newId)
         }, 300)
 
         if (!firstClickHandled) {
@@ -146,47 +158,47 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                 setIsAnimating(false);
             }
         })
-        .addLabel('start', 0)
-        .to(currentSlide, {
-            duration: 0.4,
-            ease: 'power2.in',
-            yPercent: -dir * 100
-        }, 'start')
-        .to(currentInner, {
-            duration: 0.4,
-            ease: 'power2.in',
-            yPercent: dir * 75,
-            rotation: -dir * 2
-        }, 'start')
-        .fromTo(deco, {
-            yPercent: dir * 100,
-            autoAlpha: 1
-        }, {
-            duration: 0.4,
-            ease: 'power2.in',
-            yPercent: 0,
-        }, 'start')
-        
-        .addLabel('middle', 'start+=0.5')
-        .to(deco, {
-            ease: 'expo',
-            yPercent: -dir * 100,
-        }, 'middle')
-        .fromTo(upcomingSlide, {
-            autoAlpha: 1,
-            yPercent: dir * 100
-        }, {
-            ease: 'expo',
-            yPercent: 0
-        }, 'middle')
-        .fromTo(upcomingInner, {
-            yPercent: -dir * 75,
-            rotation: dir * 2
-        }, {
-            ease: 'expo',
-            yPercent: 0,
-            rotation: 0
-        }, 'middle');
+            .addLabel('start', 0)
+            .to(currentSlide, {
+                duration: 0.4,
+                ease: 'power2.in',
+                yPercent: -dir * 100
+            }, 'start')
+            .to(currentInner, {
+                duration: 0.4,
+                ease: 'power2.in',
+                yPercent: dir * 75,
+                rotation: -dir * 2
+            }, 'start')
+            .fromTo(deco, {
+                yPercent: dir * 100,
+                autoAlpha: 1
+            }, {
+                duration: 0.4,
+                ease: 'power2.in',
+                yPercent: 0,
+            }, 'start')
+
+            .addLabel('middle', 'start+=0.5')
+            .to(deco, {
+                ease: 'expo',
+                yPercent: -dir * 100,
+            }, 'middle')
+            .fromTo(upcomingSlide, {
+                autoAlpha: 1,
+                yPercent: dir * 100
+            }, {
+                ease: 'expo',
+                yPercent: 0
+            }, 'middle')
+            .fromTo(upcomingInner, {
+                yPercent: -dir * 75,
+                rotation: dir * 2
+            }, {
+                ease: 'expo',
+                yPercent: 0,
+                rotation: 0
+            }, 'middle');
     };
 
 
@@ -217,17 +229,17 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
     // Charger GSAP et initialiser l'Observer
     useEffect(() => {
         let observer = null;
-        
+
         const loadGSAP = async () => {
             try {
                 const gsapModule = await import('gsap');
                 const observerModule = await import('gsap/Observer');
-                
+
                 gsapLib.gsap = gsapModule.gsap;
                 gsapLib.Observer = observerModule.Observer;
                 gsapLib.gsap.registerPlugin(gsapLib.Observer);
                 gsapLib.loaded = true;
-                
+
                 // Attendre un court délai pour s'assurer que tout est initialisé
                 setTimeout(() => {
                     setSliderReady(true);
@@ -236,9 +248,9 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                 console.error("Erreur lors du chargement de GSAP:", error);
             }
         };
-        
+
         loadGSAP();
-        
+
         // Nettoyage
         return () => {
             if (observer) {
@@ -258,172 +270,179 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                     img.src = project.fields.Image[0].url;
                 });
             });
-            
+
             await Promise.all(imagePromises);
-            
+
             // Ajouter une classe loaded ou autre effet quand tout est chargé
             if (containerRef.current) {
                 containerRef.current.classList.add(home.loaded || 'loaded');
             }
         };
-        
+
         preloadImages();
     }, [projects]);
 
-    useEffect(()=>{
-      const observer = new IntersectionObserver(
-          ([entry]) => {
-              setIsVisible(entry.isIntersecting);
-          },
-          { threshold: 0.7 } // Ajuste le seuil pour déclencher l'effet plus tôt ou plus tard
-      );
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry.isIntersecting);
+            },
+            { threshold: 0.7 } // Ajuste le seuil pour déclencher l'effet plus tôt ou plus tard
+        );
 
-      if (sectionRef.current) {
-          observer.observe(sectionRef.current);
-      }
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
 
-      return () => {
-          if (sectionRef.current) {
-              observer.unobserve(sectionRef.current);
-          }
-      };
-    },[])
+        return () => {
+            if (sectionRef.current) {
+                observer.unobserve(sectionRef.current);
+            }
+        };
+    }, [])
     return (
-        <div 
-            ref={sectionRef} 
+        <div
+            ref={sectionRef}
             className={`relative transition-all duration-500 ease-in-out`}
-        > 
-        <button className="absolute inset-0 pointer-events-none z-3 group" onClick={() => {handleNavigation(1)}}>
-            <div className="absolute right-[2vw] bottom-[50%] sm:right-[-2vw] sm:bottom-[45%] md:right-[12vw] md:bottom-[20%] rotate-[-10deg] pointer-events-auto">
-                <motion.svg 
-                    width="82" 
-                    height="80" 
-                    viewBox="0 0 82 80" 
-                    fill="none" 
-                    xmlns="http://www.w3.org/2000/svg"
-                    initial="rest"
-                    whileHover="hover"
-                >
-                    <rect width="82" height="80" rx="12" fill="#FA6218"/>
-                    
-                    {/* Premier groupe d'icônes play (gauche) */}
-                    <motion.g
-                        variants={{
-                            rest: { y: 0, scale: 1 },
-                            hover: {
-                                y: [0, -4, 0, -6, 0],
-                                scale: [1, 1.02, 1, 1.04, 1],
-                                transition: { 
-                                    duration: 0.6,
-                                    ease: [0.68, -0.55, 0.265, 1.55]
-                                }
-                            }
-                        }}
+        >
+            <button className="absolute right-[2%] bottom-[63%] sm:right-[-2vw] sm:bottom-[45%] md:right-[12vw] md:bottom-[20%] pointer-events-none z-3 group" onClick={() => { handleNavigation(1) }}>
+                <div className="rotate-[-10deg] pointer-events-auto">
+                    <motion.svg
+                        width={isMobile ? "42" : "82 "}
+                        height={isMobile ? "42 " : "82"}
+                        viewBox="0 0 82 80"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        initial="rest"
+                        whileHover="hover"
                     >
-                        <rect width="4.71789" height="38.7821" transform="translate(22.1279 19.9043)" fill="black"/>
-                        <rect width="4.71789" height="47.2436" transform="translate(18 15.6733)" fill="black"/>
-                        <rect width="4.71789" height="28.2051" transform="translate(26.8467 25.5449)" fill="black"/>
-                        <rect width="4.71789" height="17.6282" transform="translate(31.5645 31.186)" fill="black"/>
-                        <rect width="4.71789" height="5.64103" transform="translate(36.2822 36.8271)" fill="black"/>
-                    </motion.g>
-                    
-                    {/* Deuxième groupe d'icônes play (droite) */}
-                    <motion.g
-                        variants={{
-                            rest: { y: 0, scale: 1 },
-                            hover: {
-                                y: [0, -3, 0, -8, 0],
-                                scale: [1, 1.01, 1, 1.06, 1],
-                                transition: { 
-                                    duration: 0.7,
-                                    ease: [0.68, -0.55, 0.265, 1.55],
-                                    delay: 0.15
+                        <rect width="82" height="82" rx="12" fill="#FA6218" />
+
+                        {/* Premier groupe d'icônes play (gauche) */}
+                        <motion.g
+                            variants={{
+                                rest: { y: 0, scale: 1 },
+                                hover: {
+                                    y: [0, -4, 0, -6, 0],
+                                    scale: [1, 1.02, 1, 1.04, 1],
+                                    transition: {
+                                        duration: 0.6,
+                                        ease: [0.68, -0.55, 0.265, 1.55]
+                                    }
                                 }
+                            }}
+                        >
+                            <rect width="4.71789" height="38.7821" transform="translate(22.1279 19.9043)" fill="black" />
+                            <rect width="4.71789" height="47.2436" transform="translate(18 15.6733)" fill="black" />
+                            <rect width="4.71789" height="28.2051" transform="translate(26.8467 25.5449)" fill="black" />
+                            <rect width="4.71789" height="17.6282" transform="translate(31.5645 31.186)" fill="black" />
+                            <rect width="4.71789" height="5.64103" transform="translate(36.2822 36.8271)" fill="black" />
+                        </motion.g>
+
+                        {/* Deuxième groupe d'icônes play (droite) */}
+                        <motion.g
+                            variants={{
+                                rest: { y: 0, scale: 1 },
+                                hover: {
+                                    y: [0, -3, 0, -8, 0],
+                                    scale: [1, 1.01, 1, 1.06, 1],
+                                    transition: {
+                                        duration: 0.7,
+                                        ease: [0.68, -0.55, 0.265, 1.55],
+                                        delay: 0.15
+                                    }
+                                }
+                            }}
+                        >
+                            <rect width="4.71789" height="38.7821" transform="translate(45.1279 21.3145)" fill="black" />
+                            <rect width="4.71789" height="47.2436" transform="translate(41 17.0835)" fill="black" />
+                            <rect width="4.71789" height="28.2051" transform="translate(49.8457 26.9556)" fill="black" />
+                            <rect width="4.71789" height="17.6282" transform="translate(54.5635 32.5962)" fill="black" />
+                            <rect width="4.71789" height="5.64103" transform="translate(59.2822 38.2373)" fill="black" />
+                        </motion.g>
+                    </motion.svg>
+                </div>
+            </button>
+            <div id="sliderContainer" className={`${home.sliderContainer} mx-auto rounded-md z-1`}>
+                <div className={`rounded-md ${home.sliderWrapper} relative overflow`} ref={containerRef}>
+                    {/* Élément décoratif pour les transitions */}
+                    <div className={`rounded-md ${home.deco}`} ref={decoRef} ></div>
+                    {projects.map((project, index) => (
+                        <Link
+                            href="/"
+                            id="projectContainer"
+                            key={project.id}
+                            onMouseEnter={() => window.dispatchEvent(new Event("cursor-show"))}
+                            onMouseLeave={() => window.dispatchEvent(new Event("cursor-hide"))}
+                            className={
+                                index + 1 === idProject
+                                    ? `${home.projectSlide} ${home.active}`
+                                    : home.projectSlide
                             }
-                        }}
-                    >
-                        <rect width="4.71789" height="38.7821" transform="translate(45.1279 21.3145)" fill="black"/>
-                        <rect width="4.71789" height="47.2436" transform="translate(41 17.0835)" fill="black"/>
-                        <rect width="4.71789" height="28.2051" transform="translate(49.8457 26.9556)" fill="black"/>
-                        <rect width="4.71789" height="17.6282" transform="translate(54.5635 32.5962)" fill="black"/>
-                        <rect width="4.71789" height="5.64103" transform="translate(59.2822 38.2373)" fill="black"/>
-                    </motion.g>
-                </motion.svg>
+                            ref={slideRefs.current[index]}
+                        >
+                            <div
+                                className={`rounded-md ${home.slideInner}`}
+                                ref={slideInnerRefs.current[index]}
+                            >
+                                <Image
+                                    src={project.fields.Image[0].url}
+                                    alt={project.title}
+                                    width={1920}
+                                    height={1080}
+                                    priority
+                                    className={`${home.slideImg} rounded-xs`}
+                                />
+                            </div>
+                        </Link>
+                    ))}
+                </div>
             </div>
-        </button>
-         <div id="sliderContainer" className={`${home.sliderContainer} mx-auto rounded-md z-1`}>
-              <div className={`rounded-md ${home.sliderWrapper} relative overflow`} ref={containerRef}>
-                  {/* Élément décoratif pour les transitions */}
-                  <div className={`rounded-md ${home.deco}`} ref={decoRef} ></div>
-                  {projects.map((project, index) => (
-                      <Link
-                          href="/"
-                          id="projectContainer"
-                          key={project.id}
-                          onMouseEnter={() => window.dispatchEvent(new Event("cursor-show"))}
-                          onMouseLeave={() => window.dispatchEvent(new Event("cursor-hide"))}
-                          className={
-                              index + 1 === idProject
-                                  ? `${home.projectSlide} ${home.active}`
-                                  : home.projectSlide
-                          }
-                          ref={slideRefs.current[index]}
-                      >
-                          <div 
-                              className={`rounded-md ${home.slideInner}`}
-                              ref={slideInnerRefs.current[index]}
-                          >
-                              <Image
-                                  src={project.fields.Image[0].url}
-                                  alt={project.title}
-                                  width={1920}
-                                  height={1080}
-                                  priority
-                                  className={`${home.slideImg} rounded-xs`}
-                              />
-                          </div>
-                      </Link>
-                  ))}
-              </div>
-          </div>
-          <div className={home.slideBlock}>
+            <div className={`${home.slideBlock} hidden sm:block`}>
                 <Section>
                     <div className={home.containerSlideInfo}>
                         <SliderDot
                             Nb={totalProjects}
                             idProject={idProject}
                             home={home}
-                            // onButtonClick={(id) => {
-                            //     if (isAnimating) return;
-                            //     const dir = id > idProject ? 1 : -1;
-                            //     setDirection(dir);
-                            //     handleNavigation(dir);
-                            // }}
+                        // onButtonClick={(id) => {
+                        //     if (isAnimating) return;
+                        //     const dir = id > idProject ? 1 : -1;
+                        //     setDirection(dir);
+                        //     handleNavigation(dir);
+                        // }}
                         />
                     </div>
                 </Section>
             </div>
 
-            <Section>
-                <motion.div className={`items-top lg:items-start ${home.projectFooter} mx-auto mt-[60px] sm:mt-[32px]`} variants={fadeInUp}>
-                    {['Team', 'Match Day', 'Game Plan', 'Perf'].map((field) => (
-                        <div className={home.footerInfo} key={field}>
-                            <div className="container-txt flex flex-col lg:flex-row items-center flex-wrap gap-2">
-                                <p className='harbop !text-[45pt]/[38pt] sm:!text-[45pt] text-center uppercase'>{field}</p>
-                                <motion.p variants={fadeInUp} className={`${home.subInfo} flex-1 text-center lg:text-left`}>
-                                    {projects[idProjectDelay - 1].fields[field]}
-                                </motion.p>
+            <section>
+                <div className="sm:hidden"><SliderDot
+                    Nb={totalProjects}
+                    idProject={idProject}
+                    home={home}
+                /></div>
+                <Section>
+                    <motion.div className={`items-top lg:items-start ${home.projectFooter} mx-auto mt-[60px] sm:mt-[32px]`} variants={fadeInUp}>
+                        {['Team', 'Match Day', 'Game Plan', 'Perf'].map((field) => (
+                            <div className={home.footerInfo} key={field}>
+                                <div className="container-txt flex flex-col lg:flex-row items-center flex-wrap gap-2">
+                                    <p className='harbop !text-[45pt]/[38pt] sm:!text-[45pt] text-center uppercase'>{field}</p>
+                                    <motion.p variants={fadeInUp} className={`${home.subInfo} flex-1 text-center lg:text-left`}>
+                                        {projects[idProjectDelay - 1].fields[field]}
+                                    </motion.p>
+                                </div>
                             </div>
+                        ))}
+                        <div className={`${home.footerInfo}`}>
+                            <p className={`${home.slideCount} hidden md:block`}>
+                                0
+                                <motion.span key={idProject}>{idProject}</motion.span>.
+                            </p>
                         </div>
-                    ))}
-                    <div className={`${home.footerInfo}`}>
-                        <p className={`${home.slideCount} hidden md:block`}>
-                            0
-                            <motion.span key={idProject}>{idProject}</motion.span>.
-                        </p>
-                    </div>
-                </motion.div>
-            </Section>
+                    </motion.div>
+                </Section>
+            </section>
         </div>
     );
 }

@@ -27,6 +27,7 @@ import { ImagesTrails } from "../components/home/ImagesTrail.js";
 import RoundedIcon from "../components/RoundedIcon.js";
 import ProjectSection from "../components/home/ProjectSection.js";
 import HighlightText from "../components/home/HighlightText.js";
+import AppearText from '../components/AppearText.js';
 
 
 
@@ -89,7 +90,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
     const textAnimation = {
     hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
-      opacity: 0.55,
+      opacity: 1,
       y: 0,
       transition: { 
         duration: 0.6,
@@ -97,6 +98,20 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
       }
     })
   };
+
+    // Line reveal variants (top slides up, bottom slides in)
+    const lineContainer = {
+      hidden: {},
+      visible: { transition: { staggerChildren: 0.12 } }
+    };
+    const lineTop = {
+      hidden: { y: '0%', opacity: 1 },
+      visible: { y: '-100%', opacity: 0, transition: { duration: 0.6 } }
+    };
+    const lineBottom = {
+      hidden: { y: '100%', opacity: 0 },
+      visible: { y: '0%', opacity: 1, transition: { duration: 0.6 } }
+    };
 
   const calculateButtonPosition = () => {
     const imageRef = document.getElementById('sliderContainer')
@@ -135,6 +150,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  // Paragraph animations are handled by AppearText (GSAP inside component)
   return (
     <Layout home>
       <div>
@@ -144,7 +161,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         </Head>
         <Header headerImages={headerImages}/>
         <section
-          className={`${home.black} bg-black sm:text-[269pt]/[208pt] pt-12 sm:pt-32`}
+          className={`${home.black} bg-black pt-12 sm:pt-32`}
           data-scroll
           // style={{
           //   opacity: isInView ? 1 : 0,
@@ -152,19 +169,28 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           //   transition: 'opacity 0.6s cubic-bezier(0.4,0,0.2,1)'
           // }}
         >
+          <div className="flex gap-9 mx-auto justify-center items-center mb-6">
+            <AppearText type="lines"
+                  className={`${home.catHighlight} block md:hidden !opacity-55  text-[3wv] sm:text-[1.5vw]`}
+            >
+              French
+            </AppearText>
+            <p className="instrumentSerifRegular text-[8vw]/[0.8] tracking-tight sm:opacity-90 sm:text-[4vw]/[0.8]">Creative Studio</p>
+            <AppearText type="lines"
+                  className={`${home.catHighlight} block md:hidden !opacity-55  text-[3wv] sm:text-[1.5vw]`}
+            >
+              Accent
+            </AppearText>
+          </div>
           <div>
-            <h2>
-              <div className="flex gap-6 md:gap-26 justify-center">
+            <h2 className="text-[14vw]/[0.8] sm:text-[8vw]/[0.8]">
+              <div className="flex gap-9 justify-center items-center">
                 {/* GARDEZ motion.p pour catHighlight */}
-                <motion.p 
-                  initial="hidden"
-                  animate={isStudioInView ? "visible" : "hidden"}
-                  variants={titleAnimation}
-                  custom={0}
-                  className={home.catHighlight}
+                 <AppearText type="lines" once={true}
+                  className={`${home.catHighlight} hidden md:block !opacity-55 text-[1.5vw]`}
                 >
                   French
-                </motion.p>
+                </AppearText>
                 
                 {/* REMPLACEZ motion.p par HighlightText */}
                 <HighlightText 
@@ -176,15 +202,11 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 </HighlightText>
                 
                 {/* GARDEZ motion.p pour catHighlight */}
-                <motion.p 
-                  initial="hidden"
-                  animate={isStudioInView ? "visible" : "hidden"}
-                  variants={titleAnimation}
-                  custom={2}
-                  className={home.catHighlight}
+                <AppearText type="lines" once={true}
+                  className={`${home.catHighlight} hidden md:block !opacity-55 text-[1.5vw]`}
                 >
-                  Studio
-                </motion.p>
+                  Accent
+                </AppearText>
               </div>
               
               {/* REMPLACEZ motion.p par HighlightText */}
@@ -195,7 +217,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 fadedValue={0.2}           // Opacité de départ (0-1)
                 staggerValue={.04}         // Délai entre chaque caractère     
               >
-                SPORTS STORIES TROUGH
+                SPORTS STORIES
               </HighlightText>
               
               {/* REMPLACEZ motion.p par HighlightText */}
@@ -207,25 +229,45 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 className="relative"
                 staggerValue={.05}         // Délai entre chaque caractère     
               >
-                CREATIVE CANVAS.
-                <div className="absolute right-[32%] bottom-[-50px]">
+                 TROUGH CREATIVE
+                <div className="absolute right-[22.5%] bottom-[-50%] hidden sm:block">
                   <RoundedIcon icon="" size={150} rotationFactor={0.45} />
                 </div>
               </HighlightText>
+                            <HighlightText 
+                initial="hidden"
+                variants={titleAnimation}
+                custom={3}
+                fadedValue={0.2}         
+                staggerValue={0.085}
+                className="relative"         
+              >
+                CANVAS.
+                <div className="absolute right-[40%] bottom-[-50%] sm:hidden">
+                  <RoundedIcon icon="" size={90} rotationFactor={0.45} />
+                </div>
+              </HighlightText>
             </h2>
-            <motion.p 
-              initial="hidden"
-              animate={!isParaphInView ? "visible" : "hidden"}
-              variants={textAnimation}
-              custom={5}
-              className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto  mt-12 md:mt-32`}
+            <div
+              ref={paraphRef}
+              className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-16 md:mt-32`}
             >
-              LJ is a French creative studio based in Paris with an exclusive focus on the sports sector. Driven by a profound passion of sports and the emotion they provide, our studio prides itself on capturing and translating that into captivating visual narratives.
-              <div></div>
-              <br/>
-              <br />
-              From digital branding to creative direction, motion, print layouts and graphic creation, we offer a wide spectrum of services.               
-            </motion.p>
+              {[
+                {
+                  className: 'uppercase mb-12 !opacity-80 helveticaNowDisplayMedium tracking-widest',
+                  text: 'LJ Studio was born from a passion for sport and image, two languages that speak through emotion.'
+                },
+                { className: '!opacity-55', text: 'Since 2018, we’ve been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.' },
+                { className: '!opacity-55', text: 'Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.' },
+                { className: '!opacity-55', text: 'We believe every sport has its own language - we design the way it’s told.' }
+              ].map((p, idx) => (
+                <div key={idx} className="relative overflow-hidden mb-6">
+                  <AppearText type="lines" className={`${p.className}`}>
+                    {p.text}
+                  </AppearText>
+                </div>
+              ))}
+            </div>
           </div>
           <CreativeCanvas images={sliderImages}/>
         </section>

@@ -3,6 +3,7 @@ import { useLenis } from 'lenis/react';
 import gsap from 'gsap';
 import Projects from './ProjectSlider.js';
 import { useScrollTrigger } from '../../lib/useScrollTrigger.js';
+import Image from "next/image";
 
 export default function ProjectSection({ projects, home }) {
   const sectionRef = useRef(null);
@@ -17,23 +18,31 @@ export default function ProjectSection({ projects, home }) {
   const lenis = useLenis();
   const { ScrollTrigger, isReady } = useScrollTrigger();
 
+  const [isMobile, setIsMobile] = useState(false);
+    
+
+
   const defaultColor = '#FA6218';
 
   // Init premier bloc couleur
   useEffect(() => {
-    const firstColor = projects[0]?.fields?.['#hexa'] || defaultColor;
-    setColorBlocks([{ id: Date.now(), color: firstColor, entering: false, initial: true }]);
+    const firstColor = projects?.[0]?.fields?.['#hexa'] || defaultColor;
+    setColorBlocks([{ id: Date.now(), color: firstColor, entering: false, initial: true, projectIndex: 0 }]);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, [projects]);
 
   // Gestion du changement de slide (couleur)
   const handleSlideChange = (index) => {
-    const nextColor = projects[index]?.fields?.['#hexa'] || defaultColor;
+    const nextColor = projects?.[index]?.fields?.['#hexa'] || defaultColor;
 
     setColorBlocks((prev) => {
       const updated = prev.map((b) => ({ ...b, entering: false, initial: false }));
       return [
         ...updated,
-        { id: Date.now(), color: nextColor, entering: true, initial: false },
+        { id: Date.now(), color: nextColor, entering: true, initial: false, projectIndex: index },
       ];
     });
   };
@@ -113,7 +122,7 @@ export default function ProjectSection({ projects, home }) {
         opacity: 0 
       },
       { 
-        y: '0vh',
+        y: isMobile ? '15vh' : '0vh',
         opacity: 1, 
         ease: 'none',
         // duration: 0.6
@@ -157,12 +166,12 @@ export default function ProjectSection({ projects, home }) {
               key={block.id}
               className="absolute inset-x-0 h-full"
               style={{
-                backgroundColor: block.color,
+                backgroundColor: "black",
                 zIndex: i + 1,
                 transform: block.initial
                   ? 'translateY(0%)'
                   : block.entering
-                  ? 'translateY(100%)'
+                  ? 'translateY(0%)'
                   : 'translateY(0%)',
                 animation: block.initial
                   ? 'none'
@@ -170,17 +179,35 @@ export default function ProjectSection({ projects, home }) {
                   ? 'slideUp 0.8s ease-out forwards'
                   : 'none',
               }}
-            />
+              
+            > 
+            {/* Use block.projectIndex instead of using the loop index to retrieve the correct project */}
+            {(() => {
+              const projIndex = typeof block.projectIndex === 'number' ? block.projectIndex : i || 0;
+              const imageObj = projects?.[projIndex]?.fields?.Image?.[0];
+              const imageUrl = imageObj?.url;
+              const imageAlt = imageObj?.alt || 'overlay';
+
+              if (!imageUrl) return null;
+              return (
+                <Image
+                  src={imageUrl}
+                  alt={imageAlt}
+                  fill={true}
+                  style={{ objectFit: 'cover', opacity: 0.5, filter: 'blur(10px)' }}
+                />
+              );
+            })()}            </div>
           ))}
         </div>
 
         <style jsx>{`
           @keyframes slideUp {
             from {
-              transform: translateY(100%);
+              opacity: 0%;
             }
             to {
-              transform: translateY(0%);
+              opacity: 100%;
             }
           }
         `}</style>
@@ -190,9 +217,9 @@ export default function ProjectSection({ projects, home }) {
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <h2 ref={titleRef} className="bigH2 text-center">
               <p className="flex justify-center gap-2 md:gap-12">
-                <span className={`${home.catHighlight} !text-black`}>Pitch</span>
+                <span className={`${home.catHighlight} !text-black text-[3vw] sm:text-[1.5vw]`}>Pitch</span>
                 highlights of
-                <span className={`${home.catHighlight} !text-black`}>Vison</span>
+                <span className={`${home.catHighlight} !text-black text-[3vw] sm:text-[1.5vw]`}>Vison</span>
               </p>
               <p>our recent games</p>
             </h2>

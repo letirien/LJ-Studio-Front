@@ -6,11 +6,12 @@
     height: 100vh; */
 }
 .catHighlight{
-  font-size: 51pt;
+  // font-size: 1.5vw;
   // line-height: 39pt;
-  font-family: TenTwentyExtraLightItalic;
-  color: gray;
-  text-transform: capitalize;
+  font-family: HelveticaNowDisplayMedium;
+  // color: gray;
+  // opacity: 55%;
+  // text-transform: capitalize;
   // font-style: italic
 }
 .defaultText{
@@ -26,7 +27,7 @@
 
   & > div > h2{
     text-align: center;
-    font-family: HardbopUltraBold;
+    font-family: HelveticaNowDisplayBold;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -150,10 +151,10 @@
 }
 
 .cercle {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.712);
   // cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -270,7 +271,8 @@
       color: rgba(255, 255, 255, 0.497);
     }
   }
-  .slideCount {
+}
+.slideCount {
     font-size: 19pt;
     font-family: RobotoMono;
     color: #fa6218;
@@ -280,7 +282,6 @@
       font-family: TenTwenty;
     }
   }
-}
 .footerWrapper {
   margin-top: 750px; // Adjust this value based on your project container height
   position: relative;
@@ -404,12 +405,12 @@
   }
 }
 @media screen and (max-width: 1400px) {
-  .black > div > h2 {
-    font-size: 26vw; /* Plus petit sur mobile mais toujours impactant */
-    line-height: 21vw;
-    /* Optionnel: ajuster l'espacement */
-    letter-spacing: -0.02em;
-  }
+  // .black > div > h2 {
+  //   // font-size: 26vw; /* Plus petit sur mobile mais toujours impactant */
+  //   // line-height: 21vw;
+  //   /* Optionnel: ajuster l'espacement */
+  //   // letter-spacing: -0.02em;
+  // }
 }
 
 @media screen and (max-width: 768px) {
@@ -419,10 +420,6 @@
   //   /* Optionnel: ajuster l'espacement */
   //   letter-spacing: -0.02em;
   // }
-  
-  .catHighlight {
-    font-size: 8vw; /* Plus visible sur mobile */
-  }
   
   /* Ajuster le texte descriptif aussi */
   .defaultText {
@@ -443,7 +440,7 @@
     width: 80%;
     display:grid;
     grid-template-columns: repeat(2, 1fr);
-    gap:16px;
+    gap:42px;
     // margin-right: auto!important;
     // margin-left:0;
     .footerInfo{

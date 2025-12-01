@@ -138,6 +138,27 @@ a{
   font-family: RobotoMonoMedium;
   src: url("/typos/ROBOTO MONO/RobotoMono-Medium.ttf");
 }
+@font-face {
+  font-family: HelveticaNowDisplayBold;
+  src: url("/typos/HELVETICA NOW DISPLAY/HelveticaNowDisplay-Bold.ttf");
+}
+@font-face {
+  font-family: HelveticaNowDisplayMedium;
+  src: url("/typos/HELVETICA NOW DISPLAY/HelveticaNowDisplay-Medium.ttf");
+}
+@font-face {
+  font-family: InstrumentSerifRegular;
+  src: url("/typos/Instrument_Serif/InstrumentSerif-Regular.ttf");
+}
+.helveticaNowDisplayBold{
+  font-family: HelveticaNowDisplayBold;
+}
+.helveticaNowDisplayMedium{
+  font-family: HelveticaNowDisplayMedium;
+}
+.instrumentSerifRegular{
+  font-family: InstrumentSerifRegular;
+}
 .robotoMonoMedium{
   font-family: RobotoMonoMedium;
 }
