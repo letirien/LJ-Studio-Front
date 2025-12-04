@@ -62,18 +62,18 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   // On fait varier le line-height progressivement
   const lineHeight = useTransform(scrollYGalleryProgress, [0, 1], ["0.9", "0.7"]);
   
-  // Référence pour la section entière
-  const studioRef = useRef(null);
-  const paraphRef = useRef(null);
-  const isParaphInView = useInView(paraphRef, { 
-    once: true, 
-    amount: 0.35,  // Plus bas pour iOS
-  });
+  // // Référence pour la section entière
+  // const studioRef = useRef(null);
+  // const paraphRef = useRef(null);
+  // const isParaphInView = useInView(paraphRef, { 
+  //   once: true, 
+  //   amount: 0.35,  // Plus bas pour iOS
+  // });
 
-    const isStudioInView = useInView(studioRef, { 
-    once: true, 
-    amount: 0.4,  // Plus bas pour iOS
-  });
+  //   const isStudioInView = useInView(studioRef, { 
+  //   once: true, 
+  //   amount: 0.4,  // Plus bas pour iOS
+  // });
   
   // Animations simples
   const titleAnimation = {
@@ -170,13 +170,13 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           // }}
         >
           <div className="flex gap-9 mx-auto justify-center items-center mb-6">
-            <AppearText type="lines"
+            <AppearText type="words" once={true}
                   className={`${home.catHighlight} block md:hidden !opacity-55  text-[3wv] sm:text-[1.5vw]`}
             >
               French
             </AppearText>
             <p className="instrumentSerifRegular text-[8vw]/[0.8] tracking-tight sm:opacity-90 sm:text-[4vw]/[0.8]">Creative Studio</p>
-            <AppearText type="lines"
+            <AppearText type="words" once={true}
                   className={`${home.catHighlight} block md:hidden !opacity-55  text-[3wv] sm:text-[1.5vw]`}
             >
               Accent
@@ -220,8 +220,6 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 SPORTS STORIES
               </HighlightText>
               
-              {/* REMPLACEZ motion.p par HighlightText */}
-              <div ref={studioRef}></div>
               <HighlightText 
                 initial="hidden"
                 variants={titleAnimation}
@@ -230,8 +228,11 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 staggerValue={.05}         // Délai entre chaque caractère     
               >
                  TROUGH CREATIVE
-                <div className="absolute right-[22.5%] bottom-[-50%] hidden sm:block">
-                  <RoundedIcon icon="" size={150} rotationFactor={0.45} />
+                <div className="absolute right-[22.5%] bottom-[-50%] hidden sm:block xl:hidden">
+                  <RoundedIcon icon="" size={80} rotationFactor={0.45} />
+                </div>
+                <div className="absolute right-[22.5%] bottom-[-50%] hidden xl:block">
+                  <RoundedIcon icon="" size={130} rotationFactor={0.45} />
                 </div>
               </HighlightText>
                             <HighlightText 
@@ -243,13 +244,12 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 className="relative"         
               >
                 CANVAS.
-                <div className="absolute right-[40%] bottom-[-50%] sm:hidden">
-                  <RoundedIcon icon="" size={90} rotationFactor={0.45} />
+                <div className="absolute right-[40%] bottom-[-60%] sm:hidden">
+                  <RoundedIcon icon="" size={70} rotationFactor={0.45} />
                 </div>
               </HighlightText>
             </h2>
             <div
-              ref={paraphRef}
               className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-16 md:mt-32`}
             >
               {[
@@ -262,7 +262,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 { className: '!opacity-55', text: 'We believe every sport has its own language - we design the way it’s told.' }
               ].map((p, idx) => (
                 <div key={idx} className="relative overflow-hidden mb-6">
-                  <AppearText type="lines" className={`${p.className}`}>
+                  <AppearText type="lines" once={true} className={`${p.className}`}>
                     {p.text}
                   </AppearText>
                 </div>
@@ -376,9 +376,9 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </Image>
           </div>
           <div className="flex flex-wrap w-full items-center gap-8 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[40vh]">
-            <div className="md:w-1/3">
+            <div className="md:w-1/3 mx-auto sm:mx-0">
               <h2 className={`flex flex-col items-center w-min collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
-                <p className="flex items-center gap-2"><span className="prefix text-[38px] sm:[54pt]">ON</span>Every Pitch...</p>
+                <p className="flex items-center gap-2"><span className="prefix text-[38px] sm:[54pt] capitalize">On</span>Every Pitch...</p>
                 <p className="flex">OUR CLIENT</p>
                 <div className=''>
                   <p className="flex items-start"><span>COLLABORATIONS</span><span className="flex items-center leading-[60px] text-[24px] !sm:text-[96pt] roboto"><span className="">(</span>*<span className="">)</span></span></p>                             
@@ -387,12 +387,18 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </div>
             <div className="flex md:w-2/3 flex-wrap flex-col gap-6 xl:justify-between sm:flex-row pr-[3vw] flex-1">
               <div className="md:w-max">
-                <p className="uppercase hardbopBlack text-[12vw] sm:text-[45pt] leading-[0.8]">FAVORITE PLAYING SURFACE</p>
-                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[20pt]">Creativity</p>
+                <h3 className="text-center">
+                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[32pt] leading-[0.9]">Small roster,</p>
+                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[32pt] leading-[0.9]">French accent.</p>
+                </h3>
+                <p className="instrumentSerifRegular mt-2 opacity-75 !text-[18pt] sm:!text-[20pt] w-[70%] mx-auto text-center tracking-tighter	leading-[1]">Sport-focused design studio, born in Paris.</p>
               </div>
               <div className="md:w-max">
-                <p className="uppercase hardbopBlack text-[12vw] sm:text-[45pt] leading-[0.8]">WINNING STRATEGY</p>
-                <p className="defaultText mt-2 tracking-wider opacity-75 !text-[18pt] sm:!text-[20pt]">Mixing pixels and passion</p>
+                <h3 className="text-center">
+                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[32pt] leading-[0.9]">Shaped by</p>
+                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[32pt] leading-[0.9]">emotion.</p>
+                </h3>
+                <p className="instrumentSerifRegular mt-2 opacity-75 !text-[18pt] sm:!text-[20pt] w-[60%] mx-auto text-center tracking-tighter	leading-[1]">Designing for the feelings sport leaves behind.</p>
               </div>
             </div>
           </div>

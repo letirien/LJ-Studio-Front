@@ -6,7 +6,7 @@ const StudioBanner = () => {
           <span className="robotoBold text-[12vw] sm:text-[92pt] uppercase leading-[90pt]">LJ STUDIO<sup className=""><span className='-pt-12'>™</span></sup></span>
           <span className="robotoMonoMedium uppercase text-[14pt] leading-[12pt] sm:text-[19pt] sm:leading-[23pt]"><p>French</p> <p>Creative</p> <p>Studio</p></span>
           <span className="font-serif text-xl sm:text-2xl">
-            <span className="tenTwentyThin text-[12vw] sm:text-[90pt] uppercase">Let’s shoot </span>
+            <span className="tenTwentyThin text-[12vw] sm:text-[90pt] uppercase">Shoot </span>
             <span className="robotoBold text-[12vw] sm:text-[92pt] uppercase">us a message</span>
           </span>
           <span className="robotoMonoMedium uppercase text-[14pt] leading-[12pt] sm:text-[19pt] sm:leading-[23pt]"><p>French</p> <p>Creative</p> <p>Studio</p></span>

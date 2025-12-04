@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
 import { SeeMore } from '../SeeMoreResp';
 import GifDemo from "../../public/images/demo_gif.gif"
+import AppearText from '../AppearText.js';
 
 const Etiquette = ({ text }) => {
   const duration = Math.max(8, text.length * 0.15);
@@ -217,7 +218,7 @@ export default function BrandingSection({ gamePlan }) {
         return (
           <motion.div
             key={index}
-            className={`flex flex-col md:flex-row items-stretch min-h-[400px] py-12 sm:py-24 gap-3 sm:gap-0 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
+            className={`flex flex-col-reverse md:flex-row items-stretch min-h-[400px] py-12 sm:py-24 gap-3 sm:gap-0 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
             style={{
               position: 'sticky',
               top: 0,
@@ -233,7 +234,7 @@ export default function BrandingSection({ gamePlan }) {
               )
             }}
           >
-            <div className='md:w-1/2 w-full flex flex-col justify-around gap-3 sm:gap-6'>
+            <div className='md:w-1/2 w-content flex flex-col justify-around gap-6 sm:gap-6 mx-6 sm:mx-0'>
               <div className="inline-block">
                 <h2
                   ref={(el) => (titleRefs.current[index] = el)}
@@ -253,17 +254,20 @@ export default function BrandingSection({ gamePlan }) {
                   </div>
                 </h2>
               </div>
-              <p className={`w-full lg:w-3/4 ${getTextColor(index)} defaultText ${index % 3 === 2 ? "!opacity-100": ""}`}>
+              <p className={`lg:w-3/4 ${getTextColor(index)} text-[12px] sm:text-[20px] defaultText ${index % 3 === 2 ? "!opacity-100": ""}`}>
                 {item.fields['DESCRIPTION METIER']}
               </p>
               <Link 
-                className={`${getTextColor(index)} hidden sm:block roboto uppercase text-xs mt-4 ${index % 3 === 2 ? "!opacity-100": "opacity-55"}`} 
+                className={`${getTextColor(index)} uppercase w-max roboto uppercase text-xs mt-4 ${index % 3 === 2 ? "!opacity-100": "opacity-55"}`} 
                 href=""
               >
-                › check more
+                <AppearText type="words" hover={true}>
+                  › check an highlight
+                </AppearText>
+                
               </Link>
             </div>
-            <div className='md:w-1/2 relative md:my-auto xl:my-0'>
+            <div className='mx-6 sm:mx-0 md:w-1/2 relative md:my-auto xl:my-0'>
               <Image 
                 onMouseOver={() => setGif(index)}
                 onMouseLeave={() => setShowGif(null)}
@@ -273,7 +277,7 @@ export default function BrandingSection({ gamePlan }) {
                 height={item.fields.Image[0].height}
                 objectFit='cover'
               />
-              <SeeMore/>
+              {/* <SeeMore/> */}
             </div>
           </motion.div>
         );

@@ -409,9 +409,9 @@ button {
   pointer-events: none;
 }
 .defaultText{
-  font-size: 20px;
+  /* font-size: 20px; */
   font-family: RobotoMono;
-  line-height: 28px;
+  /* line-height: 28px; */
   opacity: 55%
 }
 
@@ -569,11 +569,11 @@ body:has( [data-cursor]:hover) .cursor{
   
   /* Ajuster le texte descriptif aussi */
   .defaultText {
-    font-size: 16px; /* Légèrement plus petit sur mobile */
-    line-height: 19pt;
+    /* font-size: 16px; /* Légèrement plus petit sur mobile */
+    /* line-height: 19pt; */
     /* Changer la largeur fixe en vw pour quelque chose de plus adaptatif */
-    width: 85vw !important; /* Au lieu de 40vw */
-    max-width: 600px; /* Limite maximale */
+    /* width: 85vw !important; 
+    max-width: 600px; */
     font-family: RobotoRegular;
   }
 }

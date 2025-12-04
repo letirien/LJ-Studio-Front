@@ -3,7 +3,11 @@ import gsap from 'gsap';
 import RoundedIcon from '../RoundedIcon.js';
 import { motion, useInView, useTransform, useScroll } from 'framer-motion';
 
+
+// Ajout des deux segments de ligne centrale desktop
 const FIELD_PATHS = [
+    'Centre_line_top', // segment haut
+    'Centre_line_bottom', // segment bas
     'Penalty_area_line',
     'Goal_area_line',
     'Penalty_arc',
@@ -13,7 +17,7 @@ const FIELD_PATHS = [
     'Border',
 ];
 
-const Etiquette = ({ text }) => {
+const Etiquette = ({ text, width, height }) => {
     const ref = useRef(null)
     useInView
     const isInView = useInView(ref)
@@ -22,7 +26,7 @@ const Etiquette = ({ text }) => {
   const duration = Math.max(8, text.length * 0.15); // Minimum 8s, +0.15s par caractère
   
   return (
-    <div  ref={ref} className="absolute top-[25%] left-[24%] rotate-[-6deg] h-[25px] overflow-hidden bg-[#fa6218] roboto text-black text-xs flex items-center transition-[width] delay-150 ease-in-out duration-200" style={{width: isInView ? '180px' : '0px'}}>
+    <div  ref={ref} className="absolute top-[32%] left-[36%] rotate-[-6deg] h-[16px] sm:h-[20px] pt-[1px] overflow-hidden bg-[#fa6218] roboto text-black text-[10px] sm:text-[12px] flex items-center transition-[width] delay-150 ease-in-out duration-200" style={{width: isInView ? width+'vw' : '0px'}}>
       <motion.div
         className="whitespace-nowrap flex"
         animate={{ x: ["0%", "-50%"] }} // Aller jusqu'à -50% au lieu de -100%
@@ -174,15 +178,24 @@ export default function AnimatedField() {
                 } catch {}
             }
 
-            // Récupérer tous les paths/arcs à animer
+
+            // Les deux segments de centre doivent apparaître en premier, l'un après l'autre, puis le reste (ordre aléatoire)
             const pathIds = [...FIELD_PATHS];
+            // On retire les deux segments du shuffle
+            const idxTop = pathIds.indexOf('Centre_line_top');
+            if (idxTop !== -1) pathIds.splice(idxTop, 1);
+            const idxBot = pathIds.indexOf('Centre_line_bottom');
+            if (idxBot !== -1) pathIds.splice(idxBot, 1);
+            // Shuffle du reste
             for (let i = pathIds.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [pathIds[i], pathIds[j]] = [pathIds[j], pathIds[i]];
             }
             const animationOrder = [
+                'Centre_line_top',
+                'Centre_line_bottom',
                 ...pathIds,
-                'Centre_line',
+                'Centre_line', // mobile
                 'Centre_circle',
                 ...ALL_POINTS,
                 'Corner_arcs',
@@ -357,16 +370,24 @@ export default function AnimatedField() {
     return (
         <section ref={sectionRef} className="w-screen overflow-hidden relative bg-black -mt-[1px]">
             <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none'>
-                <h2 className='text-center bigH2 relative'>
+                <h2 className='text-center text-[14vw]/[0.8] sm:text-[8vw]/[0.8] uppercase relative helveticaNowDisplayBold'>
+                    <p className="instrumentSerifRegular !capitalize text-[8vw]/[0.8] tracking-tight sm:text-[4vw]/[0.8] mb-9">Design field</p>
                     <motion.p style={{ x: rightx }}>whenever</motion.p>
-                    <motion.p >you play, we're</motion.p> 
-                    <motion.p style={{ x: leftx }}>by your side</motion.p>
-                    <div className="absolute max-[520px]:bottom-[-40%] bottom-[-4%] max-[520px]:right-[5%] right-[22%]">
-                        <RoundedIcon icon="main" size={150} circularContinue={true} />
+                    <motion.p >you play,</motion.p> 
+                    <motion.p >we're by</motion.p> 
+                    <motion.p style={{ x: leftx }}>your side</motion.p>
+                    <div className="block md:hidden absolute bottom-[-5%] right-[45%]">
+                        <RoundedIcon icon="main" size={50} circularContinue={true} />
                     </div>
-                    <Etiquette text="DESIGN / MOTION / 3D / DEVELOPMENT" />
+                    <div className="hidden md:block xl:hidden absolute bottom-[-8%] right-[46%]">
+                        <RoundedIcon icon="main" size={70} circularContinue={true} />
+                    </div>
+                        <div className="hidden xl:block absolute bottom-[-8%] right-[46%]">
+                        <RoundedIcon icon="main" size={100} circularContinue={true} />
+                    </div>
+                    <Etiquette width={11} text="DESIGN / MOTION / 3D / DEVELOPMENT" />
                 </h2>
-                <p className='absolute uppercase robotoReg text-center bottom-[5%] text-[22px] hidden lg:block'>Game Plan Deployed</p>
+                <p className='absolute uppercase robotoReg text-center bottom-[15%] text-[16px] hidden lg:block'>Game Plan Deployed</p>
             </div>
             <svg
                 ref={svgRef}
@@ -376,10 +397,10 @@ export default function AnimatedField() {
                 preserveAspectRatio="xMidYMid meet"
                 className="
                     transition-transform duration-500
-                    max-[520px]:rotate-90
-                    max-[520px]:h-screen
-                    max-[520px]:w-[150%]!
-                    max-[520px]:-ml-[25%]!
+                    max-[641px]:rotate-90
+                    max-[641px]:h-screen
+                    max-[641px]:w-[150%]!
+                    max-[641px]:-ml-[25%]!
                 "
                 style={{
                     width: '106%',
@@ -419,8 +440,14 @@ export default function AnimatedField() {
                 <g id="Calque_5">
                     <circle id="Centre_circle" className="st0" cx="852.47" cy="554.7" r="140.7" />
                 </g>
+                {/* Ligne centrale : version mobile (ligne complète, visible uniquement en mobile) */}
                 <g id="Calque_6">
-                    <path id="Centre_line" className="st0" d="M852.47,1077.51V31.89" />
+                    {/* Ligne centrale mobile (complète) */}
+                    <path id="Centre_line" className="st0 max-[641px]:block hidden" d="M852.47,1077.51V31.89" />
+                    {/* Version desktop : deux segments courts, visibles uniquement >= 641px */}
+                    {/* 8% de la hauteur totale (1110) = 88.8px */}
+                    <path id="Centre_line_bottom" className="st0 max-[641px]:hidden block" d="M852.47,1077.51V988.71" />
+                    <path id="Centre_line_top" className="st0 max-[641px]:hidden block" d="M852.47,121.69V31.89" />
                 </g>
                 <g id="Calque_7">
                     <path id="Border" className="st0" d="M45.19,1077.51V31.89h1614.56v1045.62H45.19Z" />

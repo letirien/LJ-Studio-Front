@@ -274,9 +274,9 @@ const CreativeCanvas = ({ images }) => {
                   return (
                     <motion.div
                       key={image.id}
-                      className="relative flex-shrink-0 group"
+                      className="relative flex-shrink-0 group rounded-lg"
                       style={{
-                        y: randomPositions[index] * (1 - scrollProgress)
+                        y: Math.max(-32, Math.min(32, randomPositions[index] * (1 - scrollProgress)))
                       }}
                       transition={{
                         type: "spring",
@@ -287,7 +287,7 @@ const CreativeCanvas = ({ images }) => {
                       onMouseLeave={() => setHoveredIndex(null)}
                       whileHover={{ scale: 1.02 }}
                     >
-                      <div className={`relative w-full rounded-lg overflow-hidden`} style={{
+                      <div className={`relative w-full !rounded-lg overflow-hidden`} style={{
                         width: !isMobile ? `${image.fields.IMAGE[0].width / 2}px` : `${image.fields.IMAGE[0].width / 4}px`,
                         height: !isMobile ? `${image.fields.IMAGE[0].height / 2}px` : `${image.fields.IMAGE[0].height / 4}px`,
                         background: "#222"
@@ -315,7 +315,7 @@ const CreativeCanvas = ({ images }) => {
                             src={url}
                             alt={image.fields.Name}
                             fill
-                            className={`transition-all duration-300 ${
+                            className={`transition-all duration-300 rounded-lg ${
                               hoveredIndex === index
                                 ? 'filter-none'
                                 : 'filter grayscale brightness-75'
@@ -338,7 +338,7 @@ const CreativeCanvas = ({ images }) => {
                             }} />
                           )
                         )}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                        <div className="absolute inset-0 bg-black/20 opacity-0 rounded-lg group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                         </div>
                       </div>
                     </motion.div>

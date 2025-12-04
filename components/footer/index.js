@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import { useEffect } from 'react';
+import AppearText from '../AppearText';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -63,20 +64,54 @@ const Footer = () => {
 
                     {/* Menu */}
                     <div className='flex justify-between sm:flex-1'>  
-                      <div className="flex flex-col gap-1 robotoRegular text-[17pt]">
-                          <a href="#" className="hover:text-orange-500">Home</a>
-                          <a href="#" className="hover:text-orange-500">Work</a>
-                          <a href="#" className="hover:text-orange-500">Services</a>
-                          <a href="#" className="hover:text-orange-500">Contact</a>
-                      </div>
+                        <div className="flex flex-col gap-1 robotoRegular text-[17pt]">
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                    Home
+                                </AppearText>
+                            </a>
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                    Work
+                                </AppearText>
+                            </a>
+                            
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                  Service
+                                </AppearText>
+                            </a>
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                  Contact
+                                </AppearText>
+                            </a>
+                        </div>
 
                       {/* Socials */}
                       <div className="flex flex-col justify-between gap-4">
                         <div className="flex flex-col items-end gap-1 robotoRegular text-[17pt]">
-                            <a href="#" className="hover:text-orange-500">Instagram</a>
-                            <a href="#" className="hover:text-orange-500">Twitter</a>
-                            <a href="#" className="hover:text-orange-500">LinkedIn</a>
-                            <a href="#" className="hover:text-orange-500">Behance</a>
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                    Instagram
+                                </AppearText>
+                            </a>
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                    Twitter / X
+                                </AppearText>
+                            </a>
+                            
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                  LinkedIn
+                                </AppearText>
+                            </a>
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                  Behance
+                                </AppearText>
+                            </a>
                         </div>
                       </div>
                     </div>
