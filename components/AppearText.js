@@ -27,11 +27,16 @@ export default function AppearText({
   const containerRef = useRef(null);
   const wordsRef = useRef([]); // [0] = original, [1] = duplicate
   const tlRef = useRef(null);
+  const hasAnimatedRef = useRef(false); // Pour respecter "once"
   const inView = useInView(containerRef, { once });
 
   // Animation runner
-  const animateText = async (wordSet, from, to, appear = true) => {
+  const animateText = async (wordSet, from, to) => {
     if (!containerRef.current) return;
+    
+    // Tuer l'animation précédente pour éviter les race conditions
+    tlRef.current?.kill();
+    
     let gsapLib;
     try {
       gsapLib = await import('gsap');
@@ -44,11 +49,12 @@ export default function AppearText({
     const gsap = gsapLib.gsap;
     const allWords = (wordsRef.current[wordSet] || []).filter(Boolean);
     if (!allWords.length) return;
+    
     await new Promise((res) => setTimeout(res, 20));
-    gsap.set(allWords, { yPercent: from, opacity: appear ? 0 : 1 });
-    await gsap.to(allWords, { 
-      yPercent: to, 
-      opacity: appear ? 1 : 0, 
+    gsap.set(allWords, { yPercent: from });
+    
+    tlRef.current = await gsap.to(allWords, { 
+      yPercent: to,
       duration, 
       stagger: wordStagger, 
       ease: 'main' 
@@ -58,11 +64,19 @@ export default function AppearText({
   // Effet pour la visibilité (inView)
   useEffect(() => {
     if (hover) return;
+    
+    // Respecter le "once" : ne pas réanimer si déjà animé
+    if (once && hasAnimatedRef.current) return;
+    
     let alive = true;
+    
     if (inView) {
-      animateText(0, yPercent, 0, true); // apparition classique du bas
+      hasAnimatedRef.current = true;
+      animateText(0, yPercent, 0); // apparition classique du bas
     } else {
-      // Si pas inView, afficher normalement
+      // Si pas inView, afficher normalement (sauf si once et déjà animé)
+      if (once && hasAnimatedRef.current) return;
+      
       const showWords = async () => {
         let gsapLib;
         try {
@@ -73,16 +87,21 @@ export default function AppearText({
         const gsap = gsapLib.gsap;
         const allWords = (wordsRef.current[0] || []).filter(Boolean);
         if (!allWords.length) return;
-        gsap.set(allWords, { yPercent: 0, rotate: 0, opacity: 1 });
+        gsap.set(allWords, { yPercent: 0, rotate: 0 });
       };
       showWords();
     }
+    
     const handleResize = () => {
-      if (!inView) return;
+      // Ne pas réanimer au resize si once=true et déjà animé
+      if (!inView || (once && hasAnimatedRef.current)) return;
+      
       tlRef.current?.kill();
-      animateText(0, yPercent, 0, true);
+      animateText(0, yPercent, 0);
     };
+    
     window.addEventListener('resize', handleResize);
+    
     return () => {
       alive = false;
       window.removeEventListener('resize', handleResize);
@@ -95,8 +114,8 @@ export default function AppearText({
     if (!hover) return;
     // Animation simultanée : original part vers le haut, duplicate arrive du bas
     Promise.all([
-      animateText(0, 0, -yPercent, false), // original disparaît vers le haut
-      animateText(1, yPercent, 0, true)    // duplicate apparaît du bas
+      animateText(0, 0, -yPercent), // original disparaît vers le haut
+      animateText(1, yPercent, 0)    // duplicate apparaît du bas
     ]);
   };
 
@@ -104,8 +123,8 @@ export default function AppearText({
     if (!hover) return;
     // Animation simultanée : duplicate part vers le bas, original revient du haut
     Promise.all([
-      animateText(1, 0, yPercent, false),  // duplicate disparaît vers le bas
-      animateText(0, -yPercent, 0, true)   // original revient du haut
+      animateText(1, 0, yPercent),  // duplicate disparaît vers le bas
+      animateText(0, -yPercent, 0)   // original revient du haut
     ]);
   };
 
@@ -122,26 +141,39 @@ export default function AppearText({
     key: i
   }));
 
-  const renderSegments = (wordSetIndex) => (
-    segments.map((segment, i) => {
+  const renderSegments = (wordSetIndex) => {
+    let wordIndex = 0; // Compteur séparé pour les mots uniquement (FIX du bug d'ordre)
+    
+    return segments.map((segment) => {
       if (segment.isSpace) {
         return <span key={segment.key} style={{ whiteSpace: 'pre' }}>{segment.text}</span>;
       }
+      
+      const currentWordIndex = wordIndex++;
+      
       return (
-        <span
+        <span 
           key={segment.key}
-          ref={(el) => {
-            if (!wordsRef.current[wordSetIndex]) wordsRef.current[wordSetIndex] = [];
-            wordsRef.current[wordSetIndex][i] = el;
+          style={{ 
+            display: 'inline-block', 
+            overflow: 'hidden',
+            verticalAlign: 'top'
           }}
-          style={{ display: 'inline-block', opacity: 1, whiteSpace: 'pre' }}
-          aria-hidden={wordSetIndex === 1}
         >
-          {segment.text}
+          <span
+            ref={(el) => {
+              if (!wordsRef.current[wordSetIndex]) wordsRef.current[wordSetIndex] = [];
+              wordsRef.current[wordSetIndex][currentWordIndex] = el;
+            }}
+            style={{ display: 'inline-block', whiteSpace: 'pre' }}
+            aria-hidden={wordSetIndex === 1}
+          >
+            {segment.text}
+          </span>
         </span>
       );
-    })
-  );
+    });
+  };
 
   return (
     <div
