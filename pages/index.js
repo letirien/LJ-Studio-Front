@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import Layout, { siteTitle } from "../components/layout";
+import Layout from "../components/layout";
 import home from "../styles/home.module.scss";
 import {
   motion,
@@ -164,7 +164,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
     <Layout home>
       <div>
         <Head>
-          <title>{siteTitle}</title>
+          <title>LJ Studio</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Header headerImages={headerImages}/>
