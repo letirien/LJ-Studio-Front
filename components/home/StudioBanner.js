@@ -3,13 +3,13 @@ import React from 'react';
 const StudioBanner = () => {
     const repeatedContent = (
         <div className="flex items-center gap-12 px-4">
-          <span className="robotoBold text-[12vw] sm:text-[92pt] uppercase leading-[90pt]">LJ STUDIO<sup className=""><span className='-pt-12'>™</span></sup></span>
-          <span className="robotoMonoMedium uppercase text-[14pt] leading-[12pt] sm:text-[19pt] sm:leading-[23pt]"><p>French</p> <p>Creative</p> <p>Studio</p></span>
-          <span className="font-serif text-xl sm:text-2xl">
-            <span className="tenTwentyThin text-[12vw] sm:text-[90pt] uppercase">Shoot </span>
-            <span className="robotoBold text-[12vw] sm:text-[92pt] uppercase">us a message</span>
+          <span className="robotoBold text-[12vw] xl:text-[92pt] uppercase leading-[90pt]">LJ STUDIO<sup className=""><span className='-pt-12'>™</span></sup></span>
+          <span className="robotoMonoMedium uppercase text-[8pt] sm:text-[3vw] leading-[0.9] opacity-80 xl:text-[19pt] xl:leading-[23pt]"><p>French</p> <p>Creative</p> <p>Studio</p></span>
+          <span className="font-serif text-xl xl:text-2xl">
+            <span className="tenTwentyThin text-[12vw] xl:text-[90pt] uppercase">Shoot us </span>
+            <span className="robotoBold text-[12vw] xl:text-[92pt] uppercase">a message</span>
           </span>
-          <span className="robotoMonoMedium uppercase text-[14pt] leading-[12pt] sm:text-[19pt] sm:leading-[23pt]"><p>French</p> <p>Creative</p> <p>Studio</p></span>
+          <span className="robotoMonoMedium uppercase text-[8pt] sm:text-[3vw] leading-[0.9] opacity-80 xl:text-[19pt] xl:leading-[23pt]"><p>French</p> <p>Creative</p> <p>Studio</p></span>
         </div>
       );
     

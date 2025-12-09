@@ -53,14 +53,22 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
 
   const sectionImageRef = useRef(null);
   const galerySection = useRef(null);
+  // const galerySection2 = useRef(null);
 
  const { scrollYProgress: scrollYGalleryProgress } = useScroll({
     target: galerySection,
     offset: ["start end", "end start"], // du moment où la section entre jusqu’à ce qu’elle sorte
   });
+  // const { scrollYProgress: scrollYGalleryMobProgress } = useScroll({
+  //   target: galerySection2,
+  //   offset: ["start end", "end start"], // du moment où la section entre jusqu’à ce qu’elle sorte
+  // });
 
   // On fait varier le line-height progressivement
-  const lineHeight = useTransform(scrollYGalleryProgress, [0, 1], ["0.9", "0.7"]);
+  const lineHeight = useTransform(scrollYGalleryProgress, [0, 1], ["1.1", "0.7"]);
+
+  // On fait varier le line-height progressivement
+  // const lineHeightMob = useTransform(scrollYGalleryMobProgress, [0, 1], ["1.1", "0.7"]);
   
   // // Référence pour la section entière
   // const studioRef = useRef(null);
@@ -376,7 +384,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </Image>
           </div>
           <div className="flex flex-wrap w-full items-center gap-8 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[40vh]">
-            <div className="md:w-1/3 mx-auto sm:mx-0">
+            <div className="md:w-1/3 mx-auto md:mx-0">
               <h2 className={`flex flex-col items-center w-min collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
                 <p className="flex items-center gap-2"><span className="prefix text-[38px] sm:[54pt] capitalize">On</span>Every Pitch...</p>
                 <p className="flex">OUR CLIENT</p>
@@ -385,7 +393,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 </div>
               </h2>
             </div>
-            <div className="flex md:w-2/3 flex-wrap flex-col gap-6 xl:justify-between sm:flex-row pr-[3vw] flex-1">
+            <div className="flex md:w-2/3 flex-wrap flex-col gap-6 xl:justify-between md:flex-row pr-[3vw] flex-1">
               <div className="md:w-max">
                 <h3 className="text-center">
                   <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[32pt] leading-[0.9]">Small roster,</p>
@@ -409,12 +417,23 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             <RoundedIcon icon="yeux" size={180} rotationFactor={0.45} />
           </div>
           <ImagesTrails/>
-          <motion.h2 ref={galerySection} style={{lineHeight}} className="text-center gallery mx-xl text-black">
-            <p className="flex items-center gap-3 justify-center">BEYOND <span className="tenTwentyThin text-[125pt]">THE</span> SURFACE...</p>
-            <p>STEP INSIDE OUR</p>
-            <p className="flex items-center gap-3 justify-center"><span className="tenTwentyThin text-[125pt]">VISUAL</span>GALLERY AND</p>
-            <p className="flex items-center gap-3 justify-center">EXPLORE<span className="tenTwentyThin text-[125pt]">ARCHIVES</span></p>
-          </motion.h2>
+          <div ref={galerySection}>
+            <motion.h2 style={{lineHeight}} className="hidden sm:block text-center gallery text-[9vw]/[0.8] sm:text-[8vw]/[0.8] mx-xl text-black">
+              <p className="flex items-center gap-3 justify-center">BEYOND <span className="instrumentSerifRegular text-[4vw] capitalize">The</span> SURFACE...</p>
+              <p>STEP INSIDE OUR</p>
+              <p className="flex items-center gap-3 justify-center"><span className="instrumentSerifRegular text-[4vw] capitalize">Visual</span>GALLERY AND</p>
+              <p className="flex items-center gap-3 justify-center">EXPLORE<span className="instrumentSerifRegular text-[4vw] capitalize">Archives</span></p>
+            </motion.h2>
+            <motion.h2 style={{lineHeight}} className="sm:hidden text-center gallery text-[14vw]/[0.8] sm:text-[8vw]/[0.8] mx-xl text-black">
+              <p>BEYOND</p>
+              <p className="flex items-center gap-3 justify-center"><span className="instrumentSerifRegular text-[8vw] capitalize">The</span> SURFACE...</p>
+              <p>STEP INSIDE</p>
+              <p className="flex items-center gap-3 justify-center">OUR<span className="instrumentSerifRegular text-[8vw] capitalize">Visual</span></p>
+              <p>GALLERY</p>
+              <p>AND EXPLORE</p>
+              <p className=""><span className="instrumentSerifRegular text-[8vw] capitalize">Archives</span></p>
+            </motion.h2>
+           </div>
         </motion.section>
         <StudioBanner/>
       </div>

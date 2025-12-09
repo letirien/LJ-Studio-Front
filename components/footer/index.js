@@ -45,17 +45,17 @@ const Footer = () => {
         {/* Contact */}
         <div className="col-span-2 flex flex-col gap-8 sm:gap-16 py-6 sm:py-20 pr-[12vw] pl-[6vw] relative">
             <div className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-0">
-                <p className='robotoBold text-[20pt] sm:text-[26pt] !text-white'><span className='tenTwentyThin text-[29pt] sm:text-[35pt] opacity-55'>jean</span>@LJSTUDIO.xyz</p>
-                <div className="text-end text-white text-[19pt] leading-[18pt] sm:text-[25pt] sm:leading-[23pt] robotoBold">
+                <p className='robotoBold text-[16pt] sm:text-[26pt] !text-white'><span className='tenTwentyThin text-[20pt] sm:text-[35pt] opacity-55'>jean</span>@LJSTUDIO.xyz</p>
+                <div className="hidden md:block text-end text-white text-[19pt] leading-[18pt] sm:text-[25pt] sm:leading-[23pt] robotoBold">
                     <span className="text-orange-500">thanks </span><span className="text-[#474b4e]"><span className='tenTwentyThin'>for</span><br></br> your visit</span>
                 </div>
             </div>
 
             <div>
-                <div className="flex flex-col sm:flex-row justify-between gap-8">
-                    <div className="flex flex-col flex-1">
-                        <h4 className="robotoBold text-[#474b4e] text-[19pt] mb-1">OUR FIELD</h4>
-                        <p className="robotoRegular text-[17pt] leading-[21pt]">
+                <div className="flex sm:flex-col md:flex-row justify-between gap-8 flex-wrap">
+                    <div className="flex flex-col w-max sm:flex-1">
+                        <h4 className="robotoBold text-[#474b4e] text-[14pt] sm:text-[19pt] mb-1">OUR FIELD</h4>
+                        <p className="robotoRegular text-[12pt] sm:text-[17pt] leading-[1.1]">
                             128 rue de la Boetie<br />
                             75008 | Paris<br />
                             FRANCE
@@ -63,8 +63,8 @@ const Footer = () => {
                     </div>
 
                     {/* Menu */}
-                    <div className='flex justify-between sm:flex-1'>  
-                        <div className="flex flex-col gap-1 robotoRegular text-[17pt]">
+                    <div className='flex justify-between sm:flex-1 flex-wrap sm:flex-nowrap'>  
+                        <div className="flex flex-col gap-1 robotoRegular text-[12pt] sm:text-[17pt]">
                             <a href="#" className="hover:text-orange-500 overflow-hidden">
                               <AppearText type="words" hover={true}>
                                     Home
@@ -89,8 +89,8 @@ const Footer = () => {
                         </div>
 
                       {/* Socials */}
-                      <div className="flex flex-col justify-between gap-4">
-                        <div className="flex flex-col items-end gap-1 robotoRegular text-[17pt]">
+                      <div className="hidden sm:block flex flex-col justify-between gap-4">
+                        <div className="flex flex-row sm:flex-col items-end gap-1 robotoRegular text-[17pt]">
                             <a href="#" className="hover:text-orange-500 overflow-hidden">
                               <AppearText type="words" hover={true}>
                                     Instagram
@@ -115,6 +115,31 @@ const Footer = () => {
                         </div>
                       </div>
                     </div>
+                      <div className="sm:hidden gap-4 w-full">
+                        <div className="flex flex-row sm:flex-col items-end robotoRegular text-[clamp(9pt,2vw,12pt)] justify-between">
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                    Instagram
+                                </AppearText>
+                            </a>
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                    Twitter / X
+                                </AppearText>
+                            </a>
+                            
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                  LinkedIn
+                                </AppearText>
+                            </a>
+                            <a href="#" className="hover:text-orange-500 overflow-hidden">
+                              <AppearText type="words" hover={true}>
+                                  Behance
+                                </AppearText>
+                            </a>
+                        </div>
+                      </div>
                 </div>
             </div>
             <div className=" md:block absolute bottom-0 right-0 bottom-0 h-[3px] w-[100%] lg:w-[98.5%] bg-gray-700"></div>
@@ -122,9 +147,9 @@ const Footer = () => {
       </div>
       <div className="w-full overflow-hidden bg-black">
         <img
-          src="/images/TYPO_LJ-STUDIO_BLACK.svg"
+          src="/images/LJSTD_WORDMARK.svg"
           alt="LJ Studio Logo"
-          className="w-full object-cover invert mb-[-12px] sm:mb-[-60px]"
+          className="w-full object-cover invert pt-8 pb-2 md:py-12"
         />
       </div>
 
