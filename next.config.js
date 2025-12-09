@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  turbopack: {}, // Active Turbopack sans erreur
+  
   images: {
     remotePatterns: [
       {
