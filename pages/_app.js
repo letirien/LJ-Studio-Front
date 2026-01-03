@@ -1,4 +1,5 @@
 import '/styles/global.css';
+import Head from 'next/head';
 import { AnimatePresence } from 'framer-motion';
 import { ReactLenis } from 'lenis/react';
 import { useEffect } from 'react';
@@ -45,13 +46,18 @@ function App({ Component, pageProps }) {
   };
 
   return (
-    <ReactLenis root options={lenisOptions}>
-      <AnimatePresence mode="wait" initial={false}>
-      <Cursor />
-      <Component {...pageProps} />
-      <CustomCursor />
-      </AnimatePresence>
-    </ReactLenis>
+      <>
+        <Head>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+        <ReactLenis root options={lenisOptions}>
+          <AnimatePresence mode="wait" initial={false}>
+            <Cursor />
+            <Component {...pageProps} />
+            <CustomCursor />
+          </AnimatePresence>
+        </ReactLenis>
+      </>
   );
 }
 
