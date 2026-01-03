@@ -196,6 +196,7 @@ export default function ProjectSection({ projects, home }) {
                   alt={imageAlt}
                   fill={true}
                   style={{ objectFit: 'cover', opacity: 0.5, filter: 'blur(10px)' }}
+                  unoptimized={true}
                 />
               );
             })()}            </div>

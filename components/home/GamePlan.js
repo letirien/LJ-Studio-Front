@@ -290,7 +290,7 @@ export default function BrandingSection({ gamePlan }) {
                 width={item.fields.Image[0].width || gamePlan[0].fields.Image[0].width}
                 height={item.fields.Image[0].height || gamePlan[0].fields.Image[0].height}
                 objectFit='cover'
-                unoptimized
+                unoptimized={true}
               />
               {/* <SeeMore/> */}
             </div>
