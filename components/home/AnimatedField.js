@@ -26,7 +26,7 @@ const Etiquette = ({ text, width, height }) => {
   const duration = Math.max(8, text.length * 0.15); // Minimum 8s, +0.15s par caractère
   
   return (
-    <div  ref={ref} className="absolute top-[32%] left-[36%] rotate-[-6deg] h-[16px] sm:h-[20px] pt-[1px] overflow-hidden bg-[#fa6218] roboto text-black text-[10px] sm:text-[12px] flex items-center transition-[width] delay-150 ease-in-out duration-200" style={{width: isInView ? width+'vw' : '0px'}}>
+    <div  ref={ref} className="absolute top-[35%] left-[28%] md:top-[28%] md:left-[28%] rotate-[-6deg] h-[16px] sm:h-[20px] pt-[1px] overflow-hidden bg-[#fa6218] roboto text-black text-[10px] sm:text-[12px] flex items-center transition-[width] delay-150 ease-in-out duration-200" style={{width: isInView ? width+'vw' : '0px'}}>
       <motion.div
         className="whitespace-nowrap flex"
         animate={{ x: ["0%", "-50%"] }} // Aller jusqu'à -50% au lieu de -100%
@@ -372,20 +372,26 @@ export default function AnimatedField() {
             <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none'>
                 <h2 className='text-center text-[14vw]/[0.8] sm:text-[8vw]/[0.8] uppercase relative helveticaNowDisplayBold'>
                     <p className="instrumentSerifRegular !capitalize text-[8vw]/[0.8] tracking-tight sm:text-[4vw]/[0.8] mb-9">Design field</p>
-                    <motion.p style={{ x: rightx }}>whenever</motion.p>
+                    <motion.p style={{ x: rightx }}>wherever</motion.p>
                     <motion.p >you play,</motion.p> 
                     <motion.p >we're by</motion.p> 
                     <motion.p style={{ x: leftx }}>your side</motion.p>
-                    <div className="block md:hidden absolute bottom-[-5%] right-[45%]">
-                        <RoundedIcon icon="main" size={50} circularContinue={true} />
+                    <div className="block md:hidden absolute bottom-[-4%] right-[45%]">
+                        <RoundedIcon icon="main" size={60} circularContinue={true} />
                     </div>
-                    <div className="hidden md:block xl:hidden absolute bottom-[-8%] right-[46%]">
+                    <div className="hidden md:block xl:hidden absolute bottom-[-10%] right-[44%]">
                         <RoundedIcon icon="main" size={70} circularContinue={true} />
                     </div>
-                        <div className="hidden xl:block absolute bottom-[-8%] right-[46%]">
+                        <div className="hidden xl:block absolute bottom-[-8%] right-[44%]">
                         <RoundedIcon icon="main" size={100} circularContinue={true} />
                     </div>
-                    <Etiquette width={11} text="DESIGN / MOTION / 3D / DEVELOPMENT" />
+                    <div className="sm:hidden">
+                        <Etiquette width={18} text="DESIGN / MOTION / 3D / DEVELOPMENT" />
+                    </div>
+                    <div className="hidden sm:block">
+                        <Etiquette width={11} text="DESIGN / MOTION / 3D / DEVELOPMENT" />
+                    </div>
+                    
                 </h2>
                 <p className='absolute uppercase robotoReg text-center bottom-[15%] text-[16px] hidden lg:block'>Game Plan Deployed</p>
             </div>

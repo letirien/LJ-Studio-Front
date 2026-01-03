@@ -43,6 +43,8 @@ export default function AppearText({
       const CustomEase = (await import('gsap/CustomEase')).CustomEase;
       gsapLib.gsap.registerPlugin(CustomEase);
       try { CustomEase.create('main', '0.65, 0.01, 0.05, 0.99'); } catch (e) {}
+
+      // try { CustomEase.create('main', '0.12, 0, 0.88, 1'); } catch (e) {}
     } catch (err) {
       return;
     }

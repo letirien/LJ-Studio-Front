@@ -27,7 +27,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
       const { gsap } = await import("gsap");
       const { CustomEase } = await import("gsap/CustomEase");
       gsap.registerPlugin(CustomEase);
-      CustomEase.create("main", "0.65, 0.01, 0.05, 0.99");
+      CustomEase.create("menu", "0.65, 0.01, 0.05, 0.99");
       setGsapInstance(gsap);
     })();
   }, []);
@@ -37,7 +37,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
     if (!gsapInstance) return;
 
     const tl = gsapInstance.timeline({
-      defaults: { ease: "main", duration: 0.7 },
+      defaults: { ease: "menu", duration: 0.7 },
       paused: true, // important !
     });
 
@@ -107,7 +107,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
 
     gsapInstance.killTweensOf([linkRefs.top, linkRefs.bottom]);
 
-    const tl = gsapInstance.timeline({ defaults: { ease: "main", duration: 0.45 } });
+    const tl = gsapInstance.timeline({ defaults: { ease: "menu", duration: 0.45 } });
 
     if (isHovering) {
       tl.to(linkRefs.top, { yPercent: -100, rotate: -10, opacity: 0 }).fromTo(
@@ -216,9 +216,9 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
             ))}
             <p
               ref={sideTextRef}
-              className="w-full uppercase robotoBold text-[10pt] text-black/55 -rotate-90 origin-bottom-right border-r-2 pr-10 hidden 2xl:block"
+              className="w-full uppercase roboto text-[10pt] text-black/55 -rotate-90 origin-bottom-right border-r-2 pr-10 hidden 2xl:block"
             >
-              creative studio with a french accent
+              creative studio - french accent
             </p>
           </ul>
         </div>
@@ -229,9 +229,9 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
             <RoundedIcon icon="" size={120} rotationFactor={0} circularContinue={true} menu={true} />
           </button>
         </div>
-
-        <p className="text-center w-full uppercase robotoBold text-[10pt] text-black/55 2xl:hidden">
-          creative studio with a french accent
+        {/* todo: add woodmark ljstd */}
+        <p className="text-center w-full uppercase roboto text-[10pt] text-black/55 2xl:hidden">
+          creative studio - french accent
         </p>
       </div>
     </>

@@ -241,7 +241,8 @@ const CreativeCanvas = ({ images }) => {
 
   return (
     <section ref={containerRef} className="bg-black text-white py-12 sm:py-24">
-      <div ref={inViewRef}>
+      <div ref={inViewRef}   onMouseEnter={() => window.dispatchEvent(new Event("cursor-show"))}
+                            onMouseLeave={() => window.dispatchEvent(new Event("cursor-hide"))}>
         <motion.div className="max-w-none">
           <motion.div
             ref={scrollContainerRef}
@@ -274,7 +275,7 @@ const CreativeCanvas = ({ images }) => {
                   return (
                     <motion.div
                       key={image.id}
-                      className="relative flex-shrink-0 group rounded-lg"
+                      className="relative flex-shrink-0 group"
                       style={{
                         y: Math.max(-32, Math.min(32, randomPositions[index] * (1 - scrollProgress)))
                       }}
@@ -287,9 +288,9 @@ const CreativeCanvas = ({ images }) => {
                       onMouseLeave={() => setHoveredIndex(null)}
                       whileHover={{ scale: 1.02 }}
                     >
-                      <div className={`relative w-full !rounded-lg overflow-hidden`} style={{
-                        width: !isMobile ? `${image.fields.IMAGE[0].width / 2}px` : `${image.fields.IMAGE[0].width / 4}px`,
-                        height: !isMobile ? `${image.fields.IMAGE[0].height / 2}px` : `${image.fields.IMAGE[0].height / 4}px`,
+                      <div className={`relative w-full overflow-hidden`} style={{
+                        width: !isMobile ? `${image.fields.IMAGE[0].width / 3}px` : `${image.fields.IMAGE[0].width / 4}px`,
+                        height: !isMobile ? `${image.fields.IMAGE[0].height / 3}px` : `${image.fields.IMAGE[0].height / 4}px`,
                         background: "#222"
                       }}>
                         {/* Thumbnail en arrière-plan (chargement immédiat) */}
@@ -299,7 +300,7 @@ const CreativeCanvas = ({ images }) => {
                             src={thumbnailUrl}
                             alt={image.fields.Name}
                             fill
-                            className="blur-sm rounded-lg"
+                            className="blur-sm"
                             style={{
                               objectFit: 'contain',
                               filter: 'grayscale(100%) brightness(0.75) blur(4px)'
@@ -315,16 +316,16 @@ const CreativeCanvas = ({ images }) => {
                             src={url}
                             alt={image.fields.Name}
                             fill
-                            className={`transition-all duration-300 rounded-lg ${
+                            className={`transition-all duration-300 ${
                               hoveredIndex === index
                                 ? 'filter-none'
-                                : 'filter grayscale brightness-75'
-                            }`}
+                                : 'filter grayscale'
+                            }`} 
                             style={{
                               objectFit: 'contain',
                               filter: hoveredIndex === index
                                 ? 'none'
-                                : 'grayscale(100%) brightness(0.75) sepia(0.1) hue-rotate(200deg)'
+                                : 'grayscale(100%)'
                             }}
                             priority={index < 5}
                           />
@@ -338,7 +339,7 @@ const CreativeCanvas = ({ images }) => {
                             }} />
                           )
                         )}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 rounded-lg group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                         </div>
                       </div>
                     </motion.div>

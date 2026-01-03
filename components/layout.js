@@ -25,7 +25,7 @@ export default function Layout({ children, home }) {
     
     if (footer) {
       const isSmOrAbove = window.matchMedia('(min-width: 640px)').matches;
-      setFooterHeight(isSmOrAbove ? footer.offsetHeight : 0);
+      setFooterHeight(isSmOrAbove ? footer.getBoundingClientRect().height : 0);
     }
   }, []);
 

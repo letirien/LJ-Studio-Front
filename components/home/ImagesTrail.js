@@ -90,14 +90,24 @@ export const ImagesTrails = ({ speed = 1 }) => {
 
     function fadeOutTrailImage(trailImage) {
       if (!trailImage) return;
-      // Here, animate how the images will disappear!
+      // Animation de chute douce façon feuille qui tombe
+      const rect = trailImage.getBoundingClientRect();
+      const currentTop = parseFloat(trailImage.style.top) || rect.top;
+      const currentLeft = parseFloat(trailImage.style.left) || rect.left;
+      // Décalage vertical et léger mouvement latéral + rotation
+      const fallDistance = 120 + Math.random() * 40; // px
+      const sideSwing = (Math.random() - 0.5) * 40; // px
+      const rotate = (Math.random() - 0.5) * 30; // deg
       gsap.to(trailImage, {
         opacity: 0,
-        scale: 0.2,
-        duration: 0.8,
-        ease: "expo.out",
+        scale: 0.8,
+        top: currentTop + fallDistance,
+        left: currentLeft + sideSwing,
+        rotate: rotate,
+        duration: 0.4,
+        ease: "power1.in",
         onComplete: () => {
-          gsap.set(trailImage, { autoAlpha: 0 });
+          gsap.set(trailImage, { autoAlpha: 0, rotate: 0 });
         },
       });
     }

@@ -55,6 +55,7 @@ a{
   font-family: robotoRegular;
   src: url("/typos/ROBOTO/Roboto-Regular.ttf");
 }
+
 .robotoReg {
   font-family: robotoRegular;
 }
@@ -139,6 +140,10 @@ a{
   src: url("/typos/ROBOTO MONO/RobotoMono-Medium.ttf");
 }
 @font-face {
+  font-family: RobotoMonoBold;
+  src: url("/typos/ROBOTO MONO/RobotoMono-Bold.ttf");
+}
+@font-face {
   font-family: HelveticaNowDisplayBold;
   src: url("/typos/HELVETICA NOW DISPLAY/HelveticaNowDisplay-Bold.ttf");
 }
@@ -161,6 +166,9 @@ a{
 }
 .robotoMonoMedium{
   font-family: RobotoMonoMedium;
+}
+.robotoMonoBold{
+  font-family: RobotoMonoBold;
 }
 .robotoRegular{
   font-family: RobotoMono;
@@ -408,12 +416,6 @@ button {
   inset: 0% auto auto 0%;
   pointer-events: none;
 }
-.defaultText{
-  /* font-size: 20px; */
-  font-family: RobotoMono;
-  /* line-height: 28px; */
-  opacity: 55%
-}
 
 body:has( a:hover) .cursor,
 body:has( button:hover) .cursor,
@@ -556,18 +558,4 @@ body:has( [data-cursor]:hover) .cursor{
 
 .st1 {
   fill: #fff;
-}
-
-
-@media screen and (max-width: 768px) {
-  
-  /* Ajuster le texte descriptif aussi */
-  .defaultText {
-    /* font-size: 16px; /* Légèrement plus petit sur mobile */
-    /* line-height: 19pt; */
-    /* Changer la largeur fixe en vw pour quelque chose de plus adaptatif */
-    /* width: 85vw !important; 
-    max-width: 600px; */
-    font-family: RobotoRegular;
-  }
 }

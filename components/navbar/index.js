@@ -75,6 +75,7 @@ export default function Navbar() {
           className={styles.menuBTN}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
+          {/* todo : animer le burger // voir milanote*/}
           <svg xmlns="http://www.w3.org/2000/svg" width={isMobille ? 48 : 74} height="35" viewBox="0 0 74 35">
             <g>
               <g>

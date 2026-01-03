@@ -47,6 +47,7 @@ export default function ProjectSection({ projects, home }) {
     });
   };
 
+  // todo: animation interlignagne un peu avant quand on rentre dans la section
   useEffect(() => {
     if (!isReady || !ScrollTrigger || !lenis) return;
     if (!sectionRef.current || !titleRef.current || !colorBlockRef.current || !slideMainContainer.current || !orangeBgRef.current)
@@ -81,7 +82,7 @@ export default function ProjectSection({ projects, home }) {
       titleRef.current, 
       { 
         opacity: 0, 
-        y: -100, 
+        y: -80, 
         scale: 0.85, 
         // ease: 'power2.inOut',
         duration: 0.4

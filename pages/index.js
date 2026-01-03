@@ -178,23 +178,24 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           // }}
         >
           <div className="flex gap-9 mx-auto justify-center items-center mb-6">
-            <AppearText type="words" once={true}
+            <AppearText type="words" duration={1.4} once={true}
                   className={`${home.catHighlight} block md:hidden !opacity-55  text-[3wv] sm:text-[1.5vw]`}
             >
               French
             </AppearText>
             <p className="instrumentSerifRegular text-[8vw]/[0.8] tracking-tight sm:opacity-90 sm:text-[4vw]/[0.8]">Creative Studio</p>
-            <AppearText type="words" once={true}
+            <AppearText type="words" once={true} duration={1.4}
                   className={`${home.catHighlight} block md:hidden !opacity-55  text-[3wv] sm:text-[1.5vw]`}
             >
               Accent
             </AppearText>
           </div>
           <div>
-            <h2 className="text-[14vw]/[0.8] sm:text-[8vw]/[0.8]">
+            <h2 className="text-[14vw]/[0.85] sm:text-[8vw]/[0.85]">
               <div className="flex gap-9 justify-center items-center">
                 {/* GARDEZ motion.p pour catHighlight */}
-                 <AppearText type="lines" once={true}
+                {/* todo: gérer le delay d'animation (plus long) courbe linéraire et très douce à la fin */}
+                 <AppearText type="lines" once={true} duration={1.4}
                   className={`${home.catHighlight} hidden md:block !opacity-55 text-[1.5vw]`}
                 >
                   French
@@ -210,7 +211,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 </HighlightText>
                 
                 {/* GARDEZ motion.p pour catHighlight */}
-                <AppearText type="lines" once={true}
+                <AppearText type="lines" once={true} duration={1.4}
                   className={`${home.catHighlight} hidden md:block !opacity-55 text-[1.5vw]`}
                 >
                   Accent
@@ -239,8 +240,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 <div className="absolute right-[22.5%] bottom-[-50%] hidden sm:block xl:hidden">
                   <RoundedIcon icon="" size={80} rotationFactor={0.45} />
                 </div>
-                <div className="absolute right-[22.5%] bottom-[-50%] hidden xl:block">
-                  <RoundedIcon icon="" size={130} rotationFactor={0.45} />
+                <div className="absolute right-[22.5%] bottom-[-30%] hidden xl:block">
+                  <RoundedIcon icon="" size={120} rotationFactor={0.45} />
                 </div>
               </HighlightText>
                             <HighlightText 
@@ -262,12 +263,12 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             >
               {[
                 {
-                  className: 'uppercase mb-12 !opacity-80 helveticaNowDisplayMedium tracking-widest',
+                  className: 'uppercase mb-12 robotoRegular tracking-[0.7px] text-white',
                   text: 'LJ Studio was born from a passion for sport and image, two languages that speak through emotion.'
                 },
-                { className: '!opacity-55', text: 'Since 2018, we’ve been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.' },
-                { className: '!opacity-55', text: 'Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.' },
-                { className: '!opacity-55', text: 'We believe every sport has its own language - we design the way it’s told.' }
+                { className: '!opacity-55 robotoReg text-[20px]', text: 'Since 2018, we’ve been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.' },
+                { className: '!opacity-55 robotoReg text-[20px]', text: 'Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.' },
+                { className: '!opacity-55 robotoReg text-[20px]', text: 'We believe every sport has its own language - we design the way it’s told.' }
               ].map((p, idx) => (
                 <div key={idx} className="relative overflow-hidden mb-6">
                   <AppearText type="lines" once={true} className={`${p.className}`}>
@@ -396,15 +397,15 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             <div className="flex md:w-2/3 flex-wrap flex-col gap-6 xl:justify-between md:flex-row pr-[3vw] flex-1">
               <div className="md:w-max">
                 <h3 className="text-center">
-                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[32pt] leading-[0.9]">Small roster,</p>
-                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[32pt] leading-[0.9]">French accent.</p>
+                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">Small roster,</p>
+                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">French accent.</p>
                 </h3>
                 <p className="instrumentSerifRegular mt-2 opacity-75 !text-[18pt] sm:!text-[20pt] w-[70%] mx-auto text-center tracking-tighter	leading-[1]">Sport-focused design studio, born in Paris.</p>
               </div>
               <div className="md:w-max">
                 <h3 className="text-center">
-                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[32pt] leading-[0.9]">Shaped by</p>
-                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[32pt] leading-[0.9]">emotion.</p>
+                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">Shaped by</p>
+                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">emotion.</p>
                 </h3>
                 <p className="instrumentSerifRegular mt-2 opacity-75 !text-[18pt] sm:!text-[20pt] w-[60%] mx-auto text-center tracking-tighter	leading-[1]">Designing for the feelings sport leaves behind.</p>
               </div>
@@ -492,7 +493,7 @@ export async function getServerSideProps() {
         projects: projectsData?.records || [],
         gamePlan: (gamePlanData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
         logoClients: (logoClientsData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
-        sliderImages: sliderImagesData?.records || [],
+        sliderImages: (sliderImagesData?.records || []).sort((a, b) => (a.fields?.id) - (b.fields?.id )),
         headerImages: headerImages?.records || []
       },
     };

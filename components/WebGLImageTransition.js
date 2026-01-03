@@ -334,6 +334,7 @@ function WebGLImageTransitionDemo5Internal({
       aria-label="WebGL Image Transition (demo5)"
       role="img"
     >
+      {/* todo: add opacity sur image ou voile noir */}
       {!isReady && images[fallbackIndex] && (
         <img
           src={images[fallbackIndex]}
@@ -346,7 +347,7 @@ function WebGLImageTransitionDemo5Internal({
             objectFit: "cover",
             zIndex: 1,
             pointerEvents: "none",
-            transition: "opacity 0.3s"
+            // transition: "opacity 0.3s",
           }}
         />
       )}

@@ -149,7 +149,7 @@ const Collab = ({logos}) => {
         </div>
       </div>
       
-    <div className="logo-divider my-8"></div>
+    <div className="logo-divider my-12"></div>
       
       {/* Marquee pour la rangée du bas */}
       <div 
@@ -210,7 +210,7 @@ const Collab = ({logos}) => {
         .marquee-advanced__item {
           display: flex;
           align-items: center;
-          padding: 0 1rem;
+          padding: 0 28px;
           flex-shrink: 0;
         }
         
@@ -218,7 +218,7 @@ const Collab = ({logos}) => {
           flex-shrink: 0;
           position: relative;
           height: 80px;
-          width: 150px;
+          width: 100px;
           opacity: 0.5;
           filter: grayscale(100%) brightness(0.8);
           transition: filter 0.3s ease;
