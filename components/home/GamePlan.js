@@ -288,8 +288,9 @@ export default function BrandingSection({ gamePlan }) {
                 src={showGif === index && item.fields.GIF ? item.fields.GIF[0].url : item.fields.Image[0].url} 
                 alt={item.fields.Image[0].filename || 'Game plan image'}
                 width={item.fields.Image[0].width || gamePlan[0].fields.Image[0].width}
-                height={item.fields.Image[0].height || 100}
+                height={item.fields.Image[0].height || gamePlan[0].fields.Image[0].height}
                 objectFit='cover'
+                unoptimized
               />
               {/* <SeeMore/> */}
             </div>

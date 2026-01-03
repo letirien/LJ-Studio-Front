@@ -392,6 +392,7 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                                     height={1080}
                                     priority
                                     className={`${home.slideImg} rounded-xs`}
+                                    unoptimized={true}
                                 />
                             </div>
                         </Link>
