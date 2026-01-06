@@ -28,11 +28,16 @@ import RoundedIcon from "../components/RoundedIcon.js";
 import ProjectSection from "../components/home/ProjectSection.js";
 import HighlightText from "../components/home/HighlightText.js";
 import AppearText from '../components/AppearText.js';
+import { useLoading } from '../lib/LoadingManager';
 
 
 
 export default function Home({ projects, gamePlan, logoClients, sliderImages, headerImages }) {
   const { scrollYProgress } = useScroll();
+  const { scrollYPProgress } = useScroll();
+  const { setDataLoaded, setEffectsReady, setPageImagesProgress } = useLoading();
+  const [buttonTopPosition, setButtonTopPosition] = useState('50%');
+
   console.log(sliderImages)
   const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
   // Map scroll progress to a parallax range
@@ -53,11 +58,17 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
 
   const sectionImageRef = useRef(null);
   const galerySection = useRef(null);
+  const aboutUsRef = useRef(null);
   // const galerySection2 = useRef(null);
 
  const { scrollYProgress: scrollYGalleryProgress } = useScroll({
     target: galerySection,
     offset: ["start end", "end start"], // du moment où la section entre jusqu’à ce qu’elle sorte
+  });
+
+  const { scrollYProgress: scrollYTextGalleryProgress } = useScroll({
+    target: aboutUsRef,
+    offset: ["start center", "end center"], // du moment où la section entre jusqu’à ce qu’elle sorte
   });
   // const { scrollYProgress: scrollYGalleryMobProgress } = useScroll({
   //   target: galerySection2,
@@ -66,6 +77,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
 
   // On fait varier le line-height progressivement
   const lineHeight = useTransform(scrollYGalleryProgress, [0, 1], ["1.1", "0.7"]);
+  const pLineHeight = useTransform(scrollYTextGalleryProgress, [0, 1], ["1.6", "1.2"]);
 
   // On fait varier le line-height progressivement
   // const lineHeightMob = useTransform(scrollYGalleryMobProgress, [0, 1], ["1.1", "0.7"]);
@@ -145,19 +157,38 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   useEffect(() => {
     // Calculer après le premier rendu
     const timer = setTimeout(calculateButtonPosition, 100);
-    
+
     // Recalculer lors du redimensionnement
     const handleResize = () => {
       calculateButtonPosition();
     };
-    
+
     window.addEventListener('resize', handleResize);
-    
+
     return () => {
       clearTimeout(timer);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  // Marquer les données comme chargées dès le montage du composant
+  // (puisque getServerSideProps les charge côté serveur)
+  useEffect(() => {
+    setDataLoaded();
+    // Marquer les images de la page comme chargées immédiatement
+    // (on ne les preload pas pour éviter les conflits et le lag)
+    setPageImagesProgress(100, 100);
+  }, [setDataLoaded, setPageImagesProgress]);
+
+  // Marquer les effets comme prêts après l'initialisation de GSAP et des animations
+  useEffect(() => {
+    // Donner un peu de temps pour que GSAP et ScrollTrigger s'initialisent
+    const timer = setTimeout(() => {
+      setEffectsReady();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [setEffectsReady]);
 
   // Paragraph animations are handled by AppearText (GSAP inside component)
   return (
@@ -258,10 +289,15 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 </div>
               </HighlightText>
             </h2>
-            <div
+            <div 
+              ref={aboutUsRef}
               className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-16 md:mt-32`}
             >
-              {[
+              <motion.p style={{lineHeight: pLineHeight}} className="uppercase mb-12 robotoRegular tracking-[0.7px] text-white">LJ Studio was born from a passion for sport and image, two languages that speak through emotion.</motion.p>
+              <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoReg text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
+              <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoReg text-[20px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
+              <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoReg text-[20px]">We believe every sport has its own language - we design the way it's told.</motion.p>
+              {/* {[
                 {
                   className: 'uppercase mb-12 robotoRegular tracking-[0.7px] text-white',
                   text: 'LJ Studio was born from a passion for sport and image, two languages that speak through emotion.'
@@ -275,7 +311,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                     {p.text}
                   </AppearText>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
           <CreativeCanvas images={sliderImages}/>

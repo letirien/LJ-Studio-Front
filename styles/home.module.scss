@@ -18,7 +18,7 @@
   font-size: 20pt;
   font-family: RobotoRegular;
   // letter-spacing: 1px;
-  line-height: 28pt;
+  // line-height: 28pt;
   // opacity: 55%
 }
 .black{
@@ -424,7 +424,7 @@
   /* Ajuster le texte descriptif aussi */
   .defaultText {
     font-size: 16px; /* Légèrement plus petit sur mobile */
-    line-height: 19pt;
+    // line-height: 19pt;
     /* Changer la largeur fixe en vw pour quelque chose de plus adaptatif */
     width: 85vw !important; /* Au lieu de 40vw */
     max-width: 600px; /* Limite maximale */

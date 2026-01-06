@@ -7,17 +7,20 @@ import utilStyles from "../../styles/utils.module.css";
 import Link from "next/link";
 import RoundedIcon from "../RoundedIcon";
 import {Clock} from "../clock";
-// import WebGLImageTransition from "../WebGLImageTransition";
 import dynamic from "next/dynamic";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
+import { useLoading } from "../../lib/LoadingManager";
+
+// Charger WebGLImageTransition en dehors du composant pour éviter les re-créations
+const WebGLImageTransition = dynamic(
+    () => import("../WebGLImageTransition"),
+    { ssr: false }
+);
 
 export function Header({headerImages}) {
+    const { setWebGLProgress } = useLoading();
 
-    const imagesArray = headerImages.map(img => img.fields.IMAGE[0].url);
-    const WebGLImageTransition = dynamic(
-        () => import("../WebGLImageTransition"),
-        { ssr: false }
-    );
+    const imagesArray = useMemo(() => headerImages.map(img => img.fields.IMAGE[0].url), [headerImages]);
     const webglRef = useRef(null);
     const webglApiRef = useRef(null);
     const linesRef = useRef(null);
@@ -93,6 +96,7 @@ export function Header({headerImages}) {
                             pauseOnHover={false}
                             expose={(api) => { webglApiRef.current = api; console.log('[Header] expose API set', !!api); }}
                             onReady={onWebGLReady}
+                            onLoadProgress={setWebGLProgress}
                         />
                     {/* <div className={styles.headimg}>
                         <Image

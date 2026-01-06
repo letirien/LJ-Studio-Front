@@ -36,6 +36,22 @@ export default function BrandingSection({ gamePlan }) {
   const labelRatios = useRef({});
   const [positionsVersion, setPositionsVersion] = useState(0);
   const [showGif, setShowGif] = useState(null);
+  const [preloadedGifs, setPreloadedGifs] = useState(new Set());
+
+  // Précharger tous les GIFs au montage
+  useEffect(() => {
+    if (!gamePlan) return;
+
+    gamePlan.forEach((item) => {
+      if (item.fields.GIF && item.fields.GIF[0]?.url) {
+        const img = new window.Image();
+        img.src = item.fields.GIF[0].url;
+        img.onload = () => {
+          setPreloadedGifs((prev) => new Set([...prev, item.fields.GIF[0].url]));
+        };
+      }
+    });
+  }, [gamePlan]);
 
   const calculateLabelPosition = (index) => {
     const titleRef = titleRefs.current[index];
@@ -232,7 +248,7 @@ export default function BrandingSection({ gamePlan }) {
         return (
           <motion.div
             key={index}
-            className={`flex flex-col-reverse md:flex-row items-stretch min-h-[400px] py-12 sm:py-24 gap-3 md:gap-0 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
+            className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-3 md:gap-0 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
             style={{
               position: 'sticky',
               top: 0,
@@ -248,7 +264,7 @@ export default function BrandingSection({ gamePlan }) {
               )
             }}
           >
-            <div className='md:w-1/2 w-content flex flex-col justify-around sm:gap-6 mx-6 sm:mx-0'>
+            <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-3 sm:gap-6 mx-6 sm:mx-0'>
               <div className="inline-block">
                 <h2
                   ref={(el) => (titleRefs.current[index] = el)}
@@ -281,16 +297,18 @@ export default function BrandingSection({ gamePlan }) {
                 
               </Link>
             </div>
-            <div className='mx-6 sm:mx-0 md:w-1/2 relative md:my-auto xl:my-0'>
-              <Image 
+            <div className={`mx-6 sm:mx-0 md:w-1/2 flex-grow relative md:my-auto xl:my-0`}>
+              <Image
                 onMouseOver={() => setGif(index)}
                 onMouseLeave={() => setShowGif(null)}
-                src={showGif === index && item.fields.GIF ? item.fields.GIF[0].url : item.fields.Image[0].url} 
+                className={`w-full h-auto object-cover`}
+                src={showGif === index && item.fields.GIF ? item.fields.GIF[0].url : item.fields.Image[0].url}
                 alt={item.fields.Image[0].filename || 'Game plan image'}
                 width={item.fields.Image[0].width || gamePlan[0].fields.Image[0].width}
                 height={item.fields.Image[0].height || gamePlan[0].fields.Image[0].height}
-                objectFit='cover'
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 unoptimized={true}
+                priority={index === 0}
               />
               {/* <SeeMore/> */}
             </div>

@@ -13,7 +13,8 @@ function WebGLImageTransitionDemo5Internal({
   pauseOnHover = true,
   className,
   onReady,
-  expose
+  expose,
+  onLoadProgress
 }, ref) {
   const [isReady, setIsReady] = useState(false);
 
@@ -99,14 +100,45 @@ function WebGLImageTransitionDemo5Internal({
       const loader = new THREE.TextureLoader();
       let loadedCount = 0;
       let ready = false;
-      const loaded = images.map((src, idx) => {
-        const t = loader.load(src, () => {
-          loadedCount++;
-          if (!ready && loadedCount > 0) {
-            setIsReady(true);
-            ready = true;
+      const totalTextures = images.length;
+
+      const loaded = images.map((src) => {
+        const t = loader.load(
+          src,
+          () => {
+            // On load success
+            loadedCount++;
+
+            // Report progress
+            if (typeof onLoadProgress === 'function') {
+              try {
+                onLoadProgress(loadedCount, totalTextures);
+              } catch (e) {
+                console.warn('[WebGL] onLoadProgress error:', e);
+              }
+            }
+
+            if (!ready && loadedCount > 0) {
+              setIsReady(true);
+              ready = true;
+            }
+          },
+          undefined,
+          (error) => {
+            // On load error
+            console.error('[WebGL] Texture load error:', error);
+            loadedCount++;
+
+            // Report progress even on error
+            if (typeof onLoadProgress === 'function') {
+              try {
+                onLoadProgress(loadedCount, totalTextures);
+              } catch (e) {
+                console.warn('[WebGL] onLoadProgress error:', e);
+              }
+            }
           }
-        });
+        );
         t.minFilter = THREE.LinearFilter;
         t.magFilter = THREE.LinearFilter;
         t.generateMipmaps = false;

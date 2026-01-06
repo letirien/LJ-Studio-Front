@@ -29,8 +29,6 @@ export default function Layout({ children, home }) {
     }
   }, []);
 
-  const words = ["OUR PITCH", "OUR GAME", "OUR CRAFT", "BOARD"];
-
   return (
     <div className={`relative ${!animationComplete ? 'h-screen overflow-hidden' : ''}`}>
       <Head>

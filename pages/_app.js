@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import gsap from 'gsap';
 import dynamic from 'next/dynamic';
 import CustomCursor from "../components/CustomCursor";
+import { LoadingProvider } from '../lib/LoadingManager';
 
 const Cursor = dynamic(() => import('../components/Cursor'), {
   ssr: false
@@ -50,13 +51,15 @@ function App({ Component, pageProps }) {
         <Head>
           <meta name="robots" content="noindex, nofollow" />
         </Head>
-        <ReactLenis root options={lenisOptions}>
-          <AnimatePresence mode="wait" initial={false}>
-            <Cursor />
-            <Component {...pageProps} />
-            <CustomCursor />
-          </AnimatePresence>
-        </ReactLenis>
+        <LoadingProvider>
+          <ReactLenis root options={lenisOptions}>
+            <AnimatePresence mode="wait" initial={false}>
+              <Cursor />
+              <Component {...pageProps} />
+              <CustomCursor />
+            </AnimatePresence>
+          </ReactLenis>
+        </LoadingProvider>
       </>
   );
 }
