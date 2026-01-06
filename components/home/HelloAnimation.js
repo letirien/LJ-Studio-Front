@@ -12,6 +12,7 @@ export default function AnimationPage({ onAnimationComplete }) {
   const [blocksDisappear, setBlocksDisappear] = useState(false);
   const [blocks2Disappear, setBlocks2Disappear] = useState(false);
   const [animationStarted, setAnimationStarted] = useState(false);
+  const [loaderVisible, setLoaderVisible] = useState(true);
 
   // Apparition progressive du texte au fur et à mesure du chargement
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function AnimationPage({ onAnimationComplete }) {
       // Animation de sortie
       const exitTimeline = async () => {
         // Étape 1: Disparition du loader (SVG avec effet pixel)
-        // setTimeout(() => setLoaderVisible(false), 1800);
+        setTimeout(() => setLoaderVisible(false), 1800);
 
         // Étape 2: Disparition du texte
         setTimeout(() => setTextDisappear(true), 2450);
@@ -180,6 +181,11 @@ export default function AnimationPage({ onAnimationComplete }) {
       {/* Contenu texte - SOLUTION 1: Chaque mot dans son propre conteneur overflow-hidden */}
       <div className="absolute inset-0 flex items-center justify-center z-30">
         <div className="text-center space-y-4 px-8">
+          <div className={`absolute right-[4vw] top-[3vw] items-center space-x-2 text-black ${loaderVisible ? 'opacity-100' : 'opacity-0'} transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)]`}>
+            <span className="text-[6vw] sm:text-[72pt] hardbopBlack font-bold tabular-nums">
+              {progress}%
+            </span>
+          </div>
           <h1 className="hardbopBlack leading-[0.8]">
             {/* Ligne 1 */}
             <div className="flex flex-wrap items-center justify-center gap-x-4">
@@ -249,12 +255,12 @@ export default function AnimationPage({ onAnimationComplete }) {
           {/* Loader et texte en bas */}
           <div className={`absolute bottom-6 left-0 right-0 transition-all duration-500 `}>
             <div className="flex items-center justify-center space-x-8 text-sm text-black">
-              <span className='robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8]'>CREATIVE STUDIO</span>
+              <span className={`robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8] ${loaderVisible ? 'opacity-100' : 'opacity-0'} transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)]`}>CREATIVE STUDIO</span>
 
               {/* Logo LED/Pixel avec animation */}
               <PixelatedLogo isComplete={isComplete} animationStarted={animationStarted} />
 
-              <span className='robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8]'>FRENCH ACCENT</span>
+              <span className={`robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8] ${loaderVisible ? 'opacity-100' : 'opacity-0'}`}>FRENCH ACCENT</span>
             </div>
           </div>
         </div>
