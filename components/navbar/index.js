@@ -72,27 +72,49 @@ export default function Navbar() {
           />
         </div>
         <button
-          className={styles.menuBTN}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="group cursor-pointer"
         >
-          {/* todo : animer le burger // voir milanote*/}
-          <svg xmlns="http://www.w3.org/2000/svg" width={isMobille ? 48 : 74} height="35" viewBox="0 0 74 35">
-            <g>
-              <g>
-                <g>
-                  <path fill={logoColor} d="M.441 5.07V.683H37V5.07z"/>
-                  <path fill="none" d="M.441 5.07V.683H37V5.07z"/>
-                </g>
-                <g>
-                  <path fill={logoColor} d="M.441 19.694v-4.387h55.57v4.387z"/>
-                  <path fill="none" d="M.441 19.694v-4.387h55.57v4.387z"/>
-                </g>
-                <g>
-                  <path fill={logoColor} d="M37 34.317V29.93h36.559v4.387z"/>
-                  <path fill="none" d="M37 34.317V29.93h36.559v4.387z"/>
-                </g>
-              </g>
-            </g>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={isMobille ? 48 : 74}
+            height="35"
+            viewBox="0 0 74 35"
+          >
+            {/* Top bar — courte */}
+            <path
+              fill={logoColor}
+              d="M10 5V1h24v4z"
+              className="
+                origin-left
+                transition-transform duration-300 ease-out
+                group-hover:scale-x-[1.55]
+              "
+            />
+
+            {/* Middle bar — largeur finale (48) */}
+            <path
+              fill={logoColor}
+              d="M9 19.7v-4.4h48v4.4z"
+              className="
+              origin-center
+              transition-transform
+              duration-300
+              ease-out
+              group-hover:scale-x-[0.85]
+              "
+            />
+
+            {/* Bottom bar — courte */}
+            <path
+              fill={logoColor}
+              d="M27 34.3v-4.4h32v4.4z"
+              className="
+                origin-right
+                transition-transform duration-300 ease-out
+                group-hover:scale-x-[1.3]
+              "
+            />
           </svg>
         </button>
         <SideMenu isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(!isMenuOpen)} />

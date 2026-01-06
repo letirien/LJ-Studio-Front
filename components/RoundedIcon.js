@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
+import AnimatedEyes from "./AnimatedEyes";
 
 /**
  * Empile des SVGs pour composer une icône ronde.
@@ -98,11 +99,15 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
                     <Image src={backgroundSrc} alt="fond" fill={true} style={{ objectFit: "contain" }} />
                 </div>
                 <div style={layerStyle}>
-                    <Image src={iconSrc} alt={`icone-${icon}`} fill={true} style={{ objectFit: "contain" }} />
+                    {icon === "yeux" ? (
+                        <AnimatedEyes />
+                    ) : (
+                        <Image src={iconSrc} alt={`icone-${icon}`} fill={true} style={{ objectFit: "contain" }} />
+                    )}
                 </div>
             </div>
             }
-            {menu && 
+            {menu &&
                 <Image src={iconCross} alt={`icone-${icon}`} fill={true} style={{ objectFit: "contain" }} />
 
             }
@@ -120,5 +125,4 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
         </div>
     );
 }
-
 

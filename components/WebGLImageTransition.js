@@ -9,11 +9,9 @@ function WebGLImageTransitionDemo5Internal({
   transitionDuration = 1.0,
   intensity = 0.3,
   autoplay = true,
-  autoplayDelay = 2000,
+  autoplayDelay = 3000,
   pauseOnHover = true,
   className,
-  onReady,
-  expose,
   onLoadProgress
 }, ref) {
   const [isReady, setIsReady] = useState(false);
@@ -257,11 +255,6 @@ function WebGLImageTransitionDemo5Internal({
     }
   }, [images.join("|"), intensity]);
 
-  useEffect(() => {
-    if (isReady && typeof onReady === 'function') {
-      try { onReady(); } catch {}
-    }
-  }, [isReady, onReady]);
 
   const next = () => {
     if (isRunningRef.current) return;
@@ -302,12 +295,12 @@ function WebGLImageTransitionDemo5Internal({
   }), []);
 
   // Alternative d'exposition via prop pour éviter les problèmes de ref avec dynamic()
-  useEffect(() => {
-    if (typeof expose === 'function') {
-      try { expose({ next }); } catch {}
-      return () => { try { expose(null); } catch {} };
-    }
-  }, [expose]);
+  // useEffect(() => {
+  //   if (typeof expose === 'function') {
+  //     try { expose({ next }); } catch {}
+  //     return () => { try { expose(null); } catch {} };
+  //   }
+  // }, [expose]);
 
   useEffect(() => {
     const el = containerRef.current;

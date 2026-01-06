@@ -8,7 +8,7 @@ import Link from "next/link";
 import RoundedIcon from "../RoundedIcon";
 import {Clock} from "../clock";
 import dynamic from "next/dynamic";
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef, useMemo, useState } from "react";
 import { useLoading } from "../../lib/LoadingManager";
 
 // Charger WebGLImageTransition en dehors du composant pour éviter les re-créations
@@ -18,66 +18,25 @@ const WebGLImageTransition = dynamic(
 );
 
 export function Header({headerImages}) {
-    const { setWebGLProgress } = useLoading();
+    const { setWebGLProgress, isComplete } = useLoading();
 
     const imagesArray = useMemo(() => headerImages.map(img => img.fields.IMAGE[0].url), [headerImages]);
     const webglRef = useRef(null);
     const webglApiRef = useRef(null);
-    const linesRef = useRef(null);
+    const [logoVisible, setLogoVisible] = useState(false);
 
-    const setupSync = () => {
-        const el = linesRef.current;
-        if (!el) return;
+    // Animation du logo lettre par lettre quand l'animation est complète
+    useEffect(() => {
+        if (isComplete) {
+            // Délai avant de commencer l'animation du logo dans le header
+            setTimeout(() => {
+                setLogoVisible(true);
+            }, 3100); // Commence juste avant que l'animation complète ne se termine
 
-        let timeouts = [];
-        let stepCounter = 0;
+            // Le logo RESTE VISIBLE - pas de disparition
+        }
+    }, [isComplete]);
 
-        const clearAll = () => {
-            timeouts.forEach(t => clearTimeout(t));
-            timeouts = [];
-        };
-
-        const scheduleStepTriggers = () => {
-            clearAll();
-            const stylesComputed = window.getComputedStyle(el);
-            const durStr = stylesComputed.animationDuration || stylesComputed.webkitAnimationDuration || "8s";
-            const durNum = parseFloat(durStr);
-            const durationMs = (isNaN(durNum) ? 8 : durNum) * (durStr.includes("ms") ? 1 : 1000);
-            const fractions = [0.2, 0.4, 0.6, 0.8];
-            stepCounter = 0;
-            fractions.forEach((f) => {
-                const id = setTimeout(() => {
-                    stepCounter += 1;
-                    if (stepCounter % 2 === 1) {
-                        try {
-                            const api = webglApiRef.current;
-                            api && api.next && api.next();
-                        } catch (e) { console.warn('[Header] next() error', e); }
-                    }
-                }, Math.max(0, Math.floor(durationMs * f)));
-                timeouts.push(id);
-            });
-        };
-
-        const onAnimStart = () => { console.log('[Header] animationstart'); scheduleStepTriggers(); };
-        const onAnimIter = () => { console.log('[Header] animationiteration'); scheduleStepTriggers(); };
-
-        el.addEventListener('animationstart', onAnimStart);
-        el.addEventListener('animationiteration', onAnimIter);
-
-        scheduleStepTriggers();
-
-        return () => {
-            clearAll();
-            el.removeEventListener('animationstart', onAnimStart);
-            el.removeEventListener('animationiteration', onAnimIter);
-        };
-    };
-
-    const onWebGLReady = () => {
-        // Une fois le shader prêt, on branche la synchro
-        setupSync();
-    };
     return (
         <header className={`${styles.header} intersectLogo header` }>
                 <>
@@ -92,12 +51,84 @@ export function Header({headerImages}) {
                             images={imagesArray}
                             transitionDuration={1.2}
                             intensity={0.35}
-                            autoplay={false}
+                            autoplay={true}
                             pauseOnHover={false}
-                            expose={(api) => { webglApiRef.current = api; console.log('[Header] expose API set', !!api); }}
-                            onReady={onWebGLReady}
+                            expose={(api) => { webglApiRef.current = api}}
                             onLoadProgress={setWebGLProgress}
                         />
+
+                    {/* Logo animé au centre du header - lettre par lettre */}
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <svg
+                            viewBox="0 0 689.83765 89.09131"
+                            className="w-[300px] sm:w-[500px] md:w-[600px] h-auto"
+                            style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }}
+                        >
+                            {/* L */}
+                            <g className="overflow-hidden">
+                                <polygon
+                                    className={`transform transition-all duration-500 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                                        logoVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+                                    }`}
+                                    style={{ transitionDelay: logoVisible ? '0ms' : '0ms' }}
+                                    fill="white"
+                                    points="19.66699 0 0 0 0 69.18579 19.84973 89.05493 101.63208 89.05493 101.63208 68.47412 19.66699 68.47412 19.66699 0"
+                                />
+                            </g>
+
+                            {/* J */}
+                            <g className="overflow-hidden">
+                                <polygon
+                                    className={`transform transition-all duration-500 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                                        logoVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+                                    }`}
+                                    style={{ transitionDelay: logoVisible ? '100ms' : '0ms' }}
+                                    fill="white"
+                                    points="209.05078 .00757 127.05737 .00757 127.05737 19.66504 209.05078 19.66504 209.05078 69.43115 127.05737 69.43115 127.05737 53.62988 107.39038 53.62988 107.39038 69.67139 127.39429 88.96338 208.83984 89.08838 228.71777 69.19067 228.71777 .00488 209.05078 .00488 209.05078 .00757"
+                                />
+                            </g>
+
+                            {/* S */}
+                            <g className="overflow-hidden">
+                                <polygon
+                                    className={`transform transition-all duration-500 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                                        logoVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+                                    }`}
+                                    style={{ transitionDelay: logoVisible ? '200ms' : '0ms' }}
+                                    fill="white"
+                                    points="375.49048 .00757 279.49731 .00757 255.33569 19.91821 255.34448 32.85107 278.88379 53.2583 366.87598 53.2583 366.87598 69.68018 256.49829 69.68018 256.49829 89.08838 366.56909 89.08838 390.20654 69.68286 390.20654 53.2583 365.95557 32.85107 279.19067 32.85107 279.19067 19.91064 375.49048 19.91064 375.49048 19.91553 427.55469 19.91553 427.55469 89.08838 452.07568 89.08838 452.07568 19.91553 506.27734 19.91553 506.27734 .00757 382.20483 .00757 375.49048 .00757"
+                                />
+                            </g>
+
+                            {/* T */}
+                            <g className="overflow-hidden">
+                                <path
+                                    className={`transform transition-all duration-500 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                                        logoVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+                                    }`}
+                                    style={{ transitionDelay: logoVisible ? '300ms' : '0ms' }}
+                                    fill="white"
+                                    d="M639.06226.0105h-123.96802v89.08081h123.96802l24.88232-19.40845-.15991-49.76465L639.06226.0105ZM639.37183,69.68286h-99.12573V19.91821h99.12573v49.76465Z"
+                                />
+                            </g>
+
+                            {/* D */}
+                            <g className="overflow-hidden">
+                                <rect
+                                    className={`transform transition-all duration-500 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                                        logoVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+                                    }`}
+                                    style={{ transitionDelay: logoVisible ? '400ms' : '0ms' }}
+                                    fill="white"
+                                    x="670.4292"
+                                    y="69.67993"
+                                    width="19.40845"
+                                    height="19.40845"
+                                />
+                            </g>
+                        </svg>
+                    </div>
+
                     {/* <div className={styles.headimg}>
                         <Image
                             src="/images/HEADER.webp"

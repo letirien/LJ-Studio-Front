@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useLoading } from '../../lib/LoadingManager';
+import PixelatedLogo from './PixelatedLogo';
 
 export default function AnimationPage({ onAnimationComplete }) {
   const { progress, isComplete } = useLoading();
 
   const [textVisible, setTextVisible] = useState({ line1: false, line2: false, line3: false });
-  const [loaderVisible, setLoaderVisible] = useState(true);
   const [textDisappear, setTextDisappear] = useState(false);
   const [blocksDisappear, setBlocksDisappear] = useState(false);
   const [blocks2Disappear, setBlocks2Disappear] = useState(false);
@@ -33,8 +33,8 @@ export default function AnimationPage({ onAnimationComplete }) {
 
       // Animation de sortie
       const exitTimeline = async () => {
-        // Étape 1: Disparition du loader (pourcentage)
-        setTimeout(() => setLoaderVisible(false), 1800);
+        // Étape 1: Disparition du loader (SVG avec effet pixel)
+        // setTimeout(() => setLoaderVisible(false), 1800);
 
         // Étape 2: Disparition du texte
         setTimeout(() => setTextDisappear(true), 2450);
@@ -194,7 +194,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                   }`}
                   style={{ transitionDelay: textDisappear ? '0ms' : '0ms' }}
                 >
-                  TURNING
+                  WELCOME
                 </span>
               </div>
               <div className="overflow-hidden">
@@ -208,7 +208,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                   }`}
                   style={{ transitionDelay: textDisappear ? '50ms' : '100ms' }}
                 >
-                  SPORT
+                  ON
                 </span>
               </div>
             </div>
@@ -226,7 +226,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                   }`}
                   style={{ transitionDelay: textDisappear ? '100ms' : '0ms' }}
                 >
-                  PASSION
+                  OUR
                 </span>
               </div>
               <div className="overflow-hidden">
@@ -240,57 +240,20 @@ export default function AnimationPage({ onAnimationComplete }) {
                   }`}
                   style={{ transitionDelay: textDisappear ? '150ms' : '120ms' }}
                 >
-                  INTO
-                </span>
-              </div>
-            </div>
-
-            {/* Ligne 3 */}
-            <div className="flex flex-wrap items-center justify-center gap-x-4">
-              <div className="overflow-hidden">
-                <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
-                    textVisible.line3 && !textDisappear
-                      ? 'translate-y-0'
-                      : textDisappear
-                      ? '-translate-y-full'
-                      : 'translate-y-full rotate-[0.5deg]'
-                  }`}
-                  style={{ transitionDelay: textDisappear ? '80ms' : '0ms' }}
-                >
-                  ARTISTIC
-                </span>
-              </div>
-              <div className="overflow-hidden">
-                <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
-                    textVisible.line3 && !textDisappear
-                      ? 'translate-y-0'
-                      : textDisappear
-                      ? '-translate-y-full'
-                      : 'translate-y-full rotate-[0.5deg]'
-                  }`}
-                  style={{ transitionDelay: textDisappear ? '200ms' : '140ms' }}
-                >
-                  EXPRESSION
+                  PITCH
                 </span>
               </div>
             </div>
           </h1>
 
           {/* Loader et texte en bas */}
-          <div
-            className={`mt-16 transition-all duration-500 ${
-              loaderVisible ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
+          <div className={`absolute bottom-6 left-0 right-0 transition-all duration-500 `}>
             <div className="flex items-center justify-center space-x-8 text-sm text-black">
               <span className='robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8]'>CREATIVE STUDIO</span>
-              <div className="flex items-center space-x-2">
-                <span className="text-[12vw] sm:text-[92pt] hardbopBlack font-bold tabular-nums">
-                  {progress}%
-                </span>
-              </div>
+
+              {/* Logo LED/Pixel avec animation */}
+              <PixelatedLogo isComplete={isComplete} animationStarted={animationStarted} />
+
               <span className='robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8]'>FRENCH ACCENT</span>
             </div>
           </div>

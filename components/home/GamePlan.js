@@ -248,7 +248,7 @@ export default function BrandingSection({ gamePlan }) {
         return (
           <motion.div
             key={index}
-            className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-3 md:gap-0 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
+            className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-3 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
             style={{
               position: 'sticky',
               top: 0,
