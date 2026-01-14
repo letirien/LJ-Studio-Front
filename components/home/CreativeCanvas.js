@@ -14,11 +14,14 @@ const CreativeCanvas = ({ images }) => {
 
   // Pour suivre le chargement individuel des images
   const [loadedImages, setLoadedImages] = useState({});
-  
+
+  // Pour la boucle infinie
+  const [infiniteImages, setInfiniteImages] = useState([]);
+
   // Précharger toutes les images dès le montage
   useEffect(() => {
     if (!images || images.length === 0) return;
-    
+
     const preloadImages = async () => {
       const loadPromises = images.map((img) => {
         const url = img.fields.IMAGE[0].url;
@@ -35,11 +38,25 @@ const CreativeCanvas = ({ images }) => {
           };
         });
       });
-      
+
       await Promise.all(loadPromises);
     };
-    
+
     preloadImages();
+  }, [images]);
+
+  // Créer un tableau avec 3 copies pour la boucle infinie
+  useEffect(() => {
+    if (!images || images.length === 0) return;
+
+    // On crée 3 sets d'images pour permettre la boucle
+    const tripleImages = [
+      ...images.map((img, i) => ({ ...img, uniqueKey: `prev-${i}` })),
+      ...images.map((img, i) => ({ ...img, uniqueKey: `main-${i}` })),
+      ...images.map((img, i) => ({ ...img, uniqueKey: `next-${i}` }))
+    ];
+
+    setInfiniteImages(tripleImages);
   }, [images]);
 
   // Refs principaux et contrôles d'animation
@@ -115,6 +132,40 @@ const CreativeCanvas = ({ images }) => {
   }, []);
 
   const lastDragRef = useRef({ time: 0, pos: 0, velocity: 0 }); // dernier échantillon vitesse
+
+  // Gestion de la boucle infinie
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container || !infiniteImages.length || !images?.length) return;
+
+    const handleInfiniteScroll = () => {
+      const scrollLeft = container.scrollLeft;
+      const scrollWidth = container.scrollWidth;
+      const clientWidth = container.clientWidth;
+
+      // Calcul de la largeur d'un set d'images
+      const oneSetWidth = scrollWidth / 3;
+
+      // Si on atteint la fin du deuxième set, on revient au début du deuxième set
+      if (scrollLeft >= oneSetWidth * 2 - clientWidth / 2) {
+        container.scrollLeft = scrollLeft - oneSetWidth;
+      }
+      // Si on remonte avant le début du deuxième set, on saute à la fin du deuxième set
+      else if (scrollLeft <= oneSetWidth / 2) {
+        container.scrollLeft = scrollLeft + oneSetWidth;
+      }
+    };
+
+    container.addEventListener('scroll', handleInfiniteScroll, { passive: true });
+
+    // Positionner au milieu (deuxième set) au démarrage
+    const scrollWidth = container.scrollWidth;
+    const oneSetWidth = scrollWidth / 3;
+    container.scrollLeft = oneSetWidth;
+
+    return () => container.removeEventListener('scroll', handleInfiniteScroll);
+  }, [infiniteImages, images]);
+
   useEffect(() => {
     let Draggable, gsap;
     let draggableInstance;
@@ -185,12 +236,12 @@ const CreativeCanvas = ({ images }) => {
                 transition: { type: "spring", stiffness: 300, damping: 20 }
               });
 
-              // Inertie / momentum avec rebond aux bords
+              // Inertie / momentum avec boucle infinie (pas de rebond aux bords)
               const maxScroll = this.target.scrollWidth - this.target.clientWidth;
+              const oneSetWidth = this.target.scrollWidth / 3;
               let currentScroll = this.target.scrollLeft;
               let currentVelocity = (lastDragRef.current?.velocity || 0) * 1000; // px/s
               const frictionPerFrame = 0.95; // friction à 60fps
-              const bounceDamping = 0.35; // restitution aux bords
               const minVelocity = 5; // px/s seuil d'arrêt
               let lastTs = 0;
 
@@ -205,13 +256,15 @@ const CreativeCanvas = ({ images }) => {
 
                 currentScroll += currentVelocity * dt;
 
-                if (currentScroll < 0) {
-                  currentScroll = 0;
-                  currentVelocity = -currentVelocity * bounceDamping;
-                } else if (currentScroll > maxScroll) {
-                  currentScroll = maxScroll;
-                  currentVelocity = -currentVelocity * bounceDamping;
+                // Gestion de la boucle infinie pendant le momentum
+                if (currentScroll >= oneSetWidth * 2 - this.target.clientWidth / 2) {
+                  currentScroll = currentScroll - oneSetWidth;
+                } else if (currentScroll <= oneSetWidth / 2) {
+                  currentScroll = currentScroll + oneSetWidth;
                 }
+
+                // Clamp pour éviter les débordements extrêmes
+                currentScroll = Math.max(0, Math.min(maxScroll, currentScroll));
 
                 this.target.scrollLeft = currentScroll;
 
@@ -266,18 +319,19 @@ const CreativeCanvas = ({ images }) => {
               transition={{ type: "spring", stiffness: 180, damping: 18, mass: 0.9 }}
             >
               <div className="flex gap-3 py-8" style={{ minWidth: 'max-content' }}>
-                {images && images.map((image, index) => {
+                {infiniteImages.map((image, index) => {
                   const url = image.fields.IMAGE[0].url;
-                  const thumbnailUrl = image.fields.IMAGE[0].thumbnails?.large?.url || 
+                  const thumbnailUrl = image.fields.IMAGE[0].thumbnails?.large?.url ||
                                       image.fields.IMAGE[0].thumbnails?.small?.url;
                   const isLoadedImg = loadedImages[url];
-                  
+                  const originalIndex = index % (images?.length || 1);
+
                   return (
                     <motion.div
-                      key={image.id}
+                      key={image.uniqueKey}
                       className="relative flex-shrink-0 group"
                       style={{
-                        y: Math.max(-32, Math.min(32, randomPositions[index] * (1 - scrollProgress)))
+                        y: Math.max(-32, Math.min(32, randomPositions[originalIndex] * (1 - scrollProgress)))
                       }}
                       transition={{
                         type: "spring",
@@ -316,16 +370,10 @@ const CreativeCanvas = ({ images }) => {
                             src={url}
                             alt={image.fields.Name}
                             fill
-                            className={`transition-all duration-300 ${
-                              hoveredIndex === index
-                                ? 'filter-none'
-                                : 'filter grayscale'
-                            }`} 
+                            className="transition-opacity duration-300"
                             style={{
                               objectFit: 'contain',
-                              filter: hoveredIndex === index
-                                ? 'none'
-                                : 'grayscale(100%)'
+                              opacity: hoveredIndex === index ? 1 : 0.4
                             }}
                             priority={index < 5}
                           />
@@ -339,7 +387,12 @@ const CreativeCanvas = ({ images }) => {
                             }} />
                           )
                         )}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                        <div
+                          className="absolute inset-0 bg-black/60 transition-opacity duration-300 flex items-end p-4"
+                          style={{
+                            opacity: hoveredIndex === index ? 0.2 : 1
+                          }}
+                        >
                         </div>
                       </div>
                     </motion.div>

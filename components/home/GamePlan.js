@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { SeeMore } from '../SeeMoreResp';
 import GifDemo from "../../public/images/demo_gif.gif"
 import AppearText from '../AppearText.js';
+import { useLoading } from '../../lib/LoadingManager';
 // todo: checl labelPosition, et régler les espaces verticales sur le texte
 const Etiquette = ({ text }) => {
   const duration = Math.max(8, text.length * 0.15);
@@ -31,12 +32,19 @@ const Etiquette = ({ text }) => {
 };
 
 export default function BrandingSection({ gamePlan }) {
+  const { setRefsReady } = useLoading();
   const titleRefs = useRef([]);
   const labelPositions = useRef({});
   const labelRatios = useRef({});
   const [positionsVersion, setPositionsVersion] = useState(0);
   const [showGif, setShowGif] = useState(null);
   const [preloadedGifs, setPreloadedGifs] = useState(new Set());
+
+  // Signaler immédiatement que le composant est prêt
+  // Les calculs de position se feront progressivement
+  useEffect(() => {
+    setRefsReady();
+  }, [setRefsReady]);
 
   // Précharger tous les GIFs au montage
   useEffect(() => {
@@ -142,20 +150,20 @@ export default function BrandingSection({ gamePlan }) {
   useLayoutEffect(() => {
     const recalc = () => {
       if (!titleRefs.current || titleRefs.current.length === 0) return;
-      
+
       // Réinitialiser les positions
       labelPositions.current = {};
-      
+
       // Force reflow pour Safari (améliore la précision)
       titleRefs.current.forEach((ref) => {
         if (ref) void ref.offsetHeight;
       });
-      
+
       // Recalculer toutes les positions
       titleRefs.current.forEach((_, idx) => {
         calculateLabelPosition(idx);
       });
-      
+
       // Forcer le re-render
       setPositionsVersion((v) => v + 1);
     };
@@ -174,9 +182,9 @@ export default function BrandingSection({ gamePlan }) {
         requestAnimationFrame(recalc);
       }, 150);
     };
-    
+
     window.addEventListener('resize', onResize, { passive: true });
-    
+
     return () => {
       if (raf1) cancelAnimationFrame(raf1);
       if (raf2) cancelAnimationFrame(raf2);

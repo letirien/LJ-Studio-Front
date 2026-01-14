@@ -210,24 +210,24 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         >
           <div className="flex gap-9 mx-auto justify-center items-center mb-6">
             <AppearText type="words" duration={1.4} once={true}
-                  className={`${home.catHighlight} block md:hidden !opacity-55  text-[3wv] sm:text-[1.5vw]`}
+                  className={`${home.catHighlight} !robotoRegular block md:hidden !opacity-55  text-[3wv] sm:text-[1.5vw]`}
             >
               French
             </AppearText>
             <p className="instrumentSerifRegular text-[8vw]/[0.8] tracking-tight sm:opacity-90 sm:text-[4vw]/[0.8]">Creative Studio</p>
             <AppearText type="words" once={true} duration={1.4}
-                  className={`${home.catHighlight} block md:hidden !opacity-55  text-[3wv] sm:text-[1.5vw]`}
+                  className={`${home.catHighlight} !robotoRegular block md:hidden  !opacity-55  text-[3wv] sm:text-[1.5vw]`}
             >
               Accent
             </AppearText>
           </div>
           <div>
-            <h2 className="text-[14vw]/[0.85] sm:text-[8vw]/[0.85]">
+            <h2 className="text-center text-[14vw]/[0.85] sm:text-[8vw]/[0.85]">
               <div className="flex gap-9 justify-center items-center">
                 {/* GARDEZ motion.p pour catHighlight */}
                 {/* todo: gérer le delay d'animation (plus long) courbe linéraire et très douce à la fin */}
                  <AppearText type="lines" once={true} duration={1.4}
-                  className={`${home.catHighlight} hidden md:block !opacity-55 text-[1.5vw]`}
+                  className={`${home.catHighlight} !robotoRegular hidden  md:block !opacity-55 text-[1.5vw]`}
                 >
                   French
                 </AppearText>
@@ -243,7 +243,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 
                 {/* GARDEZ motion.p pour catHighlight */}
                 <AppearText type="lines" once={true} duration={1.4}
-                  className={`${home.catHighlight} hidden md:block !opacity-55 text-[1.5vw]`}
+                  className={`${home.catHighlight} !robotoRegular hidden md:block !opacity-55 text-[1.5vw]`}
                 >
                   Accent
                 </AppearText>
@@ -294,9 +294,9 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-16 md:mt-32`}
             >
               <motion.p style={{lineHeight: pLineHeight}} className="uppercase mb-12 robotoRegular tracking-[0.7px] text-white">LJ Studio was born from a passion for sport and image, two languages that speak through emotion.</motion.p>
-              <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoReg text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
-              <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoReg text-[20px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
-              <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoReg text-[20px]">We believe every sport has its own language - we design the way it's told.</motion.p>
+              <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoRegular text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
+              <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoRegular text-[20px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
+              <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoRegular text-[20px]">We believe every sport has its own language - we design the way it's told.</motion.p>
               {/* {[
                 {
                   className: 'uppercase mb-12 robotoRegular tracking-[0.7px] text-white',
@@ -530,7 +530,7 @@ export async function getServerSideProps() {
         gamePlan: (gamePlanData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
         logoClients: (logoClientsData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
         sliderImages: (sliderImagesData?.records || []).sort((a, b) => (a.fields?.id) - (b.fields?.id )),
-        headerImages: headerImages?.records || []
+        headerImages: (headerImages?.records || []).sort((a, b) => (a.fields?.id) - (b.fields?.id ))
       },
     };
   } catch (error) {

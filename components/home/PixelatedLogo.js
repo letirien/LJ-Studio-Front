@@ -2,91 +2,151 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-export default function PixelatedLogo({ isComplete, disappearDelay = 2450 }) {
-  const [appearProgress, setAppearProgress] = useState(0);
-  const [disappearProgress, setDisappearProgress] = useState(0);
-  const appearAnimationRef = useRef(null);
-  const disappearAnimationRef = useRef(null);
+export default function PixelatedLogo({ isComplete }) {
+  const svgRef = useRef(null);
+  const rectsRef = useRef([]);
+  const animationStartedRef = useRef(false);
+  const isCompleteRef = useRef(isComplete); // Ref pour tracker isComplete
 
-  const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const [svgData, setSvgData] = useState(null);
+  const [ready, setReady] = useState(false);
 
-  // Phase 1: Apparition au montage
+  // Mettre à jour la ref quand isComplete change
   useEffect(() => {
-    const appearDuration = 600;
-    const startTime = Date.now();
+    isCompleteRef.current = isComplete;
+  }, [isComplete]);
 
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / appearDuration, 1);
-      setAppearProgress(easeInOutCubic(progress));
-
-      if (progress < 1) {
-        appearAnimationRef.current = requestAnimationFrame(animate);
-      }
-    };
-
-    appearAnimationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (appearAnimationRef.current) {
-        cancelAnimationFrame(appearAnimationRef.current);
-      }
-    };
+  useEffect(() => {
+    fetch('/pixelatedLogoData.txt')
+      .then(res => res.text())
+      .then(text => {
+        const lines = text.split('\n').map(l => l.trim());
+        const viewBoxLine = lines.find(l => l.startsWith('viewBox='));
+        const rectStart = lines.findIndex(l => l.startsWith('<rect'));
+        setSvgData({
+          viewBox: viewBoxLine ? viewBoxLine.replace(/viewBox=|"/g, '') : '0 0 100 100',
+          rects: rectStart >= 0 ? lines.slice(rectStart).join('\n') : '',
+        });
+      });
   }, []);
 
-  // Phase 2: Disparition après isComplete
   useEffect(() => {
-    if (!isComplete) return;
+    if (!svgRef.current || !svgData) return;
+    const rects = svgRef.current.querySelectorAll('rect');
+    rectsRef.current = Array.from(rects);
 
-    const disappearDuration = 600;
-    const delayTimer = setTimeout(() => {
-      const startTime = Date.now();
+    rectsRef.current.forEach(rect => {
+      rect.style.opacity = '0';
+      rect.style.transform = 'scale(0.3)';
+      rect.style.transformOrigin = 'center center';
+      rect.style.fill = '#000';
+    });
 
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / disappearDuration, 1);
-        setDisappearProgress(easeInOutCubic(progress));
+    setReady(true);
+  }, [svgData]);
 
-        if (progress < 1) {
-          disappearAnimationRef.current = requestAnimationFrame(animate);
+  useEffect(() => {
+    if (!ready || animationStartedRef.current) return;
+    animationStartedRef.current = true;
+
+    const dots = rectsRef.current.map(rect => ({
+      rect,
+      brightness: 0,
+      randomDelay: Math.random() * 30 - 15,
+      randomDelayOff: Math.random() * 30 - 15,
+      x: parseFloat(rect.getAttribute('x') || 0),
+    }));
+
+    dots.sort((a, b) => a.x - b.x);
+
+    let animationProgress = 0;
+    let fadeProgress = 0;
+    const speed = 0.8;
+    let phase = 'appearing';
+    let rafId;
+
+    function animate() {
+      const total = dots.length;
+
+      // Apparition
+      if (phase === 'appearing') {
+        animationProgress += speed;
+        dots.forEach((dot, i) => {
+          const point = (i / total) * 100 + dot.randomDelay;
+          if (animationProgress >= point) {
+            dot.brightness = Math.min(1, (animationProgress - point) / 3);
+          }
+        });
+
+        // Une fois tous les pixels apparus → phase idle
+        if (dots.every(d => d.brightness >= 0.999)) {
+          dots.forEach(dot => (dot.brightness = 1));
+          phase = 'idle';
         }
-      };
-
-      disappearAnimationRef.current = requestAnimationFrame(animate);
-    }, disappearDelay);
-
-    return () => {
-      clearTimeout(delayTimer);
-      if (disappearAnimationRef.current) {
-        cancelAnimationFrame(disappearAnimationRef.current);
       }
-    };
-  }, [isComplete, disappearDelay]);
 
-  const finalOpacity = (1 - disappearProgress) * appearProgress;
+      // Phase idle : attendre isComplete via la ref
+      else if (phase === 'idle') {
+        if (isCompleteRef.current) {  // Utiliser la ref au lieu de la variable
+          phase = 'fading';
+          fadeProgress = 0;
+        }
+      }
+
+      // Disparition
+      else if (phase === 'fading') {
+        fadeProgress += speed;
+        dots.forEach((dot, i) => {
+          const point = (i / total) * 100 + dot.randomDelayOff;
+          dot.brightness = fadeProgress <= point ? 1 : Math.max(0, 1 - (fadeProgress - point) / 3);
+        });
+
+        if (dots.every(d => d.brightness <= 0.001)) {
+          cancelAnimationFrame(rafId);
+          return;
+        }
+      }
+
+      dots.forEach(dot => {
+        const b = dot.brightness;
+        dot.rect.style.opacity = b.toString();
+        dot.rect.style.transform = `scale(${0.3 + 0.7 * b})`;
+      });
+
+      rafId = requestAnimationFrame(animate);
+    }
+
+    rafId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(rafId);
+  }, [ready]); // isComplete retiré des dépendances car on utilise la ref
+
+  if (!svgData) {
+    return (
+      <svg
+        className="w-[160px] sm:w-[240px] h-auto"
+        viewBox="0 0 100 100"
+        xmlns="http://www.w3.org/2000/svg"
+        shapeRendering="crispEdges"
+      >
+        <rect width="100%" height="100%" fill="transparent" />
+      </svg>
+    );
+  }
 
   return (
-    <div
-      className="flex items-center space-x-2 relative w-[200px] sm:w-[300px] h-[40px] sm:h-[60px] overflow-hidden"
-      style={{
-        opacity: finalOpacity,
-      }}
+    <svg
+      ref={svgRef}
+      viewBox={svgData.viewBox}
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-[98px] sm:w-[240px] h-auto"
+      shapeRendering="crispEdges"
     >
-      <svg
-        viewBox="0 0 689.83765 89.09131"
-        className="w-full h-full"
-        style={{
-          clipPath: `inset(0 ${(1 - appearProgress) * 100}% 0 ${disappearProgress * 100}%)`,
-        }}
-      >
-        <g fill="black">
-          <polygon points="375.49048 .00757 279.49731 .00757 255.33569 19.91821 255.34448 32.85107 278.88379 53.2583 366.87598 53.2583 366.87598 69.68018 256.49829 69.68018 256.49829 89.08838 366.56909 89.08838 390.20654 69.68286 390.20654 53.2583 365.95557 32.85107 279.19067 32.85107 279.19067 19.91064 375.49048 19.91064 375.49048 19.91553 427.55469 19.91553 427.55469 89.08838 452.07568 89.08838 452.07568 19.91553 506.27734 19.91553 506.27734 .00757 382.20483 .00757 375.49048 .00757"/>
-          <path d="M639.06226.0105h-123.96802v89.08081h123.96802l24.88232-19.40845-.15991-49.76465L639.06226.0105ZM639.37183,69.68286h-99.12573V19.91821h99.12573v49.76465Z"/>
-          <rect x="670.4292" y="69.67993" width="19.40845" height="19.40845"/>
-          <polygon points="19.66699 0 0 0 0 69.18579 19.84973 89.05493 101.63208 89.05493 101.63208 68.47412 19.66699 68.47412 19.66699 0"/>
-          <polygon points="209.05078 .00757 127.05737 .00757 127.05737 19.66504 209.05078 19.66504 209.05078 69.43115 127.05737 69.43115 127.05737 53.62988 107.39038 53.62988 107.39038 69.67139 127.39429 88.96338 208.83984 89.08838 228.71777 69.19067 228.71777 .00488 209.05078 .00488 209.05078 .00757"/>
-        </g>
-      </svg>
-    </div>
+      {svgData.rects ? (
+        <g dangerouslySetInnerHTML={{ __html: svgData.rects }} />
+      ) : (
+        <rect width="100%" height="100%" fill="transparent" />
+      )}
+    </svg>
   );
 }

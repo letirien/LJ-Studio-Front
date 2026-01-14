@@ -11,6 +11,8 @@ export default function ProjectSection({ projects, home }) {
   const sliderNavRef = useRef(null);
   const slideMainContainer = useRef(null);
   const titleRef = useRef(null);
+  const titleLine1Ref = useRef(null);
+  const titleLine2Ref = useRef(null);
   const colorBlockRef = useRef(null);
   const orangeBgRef = useRef(null);
 
@@ -50,7 +52,7 @@ export default function ProjectSection({ projects, home }) {
   // todo: animation interlignagne un peu avant quand on rentre dans la section
   useEffect(() => {
     if (!isReady || !ScrollTrigger || !lenis) return;
-    if (!sectionRef.current || !titleRef.current || !colorBlockRef.current || !slideMainContainer.current || !orangeBgRef.current)
+    if (!sectionRef.current || !titleLine1Ref.current || !titleLine2Ref.current || !colorBlockRef.current || !slideMainContainer.current || !orangeBgRef.current)
       return;
 
     const updateLenis = (opts) => {
@@ -69,64 +71,91 @@ export default function ProjectSection({ projects, home }) {
         trigger: scrollWrapperRef.current, // wrapper long
         start: 'top top',
         end: 'bottom bottom',
-        scrub: true,
+        scrub: 0, // Pas de smoothing pour éviter les sauts de transition
         pin: sectionRef.current, // section fixe
-        pinSpacing: true,
+        pinSpacing: false, // Désactive le spacing pour éviter les sauts
         anticipatePin: 1,
         markers: false,
+        invalidateOnRefresh: true, // Force le recalcul des valeurs
       },
     });
 
-    // TITRE : disparaît progressivement (0 → 15%)
     tl.to(
       titleRef.current, 
       { 
-        opacity: 0, 
-        y: -80, 
-        scale: 0.85, 
-        // ease: 'power2.inOut',
+        // opacity: 0, 
+        y: -80,         // ease: 'power2.inOut'
         duration: 0.4
       }, 
       0
     );
 
-    // FOND ORANGE : réduction fluide de 100vh à 50vh (10% → 35%)
+    // TITRE LIGNE 1 : chaque mot disparaît vers le bas avec décalage
+    if (titleLine1Ref.current) {
+      const words1 = gsap.utils.toArray(titleLine1Ref.current.children);
+      words1.forEach((word, i) => {
+        tl.to(
+          word,
+          {
+            y: '120%',
+            // opacity: 0,
+            ease: 'power2.in',
+            duration: 0.4
+          },
+          i * 0.02 // Décalage de 0.02s entre chaque mot
+        );
+      });
+    }
+
+    // TITRE LIGNE 2 : disparaît vers le bas légèrement après la ligne 1
+    if (titleLine2Ref.current) {
+      tl.to(
+        titleLine2Ref.current,
+        {
+          y: '120%',
+          // opacity: 0,
+          ease: 'power2.in',
+          duration: 0.4
+        },
+        0 // Démarre 0.08s après le début (après quelques mots de la ligne 1)
+      );
+    }
+
+    // FOND ORANGE : réduction fluide de 100vh à 50vh (0 → 40%)
     tl.to(
       orangeBgRef.current,
       {
         height: '50vh',
-        // ease: "power2.out",
-        // duration: 0.6
+        ease: "linear",
         duration: 1
       },
       0
     );
 
-    // BLOC DE COULEUR : apparition douce (30% → 40%)
+    // BLOC DE COULEUR : apparition douce (30% → 50%)
     tl.fromTo(
-      colorBlockRef.current, 
-      { y: "-100%", opacity: 1 }, 
-      {  
+      colorBlockRef.current,
+      { y: "-100%", opacity: 1 },
+      {
         y: "0%",
         opacity: 1,
-        ease: 'easeOut',
+        ease: 'linear',
         duration: 0.45
-      }, 
+      },
       0.35
     );
 
-    // SLIDER : animation fluide du bas vers le centre (20% → 100%)
+    // SLIDER : animation fluide du bas vers le centre (15% → 100%)
     tl.fromTo(
       slideMainContainer.current,
-      { 
+      {
         y: '100vh',
-        opacity: 0 
+        opacity: 0
       },
-      { 
-        y: isMobile ? '15vh' : '0vh',
-        opacity: 1, 
-        ease: 'none',
-        // duration: 0.6
+      {
+        y: '0vh',
+        opacity: 1,
+        ease: 'linear',
         duration: 1
       },
       0
@@ -218,12 +247,21 @@ export default function ProjectSection({ projects, home }) {
         <div className="relative w-full mx-auto px-[3vw] z-[2]">
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <h2 ref={titleRef} className="bigH2 text-center">
-              <p className="flex justify-center gap-2 md:gap-12">
-                <span className={`${home.catHighlight} !text-black text-[3vw] sm:text-[1.5vw]`}>Pitch</span>
-                highlights of
-                <span className={`${home.catHighlight} !text-black text-[3vw] sm:text-[1.5vw]`}>Vison</span>
-              </p>
-              <p>our recent games</p>
+              <div className="overflow-hidden">
+                <div ref={titleLine1Ref} className="flex justify-center gap-2 md:gap-12">
+                  <div className="overflow-hidden inline-block">
+                    <span className={`${home.catHighlight} !text-black text-[3vw] sm:text-[1.5vw] block`}>Pitch</span>
+                  </div>
+                  <span>highlights</span>
+                  <span>from</span>
+                  <div className="overflow-hidden inline-block">
+                    <span className={`${home.catHighlight} !text-black text-[3vw] sm:text-[1.5vw] block`}>Vison</span>
+                  </div>
+                </div>
+              </div>
+              <div className="overflow-hidden">
+                <p ref={titleLine2Ref}>our recent games</p>
+              </div>
             </h2>
           </div>
 

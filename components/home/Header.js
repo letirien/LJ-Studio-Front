@@ -56,12 +56,12 @@ export function Header({headerImages}) {
                             expose={(api) => { webglApiRef.current = api}}
                             onLoadProgress={setWebGLProgress}
                         />
-
+{/* h-[60px] sm:h-[90px] md:h-[180px] */}
                     {/* Logo animé au centre du header - lettre par lettre */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="absolute inset-0 mb-[60px] sm:mb-[90px] md:mb-[180px] flex items-center justify-center pointer-events-none">
                         <svg
                             viewBox="0 0 689.83765 89.09131"
-                            className="w-[300px] sm:w-[500px] md:w-[600px] h-auto"
+                            className="w-[300px] sm:w-[400px] md:w-[400px] h-auto"
                             style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }}
                         >
                             {/* L */}
