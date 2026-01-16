@@ -14,14 +14,37 @@ export default function AnimationPage({ onAnimationComplete }) {
   const [animationStarted, setAnimationStarted] = useState(false);
   const [loaderVisible, setLoaderVisible] = useState(true);
   const [loaderTextVisible, setLoaderTextVisible] = useState(false);
+  const [fontsReady, setFontsReady] = useState(false);
 
-  // Apparition des textes du loader au début
+  // Attendre que les fonts soient chargées avant d'afficher le texte
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const checkFonts = async () => {
+      try {
+        // Attendre que les fonts soient chargées
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+        setFontsReady(true);
+      } catch (e) {
+        // Fallback si l'API fonts n'est pas supportée
+        setFontsReady(true);
+      }
+    };
+
+    checkFonts();
+  }, []);
+
+  // Apparition des textes du loader une fois les fonts prêtes
+  useEffect(() => {
+    if (!fontsReady) return;
+
     const timer = setTimeout(() => {
       setLoaderTextVisible(true);
     }, 100);
     return () => clearTimeout(timer);
-  }, []);
+  }, [fontsReady]);
 
   // Apparition progressive du texte au fur et à mesure du chargement
   useEffect(() => {

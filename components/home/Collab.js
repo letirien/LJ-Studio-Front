@@ -1,52 +1,59 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLoading } from '../../lib/LoadingManager';
 
 const Collab = ({logos}) => {
   const containerRef = useRef(null);
+  const { onLoadingComplete } = useLoading();
+  const animationsRef = useRef([]);
+  const scrollTriggersRef = useRef([]);
+
   // Diviser les logos en deux rangées
   const topRowLogos = logos.slice(0, (logos.length / 2));
   const bottomRowLogos = logos.slice((logos.length /2), logos.length);
-  bottomRowLogos.forEach((logo)=>{
-    console.log(logo)
-  })
 
   useEffect(() => {
+    let gsap, ScrollTrigger;
+
     const initMarquees = async () => {
       // Dynamically import GSAP to avoid SSR issues
       const gsapModule = await import('gsap');
-      const gsap = gsapModule.gsap;
-      
+      gsap = gsapModule.gsap;
+
       // Import ScrollTrigger dynamically
       const scrollTriggerModule = await import('gsap/dist/ScrollTrigger');
-      const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
-      
+      ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+
       // Register the plugin
       gsap.registerPlugin(ScrollTrigger);
-      
+
+      // Refresh ScrollTrigger pour recalculer les positions
+      ScrollTrigger.refresh();
+
       // Initialize each marquee
       document.querySelectorAll('[data-marquee-scroll-direction]').forEach((marquee) => {
         // Query marquee elements
         const marqueeScroll = marquee.querySelector('[data-marquee-scroll]');
         const marqueeCollections = marquee.querySelectorAll('[data-marquee-collection]');
-        
+
         if (!marqueeScroll || !marqueeCollections.length) return;
-        
+
         // Get data attributes
         const speed = parseFloat(marquee.dataset.marqueeSpeed) || 20;
         const direction = marquee.dataset.marqueeDirection === 'right' ? 1 : -1; // 1 for right, -1 for left
         const scrollSpeed = parseFloat(marquee.dataset.marqueeScrollSpeed) || 10;
-        
+
         // Calculate appropriate speed based on content width and viewport
         const speedMultiplier = window.innerWidth < 479 ? 0.25 : window.innerWidth < 991 ? 0.5 : 1;
         const collectionWidth = marqueeCollections[0].offsetWidth;
         const viewportWidth = window.innerWidth;
         const marqueeSpeed = speed * (collectionWidth / viewportWidth) * speedMultiplier;
-        
+
         // Set width and margin for the scroll container to create parallax effect
         marqueeScroll.style.marginLeft = `${scrollSpeed * -1}%`;
         marqueeScroll.style.width = `${(scrollSpeed * 2) + 100}%`;
-        
+
         // Ensure enough logos to cover the screen by duplicating collections if needed
         if (marqueeCollections.length < 3) {
           const fragment = document.createDocumentFragment();
@@ -55,10 +62,10 @@ const Collab = ({logos}) => {
           }
           marqueeScroll.appendChild(fragment);
         }
-        
+
         // Get all collections after potentially adding clones
         const allCollections = marquee.querySelectorAll('[data-marquee-collection]');
-        
+
         // Create the main animation for infinite scrolling
         const animation = gsap.to(allCollections, {
           xPercent: -100, // Move completely out of view
@@ -66,30 +73,33 @@ const Collab = ({logos}) => {
           duration: marqueeSpeed,
           ease: 'none'
         }).totalProgress(0.5);
-        
+
+        animationsRef.current.push(animation);
+
         // Initialize marquee in the correct direction
         gsap.set(allCollections, { xPercent: direction === 1 ? 0 : -100 });
         animation.timeScale(direction);
-        
+
         // Set initial status
         marquee.setAttribute('data-marquee-status', 'normal');
-        
-        // ScrollTrigger for direction inversion - exactly as in the original code
-        ScrollTrigger.create({
+
+        // ScrollTrigger for direction inversion
+        const st1 = ScrollTrigger.create({
           trigger: marquee,
           start: 'top bottom',
           end: 'bottom top',
           onUpdate: (self) => {
             const isInverted = self.direction === 1; // Scrolling down
             const currentDirection = isInverted ? -direction : direction;
-            
+
             // Update animation direction and marquee status
             animation.timeScale(currentDirection);
             marquee.setAttribute('data-marquee-status', isInverted ? 'inverted' : 'normal');
           }
         });
-        
-        // Extra parallax effect on scroll - exactly as in the original code
+        scrollTriggersRef.current.push(st1);
+
+        // Extra parallax effect on scroll
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: marquee,
@@ -98,25 +108,37 @@ const Collab = ({logos}) => {
             scrub: 0
           }
         });
-        
+        scrollTriggersRef.current.push(tl.scrollTrigger);
+
         const scrollStart = direction === -1 ? scrollSpeed : -scrollSpeed;
         const scrollEnd = -scrollStart;
-        
-        tl.fromTo(marqueeScroll, 
-          { x: `${scrollStart}vw` }, 
+
+        tl.fromTo(marqueeScroll,
+          { x: `${scrollStart}vw` },
           { x: `${scrollEnd}vw`, ease: 'none' }
         );
       });
     };
-    
-    // Initialize when DOM is ready
-    if (document.readyState === 'complete') {
-      initMarquees();
-    } else {
-      window.addEventListener('load', initMarquees);
-      return () => window.removeEventListener('load', initMarquees);
-    }
-  }, []);
+
+    // Attendre que le loader soit terminé avant d'initialiser
+    const cleanup = onLoadingComplete(() => {
+      // Double RAF pour s'assurer que le layout est stable
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          initMarquees();
+        });
+      });
+    });
+
+    return () => {
+      cleanup();
+      // Cleanup animations
+      animationsRef.current.forEach(anim => anim?.kill?.());
+      scrollTriggersRef.current.forEach(st => st?.kill?.());
+      animationsRef.current = [];
+      scrollTriggersRef.current = [];
+    };
+  }, [onLoadingComplete]);
 
   return (
     <div className="section-collab mt-24 pb-32 relative z-3 bg-black" ref={containerRef}>

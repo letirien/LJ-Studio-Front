@@ -8,10 +8,10 @@ import { SeeMore } from '../SeeMoreResp';
 import GifDemo from "../../public/images/demo_gif.gif"
 import AppearText from '../AppearText.js';
 import { useLoading } from '../../lib/LoadingManager';
-// todo: checl labelPosition, et régler les espaces verticales sur le texte
+
 const Etiquette = ({ text }) => {
   const duration = Math.max(8, text.length * 0.15);
-  
+
   return (
     <div className="relative w-[130px] h-[20px] overflow-hidden bg-[#fa6218] roboto text-black text-xs flex items-center">
       <motion.div
@@ -32,34 +32,48 @@ const Etiquette = ({ text }) => {
 };
 
 export default function BrandingSection({ gamePlan }) {
-  const { setRefsReady } = useLoading();
+  const { setRefsReady, onLoadingComplete, isComplete } = useLoading();
   const titleRefs = useRef([]);
   const labelPositions = useRef({});
   const labelRatios = useRef({});
   const [positionsVersion, setPositionsVersion] = useState(0);
+  const [positionsReady, setPositionsReady] = useState(false);
   const [showGif, setShowGif] = useState(null);
   const [preloadedGifs, setPreloadedGifs] = useState(new Set());
-
-  // Signaler immédiatement que le composant est prêt
-  // Les calculs de position se feront progressivement
-  useEffect(() => {
-    setRefsReady();
-  }, [setRefsReady]);
 
   // Précharger tous les GIFs au montage
   useEffect(() => {
     if (!gamePlan) return;
+
+    let loadedCount = 0;
+    const totalGifs = gamePlan.filter(item => item.fields.GIF && item.fields.GIF[0]?.url).length;
 
     gamePlan.forEach((item) => {
       if (item.fields.GIF && item.fields.GIF[0]?.url) {
         const img = new window.Image();
         img.src = item.fields.GIF[0].url;
         img.onload = () => {
+          loadedCount++;
           setPreloadedGifs((prev) => new Set([...prev, item.fields.GIF[0].url]));
+          // Signaler que les refs sont prêts quand tous les GIFs sont préchargés
+          if (loadedCount >= totalGifs) {
+            setRefsReady();
+          }
+        };
+        img.onerror = () => {
+          loadedCount++;
+          if (loadedCount >= totalGifs) {
+            setRefsReady();
+          }
         };
       }
     });
-  }, [gamePlan]);
+
+    // Si pas de GIFs, signaler immédiatement
+    if (totalGifs === 0) {
+      setRefsReady();
+    }
+  }, [gamePlan, setRefsReady]);
 
   const calculateLabelPosition = (index) => {
     const titleRef = titleRefs.current[index];
@@ -146,8 +160,8 @@ export default function BrandingSection({ gamePlan }) {
     return finalPosition;
   };
 
-  // Recalcul optimisé pour tous les navigateurs
-  useLayoutEffect(() => {
+  // Recalcul des positions après que le loader soit terminé
+  useEffect(() => {
     const recalc = () => {
       if (!titleRefs.current || titleRefs.current.length === 0) return;
 
@@ -164,14 +178,19 @@ export default function BrandingSection({ gamePlan }) {
         calculateLabelPosition(idx);
       });
 
-      // Forcer le re-render
+      // Forcer le re-render et marquer comme prêt
       setPositionsVersion((v) => v + 1);
+      setPositionsReady(true);
     };
 
-    // Double RAF pour meilleure stabilité sur Safari
-    let raf1, raf2;
-    raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(recalc);
+    // Attendre que le loader soit terminé avant de calculer les positions
+    const cleanup = onLoadingComplete(() => {
+      // Triple RAF pour s'assurer que le layout est stable après l'animation du loader
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(recalc);
+        });
+      });
     });
 
     // Gestion du resize avec debounce
@@ -179,6 +198,7 @@ export default function BrandingSection({ gamePlan }) {
     const onResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
+        labelPositions.current = {};
         requestAnimationFrame(recalc);
       }, 150);
     };
@@ -186,12 +206,11 @@ export default function BrandingSection({ gamePlan }) {
     window.addEventListener('resize', onResize, { passive: true });
 
     return () => {
-      if (raf1) cancelAnimationFrame(raf1);
-      if (raf2) cancelAnimationFrame(raf2);
+      cleanup();
       clearTimeout(resizeTimeout);
       window.removeEventListener('resize', onResize);
     };
-  }, [gamePlan]);
+  }, [gamePlan, onLoadingComplete]);
 
   const setGif = (index) => {
     setShowGif(index);
@@ -280,12 +299,13 @@ export default function BrandingSection({ gamePlan }) {
                 >
                   {item.fields["TITRE METIER"]}
                   <div
-                    className="absolute"
+                    className="absolute transition-opacity duration-300"
                     style={{
                       top: item.fields["TITRE METIER"].length > 13 ? '80%' : '50%',
                       left: `${labelLeft}px`,
                       rotate: '-12deg',
                       willChange: 'transform',
+                      opacity: positionsReady ? 1 : 0,
                     }}
                   >
                     <Etiquette text={item.fields["SOUS METIERS"]}/>
@@ -316,7 +336,7 @@ export default function BrandingSection({ gamePlan }) {
                 height={item.fields.Image[0].height || gamePlan[0].fields.Image[0].height}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 unoptimized={true}
-                priority={index === 0}
+                // priority={index === 0}
               />
               {/* <SeeMore/> */}
             </div>

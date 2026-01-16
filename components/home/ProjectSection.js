@@ -71,9 +71,9 @@ export default function ProjectSection({ projects, home }) {
         trigger: scrollWrapperRef.current, // wrapper long
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0, // Pas de smoothing pour éviter les sauts de transition
+        scrub: true, // Pas de smoothing pour éviter les sauts de transition
         pin: sectionRef.current, // section fixe
-        pinSpacing: false, // Désactive le spacing pour éviter les sauts
+        pinSpacing: true, // Désactive le spacing pour éviter les sauts
         anticipatePin: 1,
         markers: false,
         invalidateOnRefresh: true, // Force le recalcul des valeurs
@@ -153,7 +153,7 @@ export default function ProjectSection({ projects, home }) {
         opacity: 0
       },
       {
-        y: '0vh',
+        y: isMobile ? '15vh' : '0vh',
         opacity: 1,
         ease: 'linear',
         duration: 1
