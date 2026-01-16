@@ -76,6 +76,96 @@ const EmailLink = () => {
   );
 };
 
+// Animation hover back to top avec GSAP (même style que AppearText)
+const BackToTopLink = ({ onClick }) => {
+  const containerRef = useRef(null);
+  const wordsRef = useRef([[], []]); // [0] = original, [1] = duplicate
+  const tlRef = useRef(null);
+
+  const animateText = async (wordSet, from, to) => {
+    if (!containerRef.current) return;
+    tlRef.current?.kill();
+
+    let gsapLib;
+    try {
+      gsapLib = await import('gsap');
+      const CustomEase = (await import('gsap/CustomEase')).CustomEase;
+      gsapLib.gsap.registerPlugin(CustomEase);
+      try { CustomEase.create('main', '0.65, 0.01, 0.05, 0.99'); } catch (e) {}
+    } catch (err) {
+      return;
+    }
+    const gsap = gsapLib.gsap;
+    const allWords = (wordsRef.current[wordSet] || []).filter(Boolean);
+    if (!allWords.length) return;
+
+    gsap.set(allWords, { yPercent: from });
+    tlRef.current = gsap.to(allWords, {
+      yPercent: to,
+      duration: 0.6,
+      stagger: 0.02,
+      ease: 'main'
+    });
+  };
+
+  const handleMouseEnter = () => {
+    Promise.all([
+      animateText(0, 0, -140),
+      animateText(1, 140, 0)
+    ]);
+  };
+
+  const handleMouseLeave = () => {
+    Promise.all([
+      animateText(1, 0, 140),
+      animateText(0, -140, 0)
+    ]);
+  };
+
+  const ArrowUp = () => (
+  <svg width="6" height="15" viewBox="0 0 6 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2.91412 5.44573e-07L0.000212246 4.98422L5.77363 5.01563L2.91412 5.44573e-07ZM2.83252 15L3.33251 15.0027L3.38963 4.50265L2.88964 4.49993L2.38965 4.49721L2.33253 14.9973L2.83252 15Z" fill="black"/>
+  </svg>
+
+  );
+
+  const renderWords = (setIndex) => (
+    <span className='flex items-center'>
+      <span className='overflow-hidden inline-block'>
+        <span ref={el => wordsRef.current[setIndex][0] = el} className='inline-block'>Back</span>
+      </span>
+      <span className='overflow-hidden inline-block ml-1'>
+        <span ref={el => wordsRef.current[setIndex][1] = el} className='inline-block'>to</span>
+      </span>
+      <span className='overflow-hidden inline-block ml-1'>
+        <span ref={el => wordsRef.current[setIndex][2] = el} className='inline-block'>the</span>
+      </span>
+      <span className='overflow-hidden inline-block ml-1'>
+        <span ref={el => wordsRef.current[setIndex][3] = el} className='inline-block'>top</span>
+      </span>
+      <span className='overflow-hidden ml-2 inline-block'>
+        <span ref={el => wordsRef.current[setIndex][4] = el} className='inline-block'><ArrowUp /></span>
+      </span>
+    </span>
+  );
+
+  return (
+    <a
+      ref={containerRef}
+      onClick={onClick}
+      className='robotoBold text-[7pt] sm:text-[14pt] no-underline relative cursor-pointer bg-transparent border-none inline-block'
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {renderWords(0)}
+      <span className='absolute top-0 left-0' aria-hidden='true'>
+        {renderWords(1)}
+      </span>
+      <div className='absolute -bottom-2 w-full h-[1px] bg-black'></div>
+    </a>
+  );
+};
+
 const Footer = () => {
   const scrollToTop = () => {
     // Utiliser Lenis pour le smooth scroll
@@ -226,15 +316,8 @@ const Footer = () => {
       <div className="bg-[#fa6218] text-black flex justify-between items-center px-[4vw] py-8 text-xs">
         <a className='roboto text-[7pt] sm:text-[12pt] uppercase'>privacy policy</a>
         <span className='roboto text-[7pt] sm:text-[12pt]'>© {new Date().getFullYear()} | LJ Studio · All rights reserved</span>
-        <a 
-          onClick={scrollToTop} 
-          className="robotoBold text-[7pt] sm:text-[14pt] no-underline relative cursor-pointer bg-transparent border-none"
-        >
-        <AppearText type="words" hover={true}>
-          Back to the top ↑
-        </AppearText>
-          <div className='absolute -bottom-2 w-full h-[1px] bg-black'></div>
-        </a>
+        <BackToTopLink onClick={scrollToTop} />
+
       </div>
     </footer>
   );
