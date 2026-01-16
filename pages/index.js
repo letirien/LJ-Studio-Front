@@ -453,10 +453,9 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         </motion.section>
         <motion.section className="relative bg-white py-42 intersectLogo white px-[4vw] bg-black">
           <div className="absolute right-[10%] top-[-90px] z-[3]">
-            <RoundedIcon icon="yeux" size={180} rotationFactor={0.45} />
+            <RoundedIcon icon="yeux" size={160} rotationFactor={0.45} />
           </div>
-          <ImagesTrails/>
-          <div ref={galerySection}>
+          <div ref={galerySection} className="relative">
             <motion.h2 style={{lineHeight}} className="hidden sm:block text-center gallery text-[9vw]/[0.8] sm:text-[8vw]/[0.8] mx-xl text-black">
               <p className="flex items-center gap-3 justify-center">BEYOND <span className="instrumentSerifRegular text-[4vw] capitalize">The</span> SURFACE...</p>
               <p>STEP INSIDE OUR</p>
@@ -472,6 +471,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               <p>AND EXPLORE</p>
               <p className=""><span className="instrumentSerifRegular text-[8vw] capitalize">Archives</span></p>
             </motion.h2>
+            <ImagesTrails images={sliderImages}/>
            </div>
         </motion.section>
         <StudioBanner/>

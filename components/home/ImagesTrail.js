@@ -2,8 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import Image from "next/image";
 
-export const ImagesTrails = ({ speed = 1 }) => {
+export const ImagesTrails = ({ speed = 1, images}) => {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -19,18 +20,20 @@ export const ImagesTrails = ({ speed = 1 }) => {
         gsap.registerPlugin(ScrollTriggerLocal);
       } catch {}
     
+    const wrapper = wrapperRef.current;
+    if (!wrapper || window.innerWidth < 992) {
+      return;
+    }
+
     // config + defaults
+    const trailImagesCount = wrapper.querySelectorAll('[data-trail="item"]').length;
     const options = {
       minWidth: 992,
       moveDistance: 2,
       stopDuration: 450,
-      trailLength: 15,
+      // trailLength doit être >= nombre d'images pour éviter le fade prématuré
+      trailLength: Math.max(15, trailImagesCount + 5),
     };
-    
-    const wrapper = wrapperRef.current;
-    if (!wrapper || window.innerWidth < options.minWidth) {
-      return;
-    }
 
     // State management
     const state = {
@@ -90,12 +93,12 @@ export const ImagesTrails = ({ speed = 1 }) => {
 
     function fadeOutTrailImage(trailImage) {
       if (!trailImage) return;
-      // Animation de chute douce façon feuille qui tombe
+      // Animation de chute physique réaliste
       const rect = trailImage.getBoundingClientRect();
       const currentTop = parseFloat(trailImage.style.top) || rect.top;
       const currentLeft = parseFloat(trailImage.style.left) || rect.left;
       // Décalage vertical et léger mouvement latéral + rotation
-      const fallDistance = 120 + Math.random() * 40; // px
+      const fallDistance = 160 + Math.random() * 40; // px
       const sideSwing = (Math.random() - 0.5) * 40; // px
       const rotate = (Math.random() - 0.5) * 30; // deg
       gsap.to(trailImage, {
@@ -105,7 +108,8 @@ export const ImagesTrails = ({ speed = 1 }) => {
         left: currentLeft + sideSwing,
         rotate: rotate,
         duration: 0.4,
-        ease: "power1.in",
+        // Courbe de chute physique : accélération progressive (gravité)
+        ease: "power3.in",
         onComplete: () => {
           gsap.set(trailImage, { autoAlpha: 0, rotate: 0 });
         },
@@ -116,7 +120,20 @@ export const ImagesTrails = ({ speed = 1 }) => {
       if (!state.isActive) return;
 
       const rectWrapper = wrapper.getBoundingClientRect();
+
+      // Utiliser les coordonnées relatives pour vérifier si on est dans la zone
       const { x: relativeX, y: relativeY } = getRelativeCoordinates(e, rectWrapper);
+
+      // Vérifier que la souris est dans les limites du wrapper (avec une petite marge)
+      const margin = 10;
+      const isInside = (
+        relativeX >= -margin &&
+        relativeX <= rectWrapper.width + margin &&
+        relativeY >= -margin &&
+        relativeY <= rectWrapper.height + margin
+      );
+
+      if (!isInside) return;
 
       const distanceFromLast = MathUtils.distance(
         relativeX,
@@ -198,8 +215,7 @@ export const ImagesTrails = ({ speed = 1 }) => {
 
     };
 
-    let inited = false;
-    init().then(() => { inited = true; });
+    init();
 
     return () => {
       stopTrail();
@@ -211,7 +227,17 @@ export const ImagesTrails = ({ speed = 1 }) => {
     <div data-trail="wrapper" className="trail-section" ref={wrapperRef}>
       <div className="trail-wrap">
         <div className="trail-list">
-          <div data-trail="item" className="trail-item">
+          {images && images.map((item, index) => (
+            <div key={index} data-trail="item" className="trail-item">
+              <img
+                src={item.fields.IMAGE[0].url}
+                alt={item.fields.IMAGE[0].alt || `Image d'archive ${index + 1}`}
+                // fill={true}
+                className="trail-item__img"
+              />
+            </div>
+          ))}
+          {/* <div data-trail="item" className="trail-item">
             <img
               src="https://cdn.prod.website-files.com/679b7e7de9b9ad0339d5524e/679b8e9f69cd4f5ebc0676bf_cursor-trail-1.avif"
               alt=""
@@ -280,7 +306,7 @@ export const ImagesTrails = ({ speed = 1 }) => {
               alt=""
               className="trail-item__img"
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <style jsx>{`
@@ -288,11 +314,12 @@ export const ImagesTrails = ({ speed = 1 }) => {
           justify-content: center;
           align-items: center;
           width: 100%;
-          height: 100vh;
+          height: 100%;
           display: flex;
           position: absolute;
           z-index: 1;
-          left: 0
+          left: 0;
+          top: 0;
         }
 
         .trail-heading {
