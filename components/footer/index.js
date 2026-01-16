@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import React, { useRef } from 'react';
-import { useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import AppearText from '../AppearText';
 
 // Animation hover email avec GSAP (même style que AppearText)
@@ -167,10 +167,55 @@ const BackToTopLink = ({ onClick }) => {
 };
 
 const Footer = () => {
+  const footerRef = useRef(null);
+  const bottomBarY = useMotionValue(-100);
+  const bottomBarYSpring = useSpring(bottomBarY, { stiffness: 100, damping: 20 });
+
+  useEffect(() => {
+    const updateBottomBarPosition = () => {
+      if (!footerRef.current) return;
+
+      const footerHeight = footerRef.current.offsetHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+      const scrollY = window.scrollY || window.pageYOffset;
+
+      // Le point où le footer commence à être révélé
+      // = quand le bas du viewport atteint le début de la zone "réservée" au footer
+      const footerRevealStart = documentHeight - viewportHeight - footerHeight;
+      const footerRevealEnd = documentHeight - viewportHeight;
+
+      // Calculer la progression (0 = début du reveal, 1 = footer entièrement visible)
+      const progress = Math.min(1, Math.max(0, (scrollY - footerRevealStart) / (footerRevealEnd - footerRevealStart)));
+
+      // La barre orange commence à -100px et descend à 0
+      const yValue = -100 + (progress * 100);
+      bottomBarY.set(yValue);
+    };
+
+    // Écouter le scroll via Lenis si disponible, sinon scroll natif
+    if (window.lenis) {
+      window.lenis.on('scroll', updateBottomBarPosition);
+    } else {
+      window.addEventListener('scroll', updateBottomBarPosition, { passive: true });
+    }
+
+    // Initial update
+    updateBottomBarPosition();
+
+    return () => {
+      if (window.lenis) {
+        window.lenis.off('scroll', updateBottomBarPosition);
+      } else {
+        window.removeEventListener('scroll', updateBottomBarPosition);
+      }
+    };
+  }, [bottomBarY]);
+
   const scrollToTop = () => {
     // Utiliser Lenis pour le smooth scroll
     if (window.lenis) {
-      window.lenis.scrollTo(0, { 
+      window.lenis.scrollTo(0, {
         duration: 2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) // Même easing que dans _app.js
       });
@@ -181,7 +226,7 @@ const Footer = () => {
   };
 
   return (
-    <footer id="footer" className="bg-black text-white text-sm font-mono relative sm:fixed sm:bottom-0 sm:w-full sm:z-[-5000]">
+    <footer ref={footerRef} id="footer" className="bg-black text-white text-sm font-mono relative sm:fixed sm:bottom-0 sm:w-full sm:z-[-5000]">
       <Image
         src="/images/ICONE_LJ-STUDIO_BLACK_OUTLINE.svg"
         alt="LJ Studio Logo"
@@ -304,7 +349,7 @@ const Footer = () => {
             <div className=" md:block absolute bottom-0 right-0 bottom-0 h-[1px] w-[100%] lg:w-[98.5%] bg-white"></div>
         </div>
       </div>
-      <div className="w-full overflow-hidden bg-black">
+      <div className="w-full overflow-hidden bg-black relative z-10">
         <img
           src="/images/LJSTD_WORDMARK.svg"
           alt="LJ Studio Logo"
@@ -313,12 +358,15 @@ const Footer = () => {
       </div>
 
       {/* Bottom section */}
-      <div className="bg-[#fa6218] text-black flex justify-between items-center px-[4vw] py-8 text-xs">
+      <motion.div
+        className="relative z-0 bg-[#fa6218] text-black flex justify-between items-center px-[4vw] py-8 text-xs"
+        style={{ y: bottomBarYSpring}}
+      >
         <a className='roboto text-[7pt] sm:text-[12pt] uppercase'>privacy policy</a>
         <span className='roboto text-[7pt] sm:text-[12pt]'>© {new Date().getFullYear()} | LJ Studio · All rights reserved</span>
         <BackToTopLink onClick={scrollToTop} />
 
-      </div>
+      </motion.div>
     </footer>
   );
 };

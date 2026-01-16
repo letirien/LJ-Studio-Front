@@ -6,10 +6,6 @@ import {
   motion,
   useScroll,
   useTransform,
-  useMotionValue,
-  useAnimation,
-  useSpring,
-  delay,
 } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { useInView } from "framer-motion";
@@ -34,27 +30,26 @@ import { useLoading } from '../lib/LoadingManager';
 
 export default function Home({ projects, gamePlan, logoClients, sliderImages, headerImages }) {
   const { scrollYProgress } = useScroll();
-  const { scrollYPProgress } = useScroll();
   const { setDataLoaded, setEffectsReady, setPageImagesProgress } = useLoading();
   const [buttonTopPosition, setButtonTopPosition] = useState('50%');
 
   console.log(sliderImages)
-  const x = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  // Map scroll progress to a parallax range
-  const mappedParallax = useTransform(scrollYProgress, [0, 1], [-1500, 500]);
-  // We'll clamp the parallax so it appears from top and stops at finalStop (0)
-  const FINAL_STOP = 0;
-  const MIN_STOP = -1500;
-  // MotionValue used directly in the style (y)
-  const parallaxSection = useMotionValue(Math.max(Math.min(mappedParallax.get(), FINAL_STOP), MIN_STOP));
 
-  useEffect(() => {
-    return mappedParallax.on("change", (v) => {
-      // Clamp between MIN_STOP and FINAL_STOP so it never goes past the final position
-      const clamped = Math.max(Math.min(v, FINAL_STOP), MIN_STOP);
-      parallaxSection.set(clamped);
-    });
-  }, [mappedParallax, parallaxSection]);
+  // Ref pour la section FC Nantes
+  const fcNantesRef = useRef(null);
+
+  // Parallax basé sur la position de FC Nantes dans le viewport
+  // offset: ["start end", "start start"] =
+  //   - progress 0 quand le haut de FC Nantes atteint le bas du viewport
+  //   - progress 1 quand le haut de FC Nantes atteint le haut du viewport
+  const { scrollYProgress: fcNantesProgress } = useScroll({
+    target: fcNantesRef,
+    offset: ["start end", "start start"]
+  });
+
+  // FC Nantes commence à -300px (cachée sous GamePlan) et descend à 0 (position normale)
+  // L'effet s'arrête à 0, elle ne descend pas plus
+  const fcNantesY = useTransform(fcNantesProgress, [0, 1], [-300, 0]);
 
   const sectionImageRef = useRef(null);
   const galerySection = useRef(null);
@@ -409,7 +404,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         */}
         <AnimatedField/>
         <BrandingSection gamePlan={gamePlan} />
-        <motion.section className="w-full h-full bg-black" style={{ y: parallaxSection }}>
+        <motion.section ref={fcNantesRef} className="w-full h-full bg-black" style={{ y: fcNantesY }}>
           <div className="w-full h-[100vh] relative">
             <div className="absolute -bottom-1 left-0 right-0 h-[60vh] z-3" style={{
               background: 'linear-gradient(to top, #000000ff 12vh, transparent 100%)'
