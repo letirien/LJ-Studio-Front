@@ -61,6 +61,7 @@ export const ImagesTrails = ({ speed = 1, images}) => {
     function activate(trailImage, x, y) {
       if (!trailImage) return;
 
+      trailImage.dataset.falling = "false";
       const rect = trailImage.getBoundingClientRect();
       
       // Ajouter un décalage aléatoire pour espacer les images
@@ -92,26 +93,27 @@ export const ImagesTrails = ({ speed = 1, images}) => {
     }
 
     function fadeOutTrailImage(trailImage) {
-      if (!trailImage) return;
-      // Animation de chute physique réaliste
-      const rect = trailImage.getBoundingClientRect();
-      const currentTop = parseFloat(trailImage.style.top) || rect.top;
-      const currentLeft = parseFloat(trailImage.style.left) || rect.left;
+      if (!trailImage || trailImage.dataset.falling === "true") return;
+      trailImage.dataset.falling = "true";
+
       // Décalage vertical et léger mouvement latéral + rotation
-      const fallDistance = 160 + Math.random() * 40; // px
+      const fallDistance = 400 + Math.random() * 40; // px
       const sideSwing = (Math.random() - 0.5) * 40; // px
       const rotate = (Math.random() - 0.5) * 30; // deg
+
+      // Utiliser x/y (transforms) au lieu de top/left pour éviter le tremblement
       gsap.to(trailImage, {
         opacity: 0,
         scale: 0.8,
-        top: currentTop + fallDistance,
-        left: currentLeft + sideSwing,
+        y: fallDistance,
+        x: sideSwing,
         rotate: rotate,
-        duration: 0.4,
-        // Courbe de chute physique : accélération progressive (gravité)
+        duration: 0.7,
         ease: "power3.in",
+        overwrite: true,
         onComplete: () => {
-          gsap.set(trailImage, { autoAlpha: 0, rotate: 0 });
+          gsap.set(trailImage, { autoAlpha: 0, rotate: 0, x: 0, y: 0 });
+          trailImage.dataset.falling = "false";
         },
       });
     }

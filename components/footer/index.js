@@ -169,7 +169,7 @@ const BackToTopLink = ({ onClick }) => {
 const Footer = () => {
   const footerRef = useRef(null);
   const bottomBarY = useMotionValue(-100);
-  const bottomBarYSpring = useSpring(bottomBarY, { stiffness: 100, damping: 20 });
+  const bottomBarYSpring = useSpring(bottomBarY, { stiffness: 180, damping: 40 });
 
   useEffect(() => {
     const updateBottomBarPosition = () => {
@@ -359,8 +359,8 @@ const Footer = () => {
 
       {/* Bottom section */}
       <motion.div
-        className="relative z-0 bg-[#fa6218] text-black flex justify-between items-center px-[4vw] py-8 text-xs"
-        style={{ y: bottomBarYSpring}}
+        className="relative z-0 bg-[#fa6218] text-black flex justify-between items-center px-[4vw] py-8 text-xs duration-100"
+
       >
         <a className='roboto text-[7pt] sm:text-[12pt] uppercase'>privacy policy</a>
         <span className='roboto text-[7pt] sm:text-[12pt]'>© {new Date().getFullYear()} | LJ Studio · All rights reserved</span>

@@ -284,11 +284,9 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 </div>
               </HighlightText>
             </h2>
-            <div 
+            <div
               ref={aboutUsRef}
-              className={`${home.defaultText} text-center w-[50vw] ml-auto mr-auto mt-16 md:mt-32`}
-              style={{ minHeight: '400px' }} // ou une valeur calculée
-
+              className={`${home.defaultText} text-center w-[90vw] sm:w-[70vw] lg:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible h-[600px] sm:h-[400px]` }
             >
               <motion.p style={{lineHeight: pLineHeight}} className="uppercase mb-12 robotoRegular tracking-[0.7px] text-white">LJ Studio was born from a passion for sport and image, two languages that speak through emotion.</motion.p>
               <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoRegular text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>

@@ -20,20 +20,43 @@ export default function AnimationPage({ onAnimationComplete }) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const checkFonts = async () => {
-      try {
-        // Attendre que les fonts soient chargées
-        if (document.fonts && document.fonts.ready) {
-          await document.fonts.ready;
-        }
-        setFontsReady(true);
-      } catch (e) {
-        // Fallback si l'API fonts n'est pas supportée
+    let mounted = true;
+    let fallbackTimeout;
+
+    const markFontsReady = () => {
+      if (mounted && !fontsReady) {
         setFontsReady(true);
       }
     };
 
+    const checkFonts = async () => {
+      try {
+        // Attendre que les fonts soient chargées
+        if (document.fonts && document.fonts.ready) {
+          // Race entre fonts.ready et un timeout de 500ms
+          await Promise.race([
+            document.fonts.ready,
+            new Promise(resolve => setTimeout(resolve, 500))
+          ]);
+          // Petit délai supplémentaire pour iOS
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        markFontsReady();
+      } catch (e) {
+        // Fallback si l'API fonts n'est pas supportée
+        markFontsReady();
+      }
+    };
+
+    // Fallback timeout absolu au cas où tout échoue
+    fallbackTimeout = setTimeout(markFontsReady, 800);
+
     checkFonts();
+
+    return () => {
+      mounted = false;
+      clearTimeout(fallbackTimeout);
+    };
   }, []);
 
   // Apparition des textes du loader une fois les fonts prêtes
@@ -280,7 +303,7 @@ export default function AnimationPage({ onAnimationComplete }) {
           </h1>
 
           {/* Loader et texte en bas */}
-          <div className={`absolute top-[20%] left-0 right-0 transition-all duration-500 `}>
+          <div className={`absolute top-[4vw] md:top-[10vw] left-0 right-0 transition-all duration-500 `}>
             <div className="flex items-center justify-center space-x-8 text-sm text-black">
               {/* CREATIVE STUDIO avec overflow-hidden */}
               <div className="">
