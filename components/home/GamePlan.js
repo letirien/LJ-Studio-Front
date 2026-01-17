@@ -248,7 +248,7 @@ export default function BrandingSection({ gamePlan }) {
   };
   
   return (
-    <section ref={containerRef} className="">
+    <section id="services" ref={containerRef} className="">
       {gamePlan && gamePlan.map((item, index) => {
         // labelPosition peut être un nombre (px) ou une string en pourcentage (ex: '50%')
         let labelLeft;

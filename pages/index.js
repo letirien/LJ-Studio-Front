@@ -197,6 +197,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         <section
           className={`${home.black} bg-black pt-12 sm:pt-32`}
           data-scroll
+          id="about"
           // style={{
           //   opacity: isInView ? 1 : 0,
           //   pointerEvents: isInView ? 'auto' : 'none',
@@ -465,7 +466,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           </div>
           <Collab logos={logoClients} />
         </motion.section>
-        <motion.section className="relative bg-white py-42 intersectLogo white px-[4vw] bg-black">
+        <motion.section id="archive" className="relative bg-white py-42 intersectLogo white px-[4vw] bg-black">
           <div className="absolute right-[10%] top-[-90px] z-[3]">
             <RoundedIcon icon="yeux" size={160} rotationFactor={0.45} />
           </div>

@@ -171,6 +171,21 @@ const Footer = () => {
   const bottomBarY = useMotionValue(-100);
   const bottomBarYSpring = useSpring(bottomBarY, { stiffness: 180, damping: 40 });
 
+  const scrollToSection = (e, sectionId) => {
+    e.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (!element) return;
+
+    if (window.lenis) {
+      window.lenis.scrollTo(element, {
+        duration: 1.5,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+      });
+    } else {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useEffect(() => {
     const updateBottomBarPosition = () => {
       if (!footerRef.current) return;
@@ -226,7 +241,7 @@ const Footer = () => {
   };
 
   return (
-    <footer ref={footerRef} id="footer" className="bg-black text-white text-sm font-mono relative sm:fixed sm:bottom-0 sm:w-full sm:z-[-5000]">
+    <footer ref={footerRef} className="bg-black text-white text-sm font-mono relative sm:fixed sm:bottom-0 sm:w-full sm:z-[-5000]">
       <Image
         src="/images/ICONE_LJ-STUDIO_BLACK_OUTLINE.svg"
         alt="LJ Studio Logo"
@@ -269,23 +284,23 @@ const Footer = () => {
                     {/* Menu */}
                     <div className='flex justify-between sm:flex-1 flex-wrap sm:flex-nowrap'>  
                         <div className="flex flex-col gap-1 robotoRegular text-[12pt] sm:text-[18px]">
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="#home" onClick={(e) => scrollToSection(e, 'home')} className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                     Home
                                 </AppearText>
                             </a>
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="#work" onClick={(e) => scrollToSection(e, 'work')} className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                     Work
                                 </AppearText>
                             </a>
-                            
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+
+                            <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                   Service
                                 </AppearText>
                             </a>
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                   Contact
                                 </AppearText>
@@ -295,23 +310,23 @@ const Footer = () => {
                       {/* Socials */}
                       <div className="hidden sm:block flex flex-col justify-between gap-4">
                         <div className="flex flex-row sm:flex-col items-end gap-1 robotoRegular text-[18px]">
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="https://www.instagram.com/lj_stration/?hl=en" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                     Instagram
                                 </AppearText>
                             </a>
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="https://x.com/LjStration" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                     Twitter / X
                                 </AppearText>
                             </a>
                             
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="https://www.linkedin.com/company/lj-stration/" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                   LinkedIn
                                 </AppearText>
                             </a>
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="https://www.behance.net/ljstration" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                   Behance
                                 </AppearText>
@@ -321,23 +336,23 @@ const Footer = () => {
                     </div>
                       <div className="sm:hidden gap-4 w-full">
                         <div className="flex flex-row sm:flex-col items-end robotoRegular text-[clamp(9pt,2vw,12pt)] justify-between">
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="https://www.instagram.com/lj_stration/?hl=en" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                     Instagram
                                 </AppearText>
                             </a>
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="https://x.com/LjStration" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                     Twitter / X
                                 </AppearText>
                             </a>
-                            
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+
+                            <a href="https://www.linkedin.com/company/lj-stration/" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                   LinkedIn
                                 </AppearText>
                             </a>
-                            <a href="#" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="https://www.behance.net/ljstration" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                   Behance
                                 </AppearText>

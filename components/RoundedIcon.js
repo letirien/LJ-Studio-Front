@@ -108,8 +108,16 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
             </div>
             }
             {menu &&
-                <Image src={iconCross} alt={`icone-${icon}`} fill={true} style={{ objectFit: "contain" }} />
-
+                <div style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: "70%",
+                    height: "70%"
+                }}>
+                    <Image src={iconCross} alt="close" fill={true} style={{ objectFit: "contain" }} />
+                </div>
             }
 
             {/* Texte circulaire tournant */}

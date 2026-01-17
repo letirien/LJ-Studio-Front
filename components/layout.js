@@ -41,7 +41,9 @@ export default function Layout({ children, home }) {
         {/* Contenu principal, toujours visible */}
         <main className="relative z-0" style={{ paddingBottom: `${footerHeight}px` }}>
           {children}
-          <Footer />
+          <section id="contact">
+            <Footer />
+          </section>
         </main>
 
         {/* Animation d'introduction par-dessus */}

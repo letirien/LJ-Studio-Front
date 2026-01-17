@@ -6,6 +6,7 @@ import XIcon from "../../public/images/logosRs/X.svg";
 import InstagramIcon from "../../public/images/logosRs/INSTA.svg";
 import BehanceIcon from "../../public/images/logosRs/BEHANCE.svg";
 import RoundedIcon from "../RoundedIcon";
+import Image from "next/image";
 
 export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
@@ -125,6 +126,22 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
     }
   };
 
+  const scrollToSection = (e, sectionId) => {
+    e.preventDefault();
+    handleToggle()
+    const element = document.getElementById(sectionId);
+    if (!element) return;
+
+    if (window.lenis) {
+      window.lenis.scrollTo(element, {
+        duration: 1.5,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+      });
+    } else {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Fermeture avec ESC
   useEffect(() => {
     const handleEscape = (e) => {
@@ -168,8 +185,8 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
                 <a
                   ref={(el) => (menuLinksRef.current[i] = el)}
                   href={`#${label.toLowerCase()}`}
-                  className="hardbopBlack block relative w-min text-[21vw] sm:text-[8vw] hover:text-white"
-                  onClick={handleToggle}
+                  onClick={(e) => scrollToSection(e, label.toLowerCase())}
+                  className="hardbopBlack block relative w-min text-[21vw] sm:text-[6vw] hover:text-white"
                   onMouseEnter={() => handleLinkHover(i, true)}
                   onMouseLeave={() => handleLinkHover(i, false)}
                 >
@@ -200,17 +217,17 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           </div>
 
           {/* SOCIAL ICONS */}
-          <ul id="socials" className="text-black flex flex-col items-end mr-[3vw] md:mt-[15vh]">
-            {[LinkedInIcon, XIcon, InstagramIcon, BehanceIcon].map((Icon, i) => (
+          <ul id="socials" className="text-black flex flex-col justify-center items-end mr-[3vw] md:mb-auto">
+            {[[LinkedInIcon, 'https://www.linkedin.com/company/lj-stration/'], [XIcon, 'https://x.com/LjStration'], [InstagramIcon, 'https://www.behance.net/ljstration']].map(([IconComponent, url], i) => (
               <li key={i} className="!mb-2">
                 <a
                   ref={(el) => (socialsRef.current[i] = el)}
-                  href="https://www.instagram.com/jean_luc_studio/"
+                  href={url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white hardbop-bold text-[17pt]"
                 >
-                  <Icon width={24} height={24} className="inline-block mb-1" />
+                  <IconComponent width={24} height={24} className="inline-block mb-1" />
                 </a>
               </li>
             ))}
@@ -220,6 +237,9 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
             >
               creative studio - french accent
             </p>
+            <div className="mb-1 -rotate-90 origin-bottom-right mt-[100%] mr-[4px] hidden 2xl:inline-block">
+              <Image src={"/images/LJSTD_WORDMARK.svg"} alt="logo" width={100} height={24}/>
+            </div>
           </ul>
         </div>
 
@@ -230,9 +250,14 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           </button>
         </div>
         {/* todo: add woodmark ljstd */}
-        <p className="text-center w-full uppercase roboto text-[10pt] text-black/55 2xl:hidden">
-          creative studio - french accent
-        </p>
+        <div className="w-full flex justify-center gap-6 2xl:hidden">
+          <p className="uppercase roboto text-[10pt] text-black/55">
+            creative studio - french accent
+          </p>
+          <div className="2xl:hidden">
+            <Image src={"/images/LJSTD_WORDMARK.svg"} alt="logo" width={100} height={24}/>
+          </div>
+        </div>
       </div>
     </>
   );
