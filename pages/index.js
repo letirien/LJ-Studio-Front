@@ -28,7 +28,7 @@ import { useLoading } from '../lib/LoadingManager';
 
 
 
-export default function Home({ projects, gamePlan, logoClients, sliderImages, headerImages }) {
+export default function Home({ projects, gamePlan, logoClients, sliderImages, headerImages, headerClients }) {
   const { scrollYProgress } = useScroll();
   const { setDataLoaded, setEffectsReady, setPageImagesProgress } = useLoading();
   const [buttonTopPosition, setButtonTopPosition] = useState('50%');
@@ -407,13 +407,34 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             <div className="absolute -bottom-1 left-0 right-0 h-[60vh] z-3" style={{
               background: 'linear-gradient(to top, #000000ff 12vh, transparent 100%)'
             }}></div>
-            <Image src="/images/lj-fcnante.png" fill={true}
-              quality={100}
-              style={{
-                objectFit: 'cover',
-                objectPosition:'top'
-              }}>
-            </Image>
+            {/* Image de fond (n0) */}
+            {headerClients[0]?.fields?.Image?.[0]?.url && (
+              <Image
+                src={headerClients[0].fields.Image[0].url}
+                fill={true}
+                quality={100}
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: 'top left'
+                }}
+                alt="Client highlight background"
+              />
+            )}
+            {/* Image déco superposée (n1) - mêmes propriétés pour garder l'alignement */}
+            {headerClients[1]?.fields?.Image?.[0]?.url && (
+              <Image
+                src={headerClients[1].fields.Image[0].url}
+                fill={true}
+                quality={100}
+                className="z-2"
+                style={{
+                  objectFit: 'cover',
+                  objectPosition: 'top left'
+                }}
+                alt="Client highlight decoration"
+              />
+            )}
+
           </div>
           <div className="flex flex-wrap w-full items-center gap-8 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[40vh]">
             <div className="md:w-1/3 mx-auto md:mx-0">
@@ -475,48 +496,34 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
 
 export async function getServerSideProps() {
   const API_KEY = process.env.AIRTABLE_API_KEY || "patf38NGwq1uuDExU.2a7d95a5d70fecef0fa606e5d327341ab1627e4c7129dcc3ffbcf844d0e3421c";
-  
-  // Base principale (limitée)
-  const PRIMARY_BASE = "appdnb8sgJdfIdsYT";
-  // Base de backup
-  const BACKUP_BASE = "appbZ4NcZBsBi6rXy";
-  
+  const BASE_ID = "appdnb8sgJdfIdsYT";
+
   const fetchConfig = {
     headers: {
       Authorization: `Bearer ${API_KEY}`
     }
   };
 
-  // Fonction pour essayer la base principale, puis la backup
-  async function fetchWithFallback(tableName) {
+  async function fetchTable(tableName) {
     try {
-      const data = await fetcher(
-        `https://api.airtable.com/v0/${PRIMARY_BASE}/${tableName}`,
+      return await fetcher(
+        `https://api.airtable.com/v0/${BASE_ID}/${tableName}`,
         fetchConfig
       );
-      return data;
     } catch (error) {
-      console.log(`Primary base failed for ${tableName}, trying backup...`);
-      try {
-        const data = await fetcher(
-          `https://api.airtable.com/v0/${BACKUP_BASE}/${tableName}`,
-          fetchConfig
-        );
-        return data;
-      } catch (backupError) {
-        console.log(`Both bases failed for ${tableName}:`, backupError);
-        return { records: [] };
-      }
+      console.log(`Failed to fetch ${tableName}:`, error);
+      return { records: [] };
     }
   }
 
   try {
-    const [projectsData, gamePlanData, logoClientsData, sliderImagesData, headerImages] = await Promise.all([
-      fetchWithFallback('Projects'),
-      fetchWithFallback('METIERS'),
-      fetchWithFallback('Logo%20clients'),
-      fetchWithFallback('SLIDER%20IMAGES'),
-      fetchWithFallback('HEADER%20IMGS')
+    const [projectsData, gamePlanData, logoClientsData, sliderImagesData, headerImages, headerClientsData] = await Promise.all([
+      fetchTable('Projects'),
+      fetchTable('METIERS'),
+      fetchTable('Logo%20clients'),
+      fetchTable('SLIDER%20IMAGES'),
+      fetchTable('HEADER%20IMGS'),
+      fetchTable('HEADER%20clients')
     ]);
 
     return {
@@ -524,20 +531,22 @@ export async function getServerSideProps() {
         projects: projectsData?.records || [],
         gamePlan: (gamePlanData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
         logoClients: (logoClientsData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
-        sliderImages: (sliderImagesData?.records || []).sort((a, b) => (a.fields?.id) - (b.fields?.id )),
-        headerImages: (headerImages?.records || []).sort((a, b) => (a.fields?.id) - (b.fields?.id ))
+        sliderImages: (sliderImagesData?.records || []).sort((a, b) => (a.fields?.id) - (b.fields?.id)),
+        headerImages: (headerImages?.records || []).sort((a, b) => (a.fields?.id) - (b.fields?.id)),
+        headerClients: (headerClientsData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0))
       },
     };
   } catch (error) {
     console.log('Error fetching Airtable data:', error);
-    
+
     return {
       props: {
         projects: [],
         gamePlan: [],
         logoClients: [],
         sliderImages: [],
-        headerImages: []
+        headerImages: [],
+        headerClients: []
       },
     };
   }
