@@ -73,49 +73,20 @@ export default function Navbar() {
         </div>
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="group cursor-pointer"
+          className="group cursor-pointer flex flex-col justify-center items-center gap-1.5 sm:gap-[8px] w-[32px] sm:w-[60px] bg-transparent border-none p-0"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={isMobille ? 48 : 74}
-            height="35"
-            viewBox="0 0 74 35"
-          >
-            {/* Top bar — courte */}
-            <path
-              fill={logoColor}
-              d="M10 5V1h24v4z"
-              className="
-                origin-left
-                transition-transform duration-300 ease-out
-                group-hover:scale-x-[1.55]
-              "
-            />
-
-            {/* Middle bar — largeur finale (48) */}
-            <path
-              fill={logoColor}
-              d="M9 19.7v-4.4h48v4.4z"
-              className="
-              origin-center
-              transition-transform
-              duration-300
-              ease-out
-              group-hover:scale-x-[0.85]
-              "
-            />
-
-            {/* Bottom bar — courte */}
-            <path
-              fill={logoColor}
-              d="M27 34.3v-4.4h32v4.4z"
-              className="
-                origin-right
-                transition-transform duration-300 ease-out
-                group-hover:scale-x-[1.3]
-              "
-            />
-          </svg>
+          {/* Top bar — courte, alignée à gauche */}
+          <div
+            className={`h-[3px]  transition-all duration-300 ease-out w-2/4 self-start group-hover:w-[70%] group-hover:self-center ${logoColor === 'white' ? 'bg-white' : 'bg-black'}`}
+          />
+          {/* Middle bar — longue */}
+          <div
+            className={`h-[3px] self-start transition-all duration-300 ease-out w-3/4 group-hover:w-[70%] group-hover:self-center ${logoColor === 'white' ? 'bg-white' : 'bg-black'}`}
+          />
+          {/* Bottom bar — courte, alignée à droite */}
+          <div
+            className={`h-[3px]  transition-all duration-300 ease-out w-2/4 self-end group-hover:w-[70%] group-hover:self-center ${logoColor === 'white' ? 'bg-white' : 'bg-black'}`}
+          />
         </button>
         <SideMenu isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(!isMenuOpen)} />
       </div>

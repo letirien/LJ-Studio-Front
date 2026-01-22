@@ -8,7 +8,7 @@ import AnimatedEyes from "./AnimatedEyes";
  * - Icône principale: "main" | "lj" | "yeux"
  * - Texte circulaire (constant) qui tourne selon la vitesse de scroll
  */
-export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 0.15, className = "", circularContinue = false, menu = false}) {
+export default function RoundedIcon({color= "", icon = "lj", size = 120, rotationFactor = 0.15, className = "", circularContinue = false, menu = false}) {
 
 
     function useIsMobile(maxWidth = 768) {
@@ -34,9 +34,14 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
             : "/images/roundedSVG/ICONE_LJ.svg";
 
     // FOND + CIRCULAR constants
+    const isBlack = color === "black";
     const backgroundSrc = "/images/roundedSVG/FOND_ORANGE.svg";
     const circularSrc = "/images/roundedSVG/CIRCULAR_TXT.svg";
-    const iconCross = "/images/roundedSVG/ICONE_CROSS.svg";
+    const iconCross = "/images/roundedSVG/ICONE_LJ_CROSS_FINAL.svg";
+
+    // Styles pour color="black"
+    const invertStyle = isBlack ? { filter: "invert(1)" } : {};
+    const blackBgStyle = isBlack ? { filter: "brightness(0)" } : {}; 
 
     useEffect(() => {
         if(circularContinue) return;
@@ -96,13 +101,13 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
             {!menu &&
             <div>
                 <div style={layerStyle}>
-                    <Image src={backgroundSrc} alt="fond" fill={true} style={{ objectFit: "contain" }} />
+                    <Image src={backgroundSrc} alt="fond" fill={true} style={{ objectFit: "contain", ...blackBgStyle }} />
                 </div>
                 <div style={layerStyle}>
                     {icon === "yeux" ? (
                         <AnimatedEyes />
                     ) : (
-                        <Image src={iconSrc} alt={`icone-${icon}`} fill={true} style={{ objectFit: "contain" }} />
+                        <Image src={iconSrc} alt={`icone-${icon}`} fill={true} style={{ objectFit: "contain", ...invertStyle }} />
                     )}
                 </div>
             </div>
@@ -113,16 +118,16 @@ export default function RoundedIcon({ icon = "lj", size = 120, rotationFactor = 
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
-                    width: "70%",
-                    height: "70%"
+                    width: "50%",
+                    height: "50%"
                 }}>
-                    <Image src={iconCross} alt="close" fill={true} style={{ objectFit: "contain" }} />
+                    <Image src={iconCross} alt="close" fill={true} style={{ objectFit: "contain", ...invertStyle }} />
                 </div>
             }
 
             {/* Texte circulaire tournant */}
             <div ref={circularRef} style={circularStyle}>
-                <Image src={circularSrc} alt="circular" fill={true} style={{ objectFit: "contain" }} />
+                <Image src={circularSrc} alt="circular" fill={true} style={{ objectFit: "contain", ...invertStyle }} />
             </div>
             <style jsx>{`
                 @keyframes spin {

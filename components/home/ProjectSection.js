@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import Projects from './ProjectSlider.js';
 import { useScrollTrigger } from '../../lib/useScrollTrigger.js';
 import Image from "next/image";
+import RoundedIcon from '../RoundedIcon.js';
 
 export default function ProjectSection({ projects, home }) {
   const sectionRef = useRef(null);
@@ -11,6 +12,7 @@ export default function ProjectSection({ projects, home }) {
   const sliderNavRef = useRef(null);
   const slideMainContainer = useRef(null);
   const titleRef = useRef(null);
+  const preTitleRef = useRef(null);
   const titleLine1Ref = useRef(null);
   const titleLine2Ref = useRef(null);
   const colorBlockRef = useRef(null);
@@ -89,6 +91,16 @@ export default function ProjectSection({ projects, home }) {
       }, 
       0
     );
+    tl.to(
+      preTitleRef.current, 
+      { 
+        opacity: 0, 
+        y: 120,         // ease: 'power2.inOut'
+        duration: 0.6,
+        delay: 0.2
+      }, 
+      0
+    );
 
     // TITRE LIGNE 1 : chaque mot disparaît vers le bas avec décalage
     if (titleLine1Ref.current) {
@@ -150,11 +162,11 @@ export default function ProjectSection({ projects, home }) {
       slideMainContainer.current,
       {
         y: '100vh',
-        opacity: 0
+        // opacity: 0
       },
       {
         y: isMobile ? '15vh' : '0vh',
-        opacity: 1,
+        // opacity: 1,
         ease: 'linear',
         duration: 1
       },
@@ -189,7 +201,7 @@ export default function ProjectSection({ projects, home }) {
         {/* BLOCS COULEUR */}
         <div
           ref={colorBlockRef}
-          className="absolute inset-x-0 top-0 h-1/2 pointer-events-none overflow-hidden z-[0]"
+          className="absolute inset-x-0 top-0 h-1/2 pointer-events-none overflow-hidden z-[2]"
           style={{ opacity: 0 }}
         >
           {colorBlocks.map((block, i) => (
@@ -245,31 +257,31 @@ export default function ProjectSection({ projects, home }) {
         `}</style>
 
         {/* CONTENU */}
-        <div className="relative w-full mx-auto px-[3vw] z-[2]">
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="relative w-full mx-auto px-[3vw]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <div className="mb-8 ">
+              <p ref={preTitleRef} className={`capitalize text-black instrumentSerifRegular text-[8vw]/[0.8] tracking-tight sm:opacity-90 sm:text-[4vw]/[0.8]`}>Pitch Vison</p>
+            </div>
             <h2 ref={titleRef} className="bigH2 text-center">
               <div className="overflow-hidden">
                 <div ref={titleLine1Ref} className="flex justify-center gap-2 md:gap-12">
-                  <div className="overflow-hidden inline-block">
-                    <span className={`${home.catHighlight} !text-black text-[3vw] sm:text-[1.5vw] block`}>Pitch</span>
-                  </div>
                   <span>highlights</span>
                   <span>from</span>
-                  <div className="overflow-hidden inline-block">
-                    <span className={`${home.catHighlight} !text-black text-[3vw] sm:text-[1.5vw] block`}>Vison</span>
-                  </div>
                 </div>
               </div>
               <div className="overflow-hidden">
                 <p ref={titleLine2Ref}>our recent games</p>
               </div>
             </h2>
+            <div className="mt-12">
+              <Image src={"/images/LJSTD_WORDMARK.svg"} alt="logo" width={200} height={24}/>
+            </div>
           </div>
 
           <div
             ref={slideMainContainer}
-            className="slider-container relative z-[2]"
-            style={{ transform: 'translateY(100vh)', opacity: 0 }}
+            className="slider-container relative !z-[4]"
+            style={{ transform: 'translateY(100vh)'}}
           >
             <Projects
               projects={projects}
@@ -277,6 +289,10 @@ export default function ProjectSection({ projects, home }) {
               onSlideChange={handleSlideChange} // 🔥 Restaure le changement de couleur
             />
           </div>
+          
+        </div>
+        <div className='absolute inset-0 flex items-center justify-center'>
+            <RoundedIcon size={120} color="black"/>
         </div>
       </section>
     </div>
