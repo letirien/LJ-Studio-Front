@@ -287,7 +287,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </h2>
             <div
               ref={aboutUsRef}
-              className={`${home.defaultText} text-center w-[90vw] sm:w-[70vw] lg:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible h-[600px] sm:h-[400px]` }
+              className={`${home.defaultText} text-center w-[90vw] sm:w-[70vw] xl:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible h-[600px] sm:h-[400px] shadow-[inset_0px_-50px_19px_-10px_#000000] sm:shadow-none` }
             >
               <motion.p style={{lineHeight: pLineHeight}} className="uppercase mb-12 robotoRegular tracking-[0.7px] text-white">LJ Studio was born from a passion for sport and image, two languages that speak through emotion.</motion.p>
               <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoRegular text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
@@ -438,7 +438,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
 
           </div>
           <div className="flex flex-wrap w-full items-center gap-8 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[40vh]">
-            <div className="md:w-1/3 mx-auto md:mx-0">
+            <div className="mx-auto">
               <h2 className={`flex flex-col items-center w-min collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
                 <p className="flex items-center gap-2"><span className="prefix text-[38px] sm:[54pt] capitalize">On</span>Every Pitch...</p>
                 <p className="flex">OUR CLIENT</p>
@@ -447,7 +447,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 </div>
               </h2>
             </div>
-            <div className="flex md:w-2/3 flex-wrap flex-col gap-6 xl:justify-between md:flex-row pr-[3vw] flex-1">
+            <div className="flex md:w-2/3 flex-wrap flex-col gap-6 justify-around md:flex-row xl:pr-[3vw] flex-1">
               <div className="md:w-max">
                 <h3 className="text-center">
                   <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">Small roster,</p>

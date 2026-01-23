@@ -77,15 +77,15 @@ export default function Navbar() {
         >
           {/* Top bar — courte, alignée à gauche */}
           <div
-            className={`h-[3px]  transition-all duration-300 ease-out w-2/4 self-start group-hover:w-[70%] group-hover:self-center ${logoColor === 'white' ? 'bg-white' : 'bg-black'}`}
+            className={`h-[3px]  transition-all duration-300 ease-out w-2/4 self-start group-hover:w-[70%] group-hover:translate-x-0 ${logoColor === 'white' ? 'bg-white' : 'bg-black'}`}
           />
           {/* Middle bar — longue */}
           <div
-            className={`h-[3px] self-start transition-all duration-300 ease-out w-3/4 group-hover:w-[70%] group-hover:self-center ${logoColor === 'white' ? 'bg-white' : 'bg-black'}`}
+            className={`h-[3px] self-start transition-all duration-300 ease-out w-3/4 group-hover:w-[70%] group-hover:translate-x-0 ${logoColor === 'white' ? 'bg-white' : 'bg-black'}`}
           />
           {/* Bottom bar — courte, alignée à droite */}
           <div
-            className={`h-[3px]  transition-all duration-300 ease-out w-2/4 self-end group-hover:w-[70%] group-hover:self-center ${logoColor === 'white' ? 'bg-white' : 'bg-black'}`}
+            className={`h-[3px] transition-all duration-300 ease-out w-2/4 self-start translate-x-full group-hover:w-[70%] group-hover:translate-x-0 ${logoColor === 'white' ? 'bg-white' : 'bg-black'}`}
           />
         </button>
         <SideMenu isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(!isMenuOpen)} />

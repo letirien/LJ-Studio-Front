@@ -17,6 +17,7 @@ export default function ProjectSection({ projects, home }) {
   const titleLine2Ref = useRef(null);
   const colorBlockRef = useRef(null);
   const orangeBgRef = useRef(null);
+  const roundedIconRef = useRef(null);
 
   const [colorBlocks, setColorBlocks] = useState([]);
   const lenis = useLenis();
@@ -95,12 +96,13 @@ export default function ProjectSection({ projects, home }) {
       preTitleRef.current, 
       { 
         opacity: 0, 
-        y: 120,         // ease: 'power2.inOut'
+        y: isMobile ? 60 : 120,         // ease: 'power2.inOut'
         duration: 0.6,
-        delay: 0.2
+        delay: isMobile ? 0.4 : 0.2
       }, 
       0
     );
+
 
     // TITRE LIGNE 1 : chaque mot disparaît vers le bas avec décalage
     if (titleLine1Ref.current) {
@@ -291,8 +293,8 @@ export default function ProjectSection({ projects, home }) {
           </div>
           
         </div>
-        <div className='absolute inset-0 flex items-center justify-center'>
-            <RoundedIcon size={120} color="black"/>
+        <div ref={roundedIconRef} className='absolute inset-0 flex items-center justify-center'>
+            <RoundedIcon size={isMobile ? 90 : 120} color="black"/>
         </div>
       </section>
     </div>

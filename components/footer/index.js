@@ -2,6 +2,8 @@ import Image from 'next/image';
 import React, { useRef, useEffect } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import AppearText from '../AppearText';
+import IconRain from '../IconRain';
+import PixelPlayIcon from '../PixelPlayIcon';
 
 // Animation hover email avec GSAP (même style que AppearText)
 const EmailLink = () => {
@@ -168,8 +170,11 @@ const BackToTopLink = ({ onClick }) => {
 
 const Footer = () => {
   const footerRef = useRef(null);
+  const iconRainContainerRef = useRef(null);
   const bottomBarY = useMotionValue(-100);
   const bottomBarYSpring = useSpring(bottomBarY, { stiffness: 180, damping: 40 });
+
+  const { triggerRain } = IconRain({ containerRef: iconRainContainerRef });
 
   const scrollToSection = (e, sectionId) => {
     e.preventDefault();
@@ -241,24 +246,25 @@ const Footer = () => {
   };
 
   return (
-    <footer ref={footerRef} className="bg-black text-white text-sm font-mono relative sm:fixed sm:bottom-0 sm:w-full sm:z-[-5000]">
-      <Image
-        src="/images/ICONE_LJ-STUDIO_BLACK_OUTLINE.svg"
-        alt="LJ Studio Logo"
-        width={800}
-        height={300}
-        className="absolute left-[-300px] top-[50px] object-cover invert opacity-30">
-      </Image>
-      {/* Top section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 relative">
-        {/* Left block with video or badge */}
-        <div className="w-full h-full flex py-20 relative">
-          <div className="flex flex-col items-start justify-between gap-4 m-auto">
-            <Image src="/images/ICONE_PLAY.svg" alt="Play Icon" width={80} height={80} className=""/>
+
+      <footer ref={footerRef} className="bg-black text-white text-sm font-mono relative sm:fixed sm:bottom-0 sm:w-full sm:z-[-5000]">
+        <Image
+          src="/images/ICONE_LJ-STUDIO_BLACK_OUTLINE.svg"
+          alt="LJ Studio Logo"
+          width={800}
+          height={300}
+          className="absolute left-[-300px] top-[50px] object-cover invert opacity-30">
+        </Image>
+        {/* Top section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 relative">
+          {/* Left block with video or badge */}
+          <div ref={iconRainContainerRef} className="w-full h-full flex py-20 relative overflow-hidden">
+            <div className="flex flex-col items-center justify-center gap-4 m-auto">
+              <PixelPlayIcon size={80} onClick={triggerRain} />
+            </div>
+            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-[1px] bg-white"></div>
+            <div className="md:block absolute bottom-0 left-0 bottom-0 h-[1px] w-full lg:w-[97%] bg-white"></div>
           </div>
-          <div className="hidden md:block absolute right-0 top-0 bottom-0 w-[1px] bg-white"></div>
-          <div className="md:block absolute bottom-0 left-0 bottom-0 h-[1px] w-full lg:w-[97%] bg-white"></div>
-        </div>
 
 
         {/* Contact */}
@@ -382,7 +388,7 @@ const Footer = () => {
         <BackToTopLink onClick={scrollToTop} />
 
       </motion.div>
-    </footer>
+      </footer>
   );
 };
 
