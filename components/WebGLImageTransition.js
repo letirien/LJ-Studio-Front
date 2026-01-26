@@ -356,7 +356,6 @@ function WebGLImageTransitionDemo5Internal({
         overflow: "hidden",
         background: "#000"
       }}
-      aria-label="WebGL Image Transition (demo5)"
       role="img"
     >
       {/* todo: add opacity sur image ou voile noir */}
