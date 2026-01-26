@@ -269,9 +269,10 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 </div>
                 <div className="absolute right-[22.5%] bottom-[-30%] hidden xl:block">
                   <RoundedIcon icon="" size={120} rotationFactor={0.45} />
+
                 </div>
               </HighlightText>
-                            <HighlightText 
+              <HighlightText 
                 initial="hidden"
                 variants={titleAnimation}
                 custom={3}

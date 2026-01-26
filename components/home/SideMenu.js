@@ -19,8 +19,11 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const menuLinksRef = useRef([]);
   const socialsRef = useRef([]);
   const sideTextRef = useRef(null);
+  const sideTextRefMob = useRef(null);
   const linkTextRefs = useRef([]);
   const tlRef = useRef(null);
+  const wordmarkRef = useRef(null);
+  const wordmarkRefMob = useRef(null);
 
   // Charger GSAP dynamiquement
   useEffect(() => {
@@ -70,6 +73,24 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
         { autoAlpha: 0 },
         { autoAlpha: 1, duration: 0.5 },
         "-=0.3"
+      )
+      .fromTo(
+        sideTextRefMob.current,
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.5 },
+        "-=0.3"
+      )
+      .fromTo(
+        wordmarkRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5 },
+        "-=0.4"
+      )
+      .fromTo(
+        wordmarkRefMob.current,
+        { autoAlpha: 0 },
+        { autoAlpha: 1, duration: 0.5 },
+        "-=0.4"
       );
 
     tlRef.current = tl;
@@ -237,7 +258,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
             >
               creative studio - french accent
             </p>
-            <div className="mb-1 -rotate-90 origin-bottom-right mt-[100%] mr-[4px] hidden 2xl:inline-block">
+            <div ref={wordmarkRef} className="mb-1 -rotate-90 origin-bottom-right mt-[100%] mr-[4px] hidden 2xl:inline-block">
               <Image src={"/images/LJSTD_WORDMARK.svg"} alt="logo" width={100} height={24}/>
             </div>
           </ul>
@@ -250,11 +271,11 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           </button>
         </div>
         {/* todo: add woodmark ljstd */}
-        <div className="w-full flex justify-center gap-6 2xl:hidden">
+        <div ref={sideTextRefMob} className="w-full flex justify-center gap-6 2xl:hidden">
           <p className="uppercase roboto text-[10pt] text-black/55">
             creative studio - french accent
           </p>
-          <div className="2xl:hidden">
+          <div ref={wordmarkRefMob} className="2xl:hidden">
             <Image src={"/images/LJSTD_WORDMARK.svg"} alt="logo" width={100} height={24}/>
           </div>
         </div>

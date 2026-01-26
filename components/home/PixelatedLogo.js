@@ -95,7 +95,7 @@ export default function PixelatedLogo({ isComplete }) {
 
       // Disparition
       else if (phase === 'fading') {
-        fadeProgress += speed;
+        fadeProgress += 0.4;
         dots.forEach((dot, i) => {
           const point = (i / total) * 100 + dot.randomDelayOff;
           dot.brightness = fadeProgress <= point ? 1 : Math.max(0, 1 - (fadeProgress - point) / 3);
@@ -124,10 +124,9 @@ export default function PixelatedLogo({ isComplete }) {
   if (!svgData) {
     return (
       <svg
-        className="w-[160px] sm:w-[240px] h-auto"
-        viewBox="0 0 100 100"
+        className="w-[120px] sm:w-[240px] h-auto"
+        viewBox="0 0 689.84 89.09"
         xmlns="http://www.w3.org/2000/svg"
-        shapeRendering="crispEdges"
       >
         <rect width="100%" height="100%" fill="transparent" />
       </svg>
@@ -139,8 +138,7 @@ export default function PixelatedLogo({ isComplete }) {
       ref={svgRef}
       viewBox={svgData.viewBox}
       xmlns="http://www.w3.org/2000/svg"
-      className="w-[98px] sm:w-[240px] h-auto"
-      shapeRendering="crispEdges"
+      className="w-[120px] sm:w-[240px] h-auto"
     >
       {svgData.rects ? (
         <g dangerouslySetInnerHTML={{ __html: svgData.rects }} />

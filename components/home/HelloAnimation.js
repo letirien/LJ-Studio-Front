@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useLoading } from '../../lib/LoadingManager';
 import PixelatedLogo from './PixelatedLogo';
+import RoundedIcon from '../RoundedIcon';
 
 export default function AnimationPage({ onAnimationComplete }) {
   const { progress, isComplete } = useLoading();
@@ -15,6 +16,9 @@ export default function AnimationPage({ onAnimationComplete }) {
   const [loaderVisible, setLoaderVisible] = useState(true);
   const [loaderTextVisible, setLoaderTextVisible] = useState(false);
   const [fontsReady, setFontsReady] = useState(false);
+
+  const [roundedVisible, setRoundedVisible] = useState(false);
+  const [roundedDisappear, setRoundedDisappear] = useState(false);
 
   // Attendre que les fonts soient chargées avant d'afficher le texte
   useEffect(() => {
@@ -80,6 +84,7 @@ export default function AnimationPage({ onAnimationComplete }) {
     if (progress >= 60 && !textVisible.line3) {
       setTextVisible((prev) => ({ ...prev, line3: true }));
     }
+    setRoundedVisible(true)
   }, [progress, textVisible]);
 
   // Quand le chargement est complet (100%), lancer l'animation de sortie
@@ -94,6 +99,7 @@ export default function AnimationPage({ onAnimationComplete }) {
 
         // Étape 2: Disparition du texte
         setTimeout(() => setTextDisappear(true), 2450);
+        setTimeout(() => setRoundedDisappear(true), 2450);
 
         // Étape 3: Disparition des blocs avec animation
         setTimeout(() => setBlocksDisappear(true), 2200);
@@ -235,13 +241,54 @@ export default function AnimationPage({ onAnimationComplete }) {
 
       {/* Contenu texte - SOLUTION 1: Chaque mot dans son propre conteneur overflow-hidden */}
       <div className="absolute inset-0 flex items-center justify-center z-30">
-        <div className="text-center space-y-4 px-8">
+        <div className="text-center space-y-4 px-8 relative">
+          {/* CREATIVE STUDIO / Logo / FRENCH ACCENT - au dessus du titre */}
+          <div className={`absolute bottom-full left-0 right-0 mb-8 transition-all duration-500`}>
+            <div className="flex items-center justify-center space-x-6 sm:space-x-8 text-sm text-black sm:whitespace-nowrap">
+              {/* CREATIVE STUDIO avec overflow-hidden */}
+              <div className="">
+                <span
+                  className={`inline-block robotoRegular text-[12pt] sm:text-[14pt] text-center leading-[0.8] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                    !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-[600%] opacity-0' : 'translate-y-0 opacity-100'
+                  }`}
+                  style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '0ms' : '200ms' }}
+                >
+                  CREATIVE STUDIO
+                </span>
+              </div>
+
+              {/* Logo LED/Pixel avec animation et overflow-hidden */}
+              <div className="overflow-visible shrink-0">
+                <div
+                  className={`transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                    !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
+                  }`}
+                  style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '50ms' : '300ms' }}
+                >
+                  <PixelatedLogo isComplete={isComplete} animationStarted={animationStarted} />
+                </div>
+              </div>
+
+              {/* FRENCH ACCENT avec overflow-hidden */}
+              <div className="">
+                <span
+                  className={`inline-block robotoRegular text-[12pt] sm:text-[14pt] text-center leading-[0.8] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                    !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-[600%] opacity-0' : 'translate-y-0 opacity-100'
+                  }`}
+                  style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '0ms' : '200ms' }}
+                >
+                  FRENCH ACCENT
+                </span>
+              </div>
+            </div>
+          </div>
+
           <h1 className="hardbopBlack leading-[0.8]">
             {/* Ligne 1 */}
             <div className="flex flex-wrap items-center justify-center gap-x-4">
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
+                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black  transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
                     textVisible.line1 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -264,7 +311,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                   }`}
                   style={{ transitionDelay: textDisappear ? '50ms' : '100ms' }}
                 >
-                  ON
+                  TO
                 </span>
               </div>
             </div>
@@ -285,88 +332,64 @@ export default function AnimationPage({ onAnimationComplete }) {
                   OUR
                 </span>
               </div>
-              <div className="overflow-hidden">
-                <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
-                    textVisible.line2 && !textDisappear
-                      ? 'translate-y-0'
-                      : textDisappear
-                      ? '-translate-y-full'
-                      : 'translate-y-full rotate-[1deg]'
-                  }`}
-                  style={{ transitionDelay: textDisappear ? '150ms' : '120ms' }}
+              <div className="relative">
+                {/* Texte (reste overflow-hidden pour l'anim) */}
+                <div className="overflow-hidden">
+                  <span
+                    className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
+                      textVisible.line2 && !textDisappear
+                        ? 'translate-y-0'
+                        : textDisappear
+                        ? '-translate-y-full'
+                        : 'translate-y-full rotate-[1deg]'
+                    }`}
+                    style={{ transitionDelay: textDisappear ? '150ms' : '120ms' }}
+                  >
+                    PITCH
+                  </span>
+                </div>
+
+                {/* Icône ancrée au mot, mais hors overflow */}
+                <div
+                  className="absolute left-1/2 top-full z-30 pointer-events-none"
+                  style={{
+                    transform: `translateX(-50%) translateY(-50%) scale(${roundedVisible && !roundedDisappear ? 1 : 0})`,
+                    transformOrigin: 'center center',
+                    transition: 'transform 0.4s cubic-bezier(0.12,0,0.88,1)',
+                  }}
                 >
-                  PITCH
-                </span>
+                  <RoundedIcon icon="intro" size={90} circularContinue color="white" />
+                </div>
               </div>
             </div>
           </h1>
+        </div>
 
-          {/* Loader et texte en bas */}
-          <div className={`absolute top-[4vw] md:top-[10vw] left-0 right-0 transition-all duration-500 `}>
-            <div className="flex items-center justify-center space-x-8 text-sm text-black">
-              {/* CREATIVE STUDIO avec overflow-hidden */}
-              <div className="">
-                <span
-                  className={`inline-block robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
-                    !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-[600%] opacity-0' : 'translate-y-0 opacity-100'
-                  }`}
-                  style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '0ms' : '200ms' }}
-                >
-                  CREATIVE STUDIO
-                </span>
-              </div>
-
-              {/* Logo LED/Pixel avec animation et overflow-hidden */}
-              <div className="overflow-hidden">
-                <div
-                  className={`transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
-                    !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
-                  }`}
-                  style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '50ms' : '300ms' }}
-                >
-                  <PixelatedLogo isComplete={isComplete} animationStarted={animationStarted} />
-                </div>
-              </div>
-
-              {/* FRENCH ACCENT avec overflow-hidden */}
-              <div className="">
-                <span
-                  className={`inline-block robotoRegular text-[12pt] sm:text-[19pt] text-center leading-[0.8] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
-                    !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-[600%] opacity-0' : 'translate-y-0 opacity-100'
-                  }`}
-                  style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '0ms' : '200ms' }}
-                >
-                  FRENCH ACCENT
-                </span>
-              </div>
+        {/* KickOff Loading - positionné par rapport au viewport */}
+        <div className={`absolute bottom-[4vh] left-0 right-0 transition-all duration-500 text-black`}>
+          <div className='flex items-center justify-center space-x-2'>
+            {/* KickOff Loading avec overflow-hidden */}
+            <div className="overflow-hidden">
+              <p
+                className={`instrumentSerifRegular text-[6vw] sm:text-[32px] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                  !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
+                }`}
+                style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '100ms' : '450ms' }}
+              >
+                KickOff Loading |
+              </p>
             </div>
-          </div>
-          <div className={`absolute bottom-[4vh] left-0 right-0 transition-all duration-500 text-black `}>
-            <div className='flex items-center justify-center space-x-2'>
-              {/* KickOff Loading avec overflow-hidden */}
-              <div className="overflow-hidden">
-                <p
-                  className={`instrumentSerifRegular text-[6vw] sm:text-[28px] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
-                    !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
-                  }`}
-                  style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '100ms' : '450ms' }}
-                >
-                  KickOff Loading |
-                </p>
-              </div>
-              {/* Pourcentage avec overflow-hidden */}
-              <div className="overflow-hidden">
-                <div
-                  className={`transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
-                    !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
-                  }`}
-                  style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '150ms' : '500ms' }}
-                >
-                  <span className="text-[6vw] sm:text-[28px] instrumentSerifRegular tabular-nums">
-                    {progress}%
-                  </span>
-                </div>
+            {/* Pourcentage avec overflow-hidden */}
+            <div className="overflow-hidden">
+              <div
+                className={`transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                  !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
+                }`}
+                style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '150ms' : '500ms' }}
+              >
+                <span className="text-[6vw] sm:text-[32px] instrumentSerifRegular tabular-nums">
+                  {progress}%
+                </span>
               </div>
             </div>
           </div>
