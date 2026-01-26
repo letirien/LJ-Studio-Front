@@ -238,7 +238,10 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           </div>
 
           {/* SOCIAL ICONS */}
-          <ul id="socials" className="text-black flex flex-col justify-center items-end mr-[3vw] md:mb-auto">
+        </div>
+
+        <div className="absolute right-[3vw] top-[40%] sm:top-[200px] w-[90px] md:w-[120px]">
+          <ul id="socials" className="text-black flex flex-col justify-center items-center md:mb-3">
             {[[LinkedInIcon, 'https://www.linkedin.com/company/lj-stration/'], [XIcon, 'https://x.com/LjStration'], [InstagramIcon, 'https://www.behance.net/ljstration']].map(([IconComponent, url], i) => (
               <li key={i} className="!mb-2">
                 <a
@@ -252,16 +255,21 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
                 </a>
               </li>
             ))}
+          </ul>
+          <div className="h-[90px] md:h-[120px] w-full flex  items-center -rotate-90 origin-bottom-right hidden 2xl:flex">
             <p
               ref={sideTextRef}
-              className="w-full uppercase roboto text-[10pt] text-black/55 -rotate-90 origin-bottom-right border-r-2 pr-10 hidden 2xl:block"
+              className=" text-nowrap uppercase roboto text-[10pt] text-black/55 border-r-2 pr-4"
             >
               creative studio - french accent
             </p>
-            <div ref={wordmarkRef} className="mb-1 -rotate-90 origin-bottom-right mt-[100%] mr-[4px] hidden 2xl:inline-block">
+          </div>
+
+          <div ref={wordmarkRef} className="h-[90px] md:h-[120px] w-full flex items-center -rotate-90 origin-bottom-right hidden 2xl:flex">
+            <div className="block">
               <Image src={"/images/LJSTD_WORDMARK.svg"} alt="logo" width={100} height={24}/>
             </div>
-          </ul>
+          </div>
         </div>
 
         {/* CLOSE BUTTON */}
