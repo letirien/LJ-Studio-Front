@@ -242,7 +242,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
 
         <div className="absolute right-[3vw] top-[40%] sm:top-[200px] w-[90px] md:w-[120px]">
           <ul id="socials" className="text-black flex flex-col justify-center items-center md:mb-3">
-            {[[LinkedInIcon, 'https://www.linkedin.com/company/lj-stration/'], [XIcon, 'https://x.com/LjStration'], [InstagramIcon, 'https://www.behance.net/ljstration']].map(([IconComponent, url], i) => (
+            {[[LinkedInIcon, 'https://www.linkedin.com/company/lj-stration/'], [XIcon, 'https://x.com/LjStration'], [InstagramIcon, 'https://www.instagram.com/lj_stration/?hl=en'], [BehanceIcon, 'https://www.behance.net/LJ-Studio']].map(([IconComponent, url], i) => (
               <li key={i} className="!mb-2">
                 <a
                   ref={(el) => (socialsRef.current[i] = el)}

@@ -174,7 +174,7 @@ const Footer = () => {
   const bottomBarY = useMotionValue(-100);
   const bottomBarYSpring = useSpring(bottomBarY, { stiffness: 180, damping: 40 });
 
-  const { triggerRain } = IconRain({ containerRef: iconRainContainerRef });
+  const { triggerRain } = IconRain({ containerRef: footerRef });
 
   const scrollToSection = (e, sectionId) => {
     e.preventDefault();
@@ -290,7 +290,7 @@ const Footer = () => {
                     {/* Menu */}
                     <div className='flex justify-between sm:flex-1 flex-wrap sm:flex-nowrap'>  
                         <div className="flex flex-col gap-1 robotoRegular text-[12pt] sm:text-[18px]">
-                            <a href="#home" onClick={(e) => scrollToSection(e, 'home')} className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="#home" onClick={(e) => scrollToSection(e, '/')} className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                     Home
                                 </AppearText>

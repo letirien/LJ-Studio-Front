@@ -32,7 +32,7 @@ export default function IconRain({ containerRef }) {
 
     const createIconElement = () => {
       const iconSrc = ICONS[getRandomInt(0, ICONS.length - 1)];
-      const iconSize = getRandomInt(60, 120);
+      const iconSize = getRandomInt(70, 220);
       const iconScale = Math.random() * 1.2 + 0.8;
       const iconRotate = getRandomInt(-30, 30);
       const iconDelay = 0.001 * getRandomInt(0, 1200);

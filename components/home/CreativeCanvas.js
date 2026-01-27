@@ -296,8 +296,8 @@ const CreativeCanvas = ({ images }) => {
 
   return (
     <section ref={containerRef} className="bg-black text-white py-12 sm:py-24">
-      <div ref={inViewRef} onMouseEnter={() => window.dispatchEvent(new Event("cursor-show"))}
-                            onMouseLeave={() => window.dispatchEvent(new Event("cursor-hide"))}>
+      <div ref={inViewRef} onMouseEnter={() => !isMobile ? window.dispatchEvent(new Event("cursor-show")) : null}
+                            onMouseLeave={() => !isMobile ? window.dispatchEvent(new Event("cursor-hide")) : null}>
         <motion.div className="max-w-none" >
           <motion.div
             ref={scrollContainerRef}

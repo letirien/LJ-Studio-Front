@@ -317,7 +317,8 @@ export default function BrandingSection({ gamePlan }) {
               </p>
               <Link 
                 className={`${getTextColor(index)} uppercase w-max robotoMonoBold text-[12px] sm:text-[16px] mt-4 ${index % 3 === 2 ? "!opacity-100": ""}`} 
-                href=""
+                href={`${item.fields['LIEN URL']}`}
+                target="_blank"
               >
                 <AppearText type="words" hover={true}>
                   › check an highlight
