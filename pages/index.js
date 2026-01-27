@@ -498,8 +498,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               <p>AND EXPLORE</p>
               <p className=""><span className="instrumentSerifRegular text-[8vw] capitalize">Archives</span></p>
             </motion.h2>
-            <ImagesTrails images={sliderImages}/>
            </div>
+          <ImagesTrails images={sliderImages}/>
         </motion.section>
         <StudioBanner/>
       </div>
