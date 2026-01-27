@@ -102,7 +102,7 @@ export function Header({ headerImages }) {
                     width: "100%",
                     height: "100%",
                     background: "black",
-                    opacity: 0.25,
+                    opacity: 0.4,
                     zIndex: 0,
                     pointerEvents: "none", // pour ne pas bloquer les interactions
                     }}
@@ -112,7 +112,6 @@ export function Header({ headerImages }) {
                     <svg
                         viewBox="0 0 689.83765 89.09131"
                         className="w-[300px] sm:w-[400px] md:w-[400px] h-auto"
-                        style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }}
                     >
                         {/* L */}
                         <g className="overflow-hidden">

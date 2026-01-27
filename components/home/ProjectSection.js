@@ -87,7 +87,16 @@ export default function ProjectSection({ projects, home }) {
       titleRef.current, 
       { 
         // opacity: 0, 
-        y: -80,         // ease: 'power2.inOut'
+        y: -60,         // ease: 'power2.inOut'
+        duration: 0.4
+      }, 
+      0
+    );
+    tl.to(
+      roundedIconRef.current, 
+      { 
+        // opacity: 0, 
+        y: -60,         // ease: 'power2.inOut'
         duration: 0.4
       }, 
       0
@@ -262,7 +271,7 @@ export default function ProjectSection({ projects, home }) {
         <div className="relative w-full mx-auto px-[3vw]">
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <div className="mb-8 ">
-              <p ref={preTitleRef} className={`capitalize text-black instrumentSerifRegular text-[8vw]/[0.8] tracking-tight sm:opacity-90 sm:text-[4vw]/[0.8]`}>Pitch Vison</p>
+              <p ref={preTitleRef} className={`capitalize text-black instrumentSerifRegular text-[8vw]/[0.8] tracking-tight sm:opacity-90 sm:text-[4vw]/[0.8]`}>Pitch Vision</p>
             </div>
             <h2 ref={titleRef} className="bigH2 text-center">
               <div className="overflow-hidden">

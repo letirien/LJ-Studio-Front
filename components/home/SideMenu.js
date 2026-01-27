@@ -75,16 +75,16 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
         "-=0.3"
       )
       .fromTo(
+        wordmarkRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5 },
+        "-=0.5"
+      )
+      .fromTo(
         sideTextRefMob.current,
         { autoAlpha: 0 },
         { autoAlpha: 1, duration: 0.5 },
         "-=0.3"
-      )
-      .fromTo(
-        wordmarkRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.5 },
-        "-=0.4"
       )
       .fromTo(
         wordmarkRefMob.current,

@@ -86,10 +86,11 @@ const CreativeCanvas = ({ images }) => {
     rootMargin: '0px 0px 0px 0px'
   });
 
-  // Positionnement initial pseudo-aléatoire pour un effet d'entrée
+  // Positionnement initial pseudo-aléatoire pour un effet d'entrée, (position plus aléatoire (1 sur 2))
+  // faire en sorte que le décallage soit à l'origine puis une fois centrée ne plus le faire pour la suite du scroll. 
   useEffect(() => {
     if (images && images.length > 0) {
-      const positions = images.map(() => Math.random() * 200 - 70);
+      const positions = images.map((_, index) => index % 2 === 0 ? 130 : -70);
       setRandomPositions(positions);
     }
   }, [images]);

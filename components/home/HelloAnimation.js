@@ -265,7 +265,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                   }`}
                   style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '50ms' : '300ms' }}
                 >
-                  <PixelatedLogo isComplete={isComplete} animationStarted={animationStarted} />
+                  <PixelatedLogo animationStarted={animationStarted} />
                 </div>
               </div>
 

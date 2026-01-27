@@ -297,7 +297,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               ref={aboutUsRef}
               className={`${home.defaultText} text-center w-[90vw] sm:w-[70vw] xl:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible h-[600px] sm:h-[400px] shadow-[inset_0px_-50px_19px_-10px_#000000] sm:shadow-none` }
             >
-              <motion.p style={{lineHeight: pLineHeight}} className="uppercase mb-12 robotoRegular tracking-[0.7px] text-white">LJ Studio was born from a passion for sport and image, two languages that speak through emotion.</motion.p>
+              {/* todo: lineHeight anim à retirer sur mobile et safari */}
+              <motion.p style={{lineHeight: pLineHeight}} className="uppercase mb-12 robotoRegular tracking-[0.7px] text-white !font-[400]">LJ Studio was born from a passion for sport and image, two languages that speak through emotion.</motion.p>
               <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoRegular text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
               <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoRegular text-[20px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
               <motion.p style={{lineHeight: pLineHeight}} className="!opacity-55 robotoRegular text-[20px]">We believe every sport has its own language - we design the way it's told.</motion.p>
@@ -541,7 +542,7 @@ export async function getServerSideProps() {
 
     return {
       props: {
-        projects: projectsData?.records || [],
+        projects: (projectsData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
         gamePlan: (gamePlanData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
         logoClients: (logoClientsData?.records || []).sort((a, b) => (a.fields?.id || 0) - (b.fields?.id || 0)),
         sliderImages: (sliderImagesData?.records || []).sort((a, b) => (a.fields?.id) - (b.fields?.id)),

@@ -131,10 +131,7 @@ a{
   font-family: RobotoMonoLight;
   src: url("/typos/ROBOTO MONO/RobotoMono-Light.ttf");
 }
-@font-face {
-  font-family: RobotoMono;
-  src: url("/typos/ROBOTO MONO/RobotoMono-Regular.ttf");
-}
+
 @font-face {
   font-family: RobotoMonoMedium;
   src: url("/typos/ROBOTO MONO/RobotoMono-Medium.ttf");
@@ -171,7 +168,10 @@ a{
   font-family: RobotoMonoBold;
 }
 .robotoRegular{
-  font-family: RobotoMono;
+    font-family: "Roboto Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    
 }
 @font-face {
   font-family: RobotoLight;
