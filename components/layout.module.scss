@@ -117,11 +117,13 @@
 
 .tiltedContainer {
   position: absolute;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   width: 100%;
   // height: var(--tilted-container-height); /* Utilisation de la variable */
   display: flex;
+  transform-origin: bottom;
+  will-change: transform;
 }
 
 .tiltedDiv1, .tiltedDiv2, .tiltedDiv3 {
@@ -148,6 +150,8 @@
   position: absolute;
   bottom: 0%;
   background: black;
+  transform-origin: bottom;
+  will-change: transform;
 }
 #main {
   flex: 1;

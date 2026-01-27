@@ -368,8 +368,10 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                     {/* Élément décoratif pour les transitions */}
                     <div className={`rounded-md ${home.deco}`} ref={decoRef} ></div>
                     {projects.map((project, index) => (
+                        
                         <Link
-                            href="/"
+                            href={`${project.fields["Lien du Projet"] ? project.fields["Lien du Projet"] : "#"}`}
+                            target="_blank"
                             id="projectContainer"
                             key={project.id}
                             onMouseEnter={() => window.dispatchEvent(new Event("cursor-show"))}

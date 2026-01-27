@@ -73,7 +73,7 @@ export default function Navbar() {
         </div>
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="group cursor-pointer flex flex-col justify-center items-center gap-1.5 sm:gap-[8px] w-[32px] sm:w-[60px] bg-transparent border-none p-0"
+          className="group cursor-pointer flex flex-col justify-center items-center scale-[0.8] sm:scale-100 gap-[8px] w-[60px] bg-transparent border-none p-0"
         >
           {/* Top bar — courte, alignée à gauche */}
           <div

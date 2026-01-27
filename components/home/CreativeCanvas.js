@@ -194,7 +194,8 @@ const CreativeCanvas = ({ images }) => {
             edgeResistance: 0.5,
             inertia: false,
             allowNativeTouchScrolling: false,
-            cursor: "grab",
+            cursor: "none",
+            activeCursor: "none",
             dragClickables: false,
             onPress: function() {
               scrollContainerRef.current.style.overflowX = 'hidden';
@@ -204,7 +205,7 @@ const CreativeCanvas = ({ images }) => {
             },
             onDragStart: function() {
               setIsDragging(true);
-              this.target.style.cursor = "grabbing";
+              // this.target.style.cursor = "grabbing";
               controls.start({ scale: 0.98, boxShadow: "0 8px 32px rgba(0,0,0,0.15)" });
               lastScrollLeft = this.scrollLeft;
               lastTime = Date.now();
@@ -229,7 +230,7 @@ const CreativeCanvas = ({ images }) => {
             },
             onDragEnd: function() {
               setIsDragging(false);
-              this.target.style.cursor = "grab";
+              // this.target.style.cursor = "grab";
               controls.start({
                 scale: 1,
                 boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
@@ -294,17 +295,16 @@ const CreativeCanvas = ({ images }) => {
 
   return (
     <section ref={containerRef} className="bg-black text-white py-12 sm:py-24">
-      <div ref={inViewRef}   onMouseEnter={() => window.dispatchEvent(new Event("cursor-show"))}
+      <div ref={inViewRef} onMouseEnter={() => window.dispatchEvent(new Event("cursor-show"))}
                             onMouseLeave={() => window.dispatchEvent(new Event("cursor-hide"))}>
-        <motion.div className="max-w-none">
+        <motion.div className="max-w-none" >
           <motion.div
             ref={scrollContainerRef}
             className="relative overflow-x-auto"
             style={{
-              cursor: isDragging ? 'grabbing' : 'grab',
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
-              touchAction: 'pan-x',
+              touchAction: 'pan-x pan-y',
               WebkitOverflowScrolling: 'touch',
               userSelect: 'none'
             }}
@@ -341,6 +341,7 @@ const CreativeCanvas = ({ images }) => {
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
                       whileHover={{ scale: 1.02 }}
+                      data-cursor
                     >
                       <div className={`relative w-full overflow-hidden`} style={{
                         width: !isMobile ? `${image.fields.IMAGE[0].width / 3}px` : `${image.fields.IMAGE[0].width / 4}px`,
@@ -373,7 +374,7 @@ const CreativeCanvas = ({ images }) => {
                             className="transition-opacity duration-300"
                             style={{
                               objectFit: 'contain',
-                              opacity: hoveredIndex === index ? 1 : 0.4
+                              opacity: hoveredIndex === index ? 1 : 0.8
                             }}
                             priority={index < 5}
                           />
@@ -413,7 +414,8 @@ const CreativeCanvas = ({ images }) => {
           -webkit-user-select: none;
           -moz-user-select: none;
           -ms-user-select: none;
-          touch-action: pan-x;
+          touch-action: pan-x pan-y;
+          cursor: none !important;
         }
       `}</style>
     </section>

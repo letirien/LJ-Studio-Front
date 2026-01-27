@@ -23,7 +23,46 @@ export function Header({ headerImages }) {
     const imagesArray = useMemo(() => headerImages.map(img => img.fields.IMAGE[0].url), [headerImages]);
     const webglRef = useRef(null);
     const webglApiRef = useRef(null);
+    const headerRef = useRef(null);
+    const tiltedRef = useRef(null);
+    const imgBottomRef = useRef(null);
     const [logoVisible, setLogoVisible] = useState(false);
+
+    // Effet parallax : les décorations du bas grandissent au scroll
+    useEffect(() => {
+        const header = headerRef.current;
+        if (!header) return;
+
+        let ticking = false;
+
+        const handleScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    const headerHeight = header.offsetHeight;
+
+                    // progress 0 → 1 quand le header sort de l'écran
+                    const progress = Math.min(Math.max(scrollY / headerHeight, 0), 1);
+
+                    // Scale de 1 à 2.5 au fur et à mesure du scroll
+                    const scale = 1 + progress * 1.5;
+
+                    if (tiltedRef.current) {
+                        tiltedRef.current.style.transform = `scaleY(${scale})`;
+                    }
+                    if (imgBottomRef.current) {
+                        imgBottomRef.current.style.transform = `scaleY(${scale})`;
+                    }
+
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Animation du logo lettre par lettre quand l'animation est complète
     useEffect(() => {
@@ -38,11 +77,11 @@ export function Header({ headerImages }) {
     }, [isComplete]);
 
     return (
-        <header className={`${styles.header} intersectLogo header`}>
+        <header ref={headerRef} className={`${styles.header} intersectLogo header`}>
             <>
                 <Navbar />
-                <div className={`${styles.clock} !flex items-center hidden md:block w-full -bottom-[0%] md:bottom-[4%]`}>
-                    <div className="self-center mx-auto hidden md:block"><Clock /></div>
+                <div className={`${styles.clock} !flex items-center block w-full -bottom-[0%] md:bottom-[4%]`}>
+                    <div className="self-center mx-auto block"><Clock /></div>
                 </div>
                 {/* <div className={`${styles.currentInfoContainer} font-light`}><div>GAME TIME : 17:47:22 UTC+2</div></div> */}
                 
@@ -146,13 +185,12 @@ export function Header({ headerImages }) {
                             }}
                         />
                     </div> */}
-                {/* todo: au scroll hors de la section, quand il y a plus que 30% visible augmenter la taille pour effet de paralax */}
-                <div className={`${styles.tiltedContainer} h-[60px] sm:h-[90px] md:h-[180px]`}>
+                <div ref={tiltedRef} className={`${styles.tiltedContainer} h-[60px] sm:h-[90px] md:h-[180px]`}>
                     <div className={`${styles.tiltedDiv1} h-[10px] sm:h-[20px] md:h-[30px]`}></div>
                     <div className={`${styles.tiltedDiv2} h-[10px] sm:h-[20px] md:h-[30px]`}></div>
                     <div className={`${styles.tiltedDiv3} h-[10px] sm:h-[20px] md:h-[30px]`}></div>
                 </div>
-                <div className={`${styles.imgBottom} h-[50px] sm:h-[70px] md:h-[150px]`}></div>
+                <div ref={imgBottomRef} className={`${styles.imgBottom} h-[50px] sm:h-[70px] md:h-[150px]`}></div>
             </>
         </header>
     )

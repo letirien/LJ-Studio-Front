@@ -51,6 +51,13 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   // L'effet s'arrête à 0, elle ne descend pas plus
   const fcNantesY = useTransform(fcNantesProgress, [0, 1], [-300, 0]);
 
+  // Parallax : le gradient du bas grandit quand la section scroll hors de l'écran
+  const { scrollYProgress: fcNantesGrowthProgress } = useScroll({
+    target: fcNantesRef,
+    offset: ["start start", "end start"]
+  });
+  const fcNantesGradientScale = useTransform(fcNantesGrowthProgress, [0, 1], [1, 1.5]);
+
   const sectionImageRef = useRef(null);
   const galerySection = useRef(null);
   const aboutUsRef = useRef(null);
@@ -405,7 +412,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         <AnimatedField/>
         <BrandingSection gamePlan={gamePlan} />
         <motion.section ref={fcNantesRef} className="w-full h-full bg-black" style={{ y: fcNantesY }}>
-          <div className="w-full h-[100vh] relative">
+          <div className="w-full h-[100vh] relative overflow-hidden">
             <div className="absolute -bottom-1 left-0 right-0 h-[60vh] z-3" style={{
               background: 'linear-gradient(to top, #000000ff 12vh, transparent 100%)'
             }}></div>
@@ -422,23 +429,27 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 alt="Client highlight background"
               />
             )}
-            {/* Image déco superposée (n1) - mêmes propriétés pour garder l'alignement */}
+            {/* Image déco superposée (n1) - parallax scaleY au scroll */}
             {headerClients[1]?.fields?.Image?.[0]?.url && (
-              <Image
-                src={headerClients[1].fields.Image[0].url}
-                fill={true}
-                quality={100}
-                className="z-2"
-                style={{
-                  objectFit: 'cover',
-                  objectPosition: 'top left'
-                }}
-                alt="Client highlight decoration"
-              />
+              <motion.div className="absolute inset-0 z-2" style={{
+                scaleY: fcNantesGradientScale,
+                transformOrigin: 'bottom'
+              }}>
+                <Image
+                  src={headerClients[1].fields.Image[0].url}
+                  fill={true}
+                  quality={100}
+                  style={{
+                    objectFit: 'cover',
+                    objectPosition: 'top left'
+                  }}
+                  alt="Client highlight people decoration"
+                />
+              </motion.div>
             )}
 
           </div>
-          <div className="flex flex-wrap w-full items-center gap-8 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[40vh]">
+          <div className="flex flex-wrap w-full items-center gap-8 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[20vh]">
             <div className="mx-auto">
               <h2 className={`flex flex-col items-center w-min collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
                 <p className="flex items-center gap-2"><span className="prefix text-[38px] sm:[54pt] capitalize">On</span>Every Pitch...</p>
