@@ -1,10 +1,26 @@
 #navbar{
     width: 100%;
-    // padding: 60px 3vw ;
-    display: flex;
-    justify-content: space-between;
     position:fixed; z-index: 4;
-    // mix-blend-mode: difference;
+
+    .navContent {
+        display: grid;
+        width: 100%;
+    }
+
+    .navLayer {
+        grid-row: 1;
+        grid-column: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        pointer-events: none;
+    }
+
+    .navClickLayer {
+        pointer-events: auto;
+        position: relative;
+        z-index: 1;
+    }
 
     .menuBTN{
         background: transparent;
@@ -14,12 +30,11 @@
     }
     .logo{
         width: auto;
-        transition: 0.4s;
         &.white{
             filter: brightness(1) invert(0);
         }
         &.dark{
-            filter: brightness(0) invert(0); /* Rend l'élément complètement noir */
+            filter: brightness(0) invert(0);
         }
     }
 
