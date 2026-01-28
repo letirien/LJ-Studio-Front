@@ -52,7 +52,6 @@ export default function ProjectSection({ projects, home }) {
     });
   };
 
-  // todo: animation interlignagne un peu avant quand on rentre dans la section
   useEffect(() => {
     if (!isReady || !ScrollTrigger || !lenis) return;
     if (!sectionRef.current || !titleLine1Ref.current || !titleLine2Ref.current || !colorBlockRef.current || !slideMainContainer.current || !orangeBgRef.current)

@@ -278,7 +278,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
             <RoundedIcon icon="" size={120} rotationFactor={0} circularContinue={true} menu={true} />
           </button>
         </div>
-        {/* todo: add woodmark ljstd */}
+
         <div ref={sideTextRefMob} className="w-full flex justify-center gap-6 2xl:hidden">
           <p className="uppercase roboto text-[10pt] text-black/55">
             creative studio - french accent

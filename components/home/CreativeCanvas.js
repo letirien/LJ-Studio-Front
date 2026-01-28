@@ -101,25 +101,35 @@ const CreativeCanvas = ({ images }) => {
 
     const handleScroll = () => {
       if (!containerRef.current) return;
-
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const elementHeight = rect.height;
 
-      // Calculer quand l'élément est au centre de l'écran
-      // -1 = complètement en haut, 0 = centré, 1 = complètement en bas
-      const elementCenter = rect.top + elementHeight / 2;
+      // Calculer la position de l'élément par rapport au viewport
+      const elementTop = rect.top;
+      const elementBottom = rect.bottom;
       const screenCenter = windowHeight / 2;
-      const distanceFromCenter = elementCenter - screenCenter;
-      
-      // Normaliser entre -1 et 1 (centré = 0)
-      const maxDistance = windowHeight / 2 + elementHeight / 2;
-      const normalizedDistance = Math.max(-1, Math.min(1, distanceFromCenter / maxDistance));
-      
-      // Inverser pour que 0 = pas centré, 1 = centré
-      const centerProgress = 1 - Math.abs(normalizedDistance);
-      
-      setScrollProgress(centerProgress);
+      const elementCenter = elementTop + elementHeight / 2;
+
+      // Déterminer si on est au-dessus, centré ou en-dessous
+      if (elementCenter > screenCenter) {
+        // Section en dessous du centre (pas encore arrivée)
+        // Calculer la progression d'entrée (0 = loin en bas, 1 = centré)
+        const distanceToCenter = elementCenter - screenCenter;
+        const maxDistance = windowHeight / 2 + elementHeight / 2;
+        const progress = Math.max(0, Math.min(1, 1 - (distanceToCenter / maxDistance)));
+        setScrollProgress(progress);
+      } else {
+        // Section au centre ou au-dessus du centre
+        // Une fois centrée, elle reste centrée (progress = 1)
+        setScrollProgress(1);
+      }
+
+      // Si on scroll au-dessus de la section (elle sort complètement par le haut)
+      if (elementBottom < 0) {
+        // Remettre le décalage initial
+        setScrollProgress(0);
+      }
     };
 
     handleScroll();

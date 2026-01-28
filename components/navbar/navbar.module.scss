@@ -1,6 +1,7 @@
 #navbar{
     width: 100%;
-    position:fixed; z-index: 4;
+    position: fixed; 
+    z-index: 4;
 
     .navContent {
         display: grid;
@@ -14,6 +15,7 @@
         justify-content: space-between;
         align-items: flex-start;
         pointer-events: none;
+        width: 100%;
     }
 
     .navClickLayer {
@@ -22,20 +24,29 @@
         z-index: 1;
     }
 
-    .menuBTN{
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        padding: 0;
-    }
-    .logo{
-        width: 90%;
-        &.white{
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        
+        // Le wrapper avec ref qui reçoit le clip-path
+        > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        &.white {
             filter: brightness(1) invert(0);
         }
-        &.dark{
+        &.dark {
             filter: brightness(0) invert(0);
         }
     }
 
+    .logo img {
+        flex-shrink: 0;
+        max-width: none !important;
+    }
 }

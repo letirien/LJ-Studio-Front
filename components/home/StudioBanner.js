@@ -14,7 +14,7 @@ const StudioBanner = () => {
       );
     
       return (
-        <div className="w-full overflow-hidden bg-white text-black sm:py-6 rounded-b-xl">
+        <section className="w-full overflow-hidden intersectLogo white bg-white text-black sm:py-6 rounded-b-xl">
           <div className="marquee whitespace-nowrap flex">
             {/* Deux fois pour boucler parfaitement */}
             <div className="flex shrink-0 animate-marquee">
@@ -38,7 +38,7 @@ const StudioBanner = () => {
               animation: marquee 120s linear infinite;
             }
           `}</style>
-        </div>
+        </section>
       );
     };
 

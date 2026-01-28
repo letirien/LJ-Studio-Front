@@ -332,7 +332,7 @@ const Footer = () => {
                                   LinkedIn
                                 </AppearText>
                             </a>
-                            <a href="https://www.behance.net/ljstration" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="https://www.behance.net/LJ-Studio" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                   Behance
                                 </AppearText>
@@ -358,7 +358,7 @@ const Footer = () => {
                                   LinkedIn
                                 </AppearText>
                             </a>
-                            <a href="https://www.behance.net/ljstration" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
+                            <a href="https://www.behance.net/LJ-Studio" target="_blank" className="hover:text-[#fa6218] overflow-hidden">
                               <AppearText type="words" hover={true}>
                                   Behance
                                 </AppearText>

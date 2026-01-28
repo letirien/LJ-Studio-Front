@@ -8,8 +8,10 @@ export default function Navbar() {
   const [isHovered, setIsHovered] = useState(false);
   const [isMobille, setIsMobille] = useState(false);
 
-  const whiteLayerRef = useRef(null);
-  const darkLayerRef = useRef(null);
+  const whiteLogoRef = useRef(null);
+  const darkLogoRef = useRef(null);
+  const whiteMenuRef = useRef(null);
+  const darkMenuRef = useRef(null);
 
   useEffect(() => {
     setIsMobille(window.innerWidth <= 768);
@@ -17,15 +19,13 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Use the navLayer rect as reference (clip-path is relative to this element)
-      const layerEl = whiteLayerRef.current;
-      if (!layerEl) return;
+      const logoEl = whiteLogoRef.current;
+      if (!logoEl) return;
 
       const sectionsWhite = document.querySelectorAll('.intersectLogo.white');
       const sectionsBlack = document.querySelectorAll('.intersectLogo.black');
-      const layerRect = layerEl.getBoundingClientRect();
+      const logoRect = logoEl.getBoundingClientRect();
 
-      // Cache section data (rects + z-index) to avoid repeated reflows
       const allSections = [
         ...Array.from(sectionsWhite).map(s => ({
           rect: s.getBoundingClientRect(),
@@ -39,27 +39,23 @@ export default function Navbar() {
         }))
       ];
 
-      // Sort by z-index descending (highest z-index = topmost layer)
       allSections.sort((a, b) => b.zIndex - a.zIndex);
 
-      // Find the logo color at a specific Y position
       const getColorAtY = (y) => {
         for (const { rect, color } of allSections) {
           if (rect.top <= y && rect.bottom >= y) {
             return color;
           }
         }
-        return 'white'; // default for dark backgrounds
+        return 'white';
       };
 
-      // Sample at the layer's own top/bottom (not the navbar's padded box)
-      const topColor = getColorAtY(layerRect.top);
-      const bottomColor = getColorAtY(layerRect.bottom);
+      const topColor = getColorAtY(logoRect.top);
+      const bottomColor = getColorAtY(logoRect.bottom);
 
       let whiteClip, darkClip;
 
       if (topColor === bottomColor) {
-        // No split — show only one layer
         if (topColor === 'white') {
           whiteClip = 'inset(0)';
           darkClip = 'inset(100% 0 0 0)';
@@ -68,9 +64,8 @@ export default function Navbar() {
           whiteClip = 'inset(100% 0 0 0)';
         }
       } else {
-        // Binary search for the exact split point
-        let low = layerRect.top;
-        let high = layerRect.bottom;
+        let low = logoRect.top;
+        let high = logoRect.bottom;
         while (high - low > 0.5) {
           const mid = (low + high) / 2;
           if (getColorAtY(mid) === topColor) {
@@ -80,10 +75,8 @@ export default function Navbar() {
           }
         }
 
-        // splitPx relative to the layer element (matches clip-path reference)
-        const splitPx = high - layerRect.top;
+        const splitPx = high - logoRect.top;
 
-        // 0.5px overlap to guarantee no sub-pixel gap
         if (topColor === 'white') {
           whiteClip = `inset(0 0 calc(100% - ${splitPx + 0.5}px) 0)`;
           darkClip = `inset(${Math.max(0, splitPx - 0.5)}px 0 0 0)`;
@@ -93,13 +86,11 @@ export default function Navbar() {
         }
       }
 
-      // Direct DOM updates for performance (avoid React re-renders on scroll)
-      if (whiteLayerRef.current) {
-        whiteLayerRef.current.style.clipPath = whiteClip;
-      }
-      if (darkLayerRef.current) {
-        darkLayerRef.current.style.clipPath = darkClip;
-      }
+      // Appliquer le clip-path sur les logos ET les menus
+      if (whiteLogoRef.current) whiteLogoRef.current.style.clipPath = whiteClip;
+      if (darkLogoRef.current) darkLogoRef.current.style.clipPath = darkClip;
+      if (whiteMenuRef.current) whiteMenuRef.current.style.clipPath = whiteClip;
+      if (darkMenuRef.current) darkMenuRef.current.style.clipPath = darkClip;
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -109,9 +100,10 @@ export default function Navbar() {
   }, []);
 
   const logoSize = isMobille ? 48 : 98;
+  const logoContainerSize = logoSize * 0.45;
 
   const menuBarsWhite = (
-    <div className="flex flex-col justify-center items-center scale-[0.8] sm:scale-100 gap-[8px] w-[60px]">
+    <div ref={whiteMenuRef} className="flex flex-col justify-center items-center scale-[0.8] sm:scale-100 gap-[8px] w-[60px]">
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-white ${isHovered ? 'w-[70%]' : 'w-2/4'}`} />
       <div className={`h-[3px] self-start transition-all duration-300 ease-out bg-white ${isHovered ? 'w-[70%]' : 'w-3/4'}`} />
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-white ${isHovered ? 'w-[70%] translate-x-0' : 'w-2/4 translate-x-full'}`} />
@@ -119,7 +111,7 @@ export default function Navbar() {
   );
 
   const menuBarsBlack = (
-    <div className="flex flex-col justify-center items-center scale-[0.8] sm:scale-100 gap-[8px] w-[60px]">
+    <div ref={darkMenuRef} className="flex flex-col justify-center items-center scale-[0.8] sm:scale-100 gap-[8px] w-[60px]">
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-black ${isHovered ? 'w-[70%]' : 'w-2/4'}`} />
       <div className={`h-[3px] self-start transition-all duration-300 ease-out bg-black ${isHovered ? 'w-[70%]' : 'w-3/4'}`} />
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-black ${isHovered ? 'w-[70%] translate-x-0' : 'w-2/4 translate-x-full'}`} />
@@ -130,25 +122,29 @@ export default function Navbar() {
     <>
       <div id={styles.navbar} className="mainContainer pt-[2vh] sm:pt-[4vh] px-[3vw]">
         <div className={styles.navContent}>
-          {/* White layer (visible over dark sections) */}
-          <div ref={whiteLayerRef} className={styles.navLayer} style={{ clipPath: 'inset(0)' }}>
-            <div className={`${styles.logo} ${styles.white}`}>
-              <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio LOGO" style={{ objectFit: 'cover' }} />
+          {/* White layer */}
+          <div className={styles.navLayer}>
+            <div className={`${styles.logo} ${styles.white}`} style={{ width: logoContainerSize }}>
+              <div ref={whiteLogoRef}>
+                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio LOGO" />
+              </div>
             </div>
             {menuBarsWhite}
           </div>
 
-          {/* Dark layer (visible over light sections) */}
-          <div ref={darkLayerRef} className={styles.navLayer} style={{ clipPath: 'inset(100% 0 0 0)' }}>
-            <div className={`${styles.logo} ${styles.dark}`}>
-              <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio LOGO" style={{ objectFit: 'cover' }} />
+          {/* Dark layer */}
+          <div className={styles.navLayer}>
+            <div className={`${styles.logo} ${styles.dark}`} style={{ width: logoContainerSize }}>
+              <div ref={darkLogoRef}>
+                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio LOGO" />
+              </div>
             </div>
             {menuBarsBlack}
           </div>
 
-          {/* Click & hover layer (transparent, on top) */}
+          {/* Click layer */}
           <div className={`${styles.navLayer} ${styles.navClickLayer}`}>
-            <div style={{ width: logoSize, height: logoSize }} />
+            <div style={{ width: logoContainerSize }} />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               onMouseEnter={() => setIsHovered(true)}

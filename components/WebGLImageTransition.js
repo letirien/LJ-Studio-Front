@@ -358,7 +358,6 @@ function WebGLImageTransitionDemo5Internal({
       }}
       role="img"
     >
-      {/* todo: add opacity sur image ou voile noir */}
       {!isReady && images[fallbackIndex] && (
         <img
           src={images[fallbackIndex]}

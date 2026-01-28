@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-
+import Image from 'next/image';
 // Lettres en pixel art (5x5 chacune)
 const letters = {
   P: [
@@ -65,6 +65,19 @@ export default function PixelPlayIcon({ size = 80, onClick }) {
   const [rainProgress, setRainProgress] = useState(0); // 0 to 1
   const [rainDirection, setRainDirection] = useState('toBlack'); // 'toBlack' or 'toWhite'
   const isHoveredRef = useRef(false);
+  const circularSrc = "/images/roundedSVG/CIRCULAR_TXT.svg";
+
+  const circularStyle = {
+    position: "absolute",
+    width: "250%",
+    height: "250%",
+    inset: "-75%",
+    // transform: `rotate(${90}deg)`,
+    transformOrigin: "50% 50%",
+    willChange: "transform",
+    animation: "spin 20s linear infinite",
+    filter: "invert(1)"
+  };
 
   const [colors, setColors] = useState({
     background: '#ec591f',
@@ -263,7 +276,7 @@ export default function PixelPlayIcon({ size = 80, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="cursor-pointer bg-transparent border-none p-0 group"
+      className="relative cursor-pointer bg-transparent border-none p-0 group"
       style={{ outline: 'none', pointerEvents: 'auto' }}
       onMouseEnter={() => { isHoveredRef.current = true; }}
       onMouseLeave={() => { isHoveredRef.current = false; }}
@@ -462,6 +475,14 @@ export default function PixelPlayIcon({ size = 80, onClick }) {
           </g>
         )}
       </svg>
+      <div style={circularStyle}>
+        <Image
+          src={circularSrc}
+          alt="circular"
+          fill
+          style={{ objectFit: "contain" }}
+          />
+        </div>
     </button>
   );
 }
