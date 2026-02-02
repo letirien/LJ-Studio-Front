@@ -232,7 +232,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </AppearText>
           </div>
           <div>
-            <h2 className="text-center text-[14vw]/[0.85] sm:text-[8vw]/[0.85]">
+            <h1 className="text-center text-[14vw]/[0.85] sm:text-[8vw]/[0.85]">
               <div className="flex gap-9 justify-center items-center">
       
                  <AppearText type="lines" once={true} duration={1.4}
@@ -298,7 +298,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                   <RoundedIcon icon="" size={70} rotationFactor={0.45} />
                 </div>
               </HighlightText>
-            </h2>
+            </h1>
             <div
               ref={aboutUsRef}
               className={`${home.defaultText} text-center w-[90vw] sm:w-[70vw] xl:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible sm:h-[400px] shadow-[inset_0px_-50px_19px_-10px_#000000] sm:shadow-none` }

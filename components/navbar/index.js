@@ -120,7 +120,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div id={styles.navbar} className="mainContainer pt-[2vh] sm:pt-[4vh] px-[3vw]">
+      <nav id={styles.navbar} className="mainContainer pt-[2vh] sm:pt-[4vh] px-[3vw]" aria-label="Main Navigation">
         <div className={styles.navContent}>
           {/* White layer */}
           <div className={styles.navLayer}>
@@ -159,7 +159,7 @@ export default function Navbar() {
         </div>
 
         <SideMenu isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(!isMenuOpen)} />
-      </div>
+      </nav>
     </>
   );
 }

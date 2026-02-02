@@ -283,7 +283,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             </div>
           </div>
 
-          <h1 className="hardbopBlack leading-[0.8]">
+          <div className="hardbopBlack leading-[0.8]">
             {/* Ligne 1 */}
             <div className="flex flex-wrap items-center justify-center gap-x-4">
               <div className="overflow-hidden">
@@ -362,7 +362,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                 </div>
               </div>
             </div>
-          </h1>
+          </div>
         </div>
 
         {/* KickOff Loading - positionné par rapport au viewport */}
