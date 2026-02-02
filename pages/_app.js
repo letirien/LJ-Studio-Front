@@ -8,6 +8,7 @@ import gsap from 'gsap';
 import dynamic from 'next/dynamic';
 import CustomCursor from "../components/CustomCursor";
 import { LoadingProvider } from '../lib/LoadingManager';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const Cursor = dynamic(() => import('../components/Cursor'), {
   ssr: false
@@ -53,6 +54,7 @@ function App({ Component, pageProps }) {
         <Head>
           <meta name="robots" content="noindex, nofollow" />
         </Head>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         <LoadingProvider>
           <ReactLenis root options={lenisOptions}>
             <Cursor key="cursor" />

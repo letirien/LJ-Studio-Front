@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@next/third-parties": "^16.1.6",
     "@svgr/webpack": "^8.1.0",
     "framer-motion": "^10.16.0",
     "gsap": "^3.12.2",
