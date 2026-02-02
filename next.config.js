@@ -10,6 +10,7 @@ const nextConfig = {
       },
     ],
     dangerouslyAllowSVG: true,
+    qualities: [30, 50, 75, 100],
   },
   
   webpack(config) {

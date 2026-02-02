@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { AnimatePresence } from 'framer-motion';
 import { ReactLenis } from 'lenis/react';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import gsap from 'gsap';
 import dynamic from 'next/dynamic';
 import CustomCursor from "../components/CustomCursor";
@@ -22,6 +23,8 @@ if (typeof window !== 'undefined') {
 }
 
 function App({ Component, pageProps }) {
+  const router = useRouter();
+
   useEffect(() => {
     function update(time) {
       window.lenis?.raf(time * 1000);
@@ -43,24 +46,20 @@ function App({ Component, pageProps }) {
     smoothTouch: false,
     wheelMultiplier: 1,
     touchMultiplier: 0.7,
-    
   };
 
   return (
       <>
         <Head>
           <meta name="robots" content="noindex, nofollow" />
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-          <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
         </Head>
         <LoadingProvider>
           <ReactLenis root options={lenisOptions}>
+            <Cursor key="cursor" />
             <AnimatePresence mode="wait" initial={false}>
-              <Cursor />
-              <Component {...pageProps} />
-              <CustomCursor />
+              <Component key={router.asPath} {...pageProps} />
             </AnimatePresence>
+            <CustomCursor key="custom-cursor" />
           </ReactLenis>
         </LoadingProvider>
       </>

@@ -29,11 +29,8 @@ import { useLoading } from '../lib/LoadingManager';
 
 
 export default function Home({ projects, gamePlan, logoClients, sliderImages, headerImages, headerClients }) {
-  const { scrollYProgress } = useScroll();
   const { setDataLoaded, setEffectsReady, setPageImagesProgress } = useLoading();
-  const [buttonTopPosition, setButtonTopPosition] = useState('50%');
-
-  console.log(sliderImages)
+  const [isMobileOrSafari, setIsMobileOrSafari] = useState(false);
 
   // Ref pour la section FC Nantes
   const fcNantesRef = useRef(null);
@@ -72,39 +69,20 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
     target: aboutUsRef,
     offset: ["start center", "end center"], // du moment où la section entre jusqu’à ce qu’elle sorte
   });
-  // const { scrollYProgress: scrollYGalleryMobProgress } = useScroll({
-  //   target: galerySection2,
-  //   offset: ["start end", "end start"], // du moment où la section entre jusqu’à ce qu’elle sorte
-  // });
 
   // On fait varier le line-height progressivement
   const lineHeight = useTransform(scrollYGalleryProgress, [0, 1], ["1.1", "0.7"]);
 
   // Animation lineHeight : utilise useTransform sauf sur mobile/Safari
-  let isMobileOrSafari = false;
-  if (typeof window !== "undefined") {
+  // Détection mobile/Safari côté client uniquement pour éviter les erreurs d'hydratation
+  useEffect(() => {
     const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    isMobileOrSafari = isMobile || isSafari;
-  }
+    setIsMobileOrSafari(isMobile || isSafari);
+  }, []);
+
   const pLineHeightMotion = useTransform(scrollYTextGalleryProgress, [0, 1], ["1.6", "1.2"]);
 
-  // On fait varier le line-height progressivement
-  // const lineHeightMob = useTransform(scrollYGalleryMobProgress, [0, 1], ["1.1", "0.7"]);
-  
-  // // Référence pour la section entière
-  // const studioRef = useRef(null);
-  // const paraphRef = useRef(null);
-  // const isParaphInView = useInView(paraphRef, { 
-  //   once: true, 
-  //   amount: 0.35,  // Plus bas pour iOS
-  // });
-
-  //   const isStudioInView = useInView(studioRef, { 
-  //   once: true, 
-  //   amount: 0.4,  // Plus bas pour iOS
-  // });
-  
   // Animations simples
   const titleAnimation = {
     hidden: { opacity: 0, y: 20 },
@@ -302,13 +280,13 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </h2>
             <div
               ref={aboutUsRef}
-              className={`${home.defaultText} text-center w-[90vw] sm:w-[70vw] xl:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible h-[600px] sm:h-[400px] shadow-[inset_0px_-50px_19px_-10px_#000000] sm:shadow-none` }
+              className={`${home.defaultText} text-center w-[90vw] sm:w-[70vw] xl:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible sm:h-[400px] shadow-[inset_0px_-50px_19px_-10px_#000000] sm:shadow-none` }
             >
               {/* lineHeight animé uniquement sur desktop non-Safari, sinon fixe */}
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.6" : pLineHeightMotion}} className="uppercase mb-12 robotoRegular tracking-[0.7px] text-white !font-[400]">LJ Studio was born from a passion for sport and image, two languages that speak through emotion.</motion.p>
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.6" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.6" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[20px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.6" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[20px]">We believe every sport has its own language - we design the way it's told.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.2" : pLineHeightMotion}} className="uppercase mb-12 robotoRegular tracking-[0.7px] text-white !font-[400]">LJ Studio was born from a passion for sport and image, two languages that speak through emotion.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.2" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.2" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[20px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.2" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[20px]">We believe every sport has its own language - we design the way it's told.</motion.p>
               {/* {[
                 {
                   className: 'uppercase mb-12 robotoRegular tracking-[0.7px] text-white',

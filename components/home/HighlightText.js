@@ -129,7 +129,7 @@ export const HighlightText = ({
   const otherElements = childrenArray.filter(child => typeof child !== 'string');
 
   return (
-    <motion.p
+    <motion.div
       ref={containerRef}
       initial={initial}
       animate={animate}
@@ -140,7 +140,7 @@ export const HighlightText = ({
     >
       <span ref={textRef}>{textContent}</span>
       {otherElements}
-    </motion.p>
+    </motion.div>
   );
 };
 

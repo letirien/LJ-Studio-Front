@@ -57,6 +57,7 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
     const totalProjects = projects.length;
 
     const [isMobile, setIsMobile] = useState(false);
+    const [sliderReady, setSliderReady] = useState(false);
 
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -122,9 +123,6 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
         const deco = decoRef.current;
 
         if (!currentSlide || !currentInner || !upcomingSlide || !upcomingInner || !deco) {
-            console.error('Some slide references are missing', {
-                currentSlide, currentInner, upcomingSlide, upcomingInner, deco
-            });
             setIsAnimating(false);
             return;
         }
@@ -264,7 +262,7 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
         const preloadImages = async () => {
             const imagePromises = projects.map(project => {
                 return new Promise((resolve) => {
-                    const img = new Image();
+                    const img = new window.Image();
                     img.onload = resolve;
                     img.onerror = resolve; // Continuer même si l'image ne charge pas
                     img.src = project.fields.Image[0].url;
@@ -389,7 +387,7 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                             >
                                 <Image
                                     src={project.fields.Image[0].url}
-                                    alt={project.title}
+                                    alt={project.fields?.Name || project.fields?.Team || `Project ${index + 1}`}
                                     width={1920}
                                     height={1080}
                                     priority

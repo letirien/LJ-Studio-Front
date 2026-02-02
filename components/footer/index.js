@@ -253,8 +253,10 @@ const Footer = () => {
           alt="LJ Studio Logo"
           width={800}
           height={300}
-          className="absolute left-[-300px] top-[50px] object-cover invert opacity-30">
-        </Image>
+          loading="eager"
+          // style={{ width: 'auto', height: 'auto'}}
+          className="absolute left-[-300px] top-[50px] object-cover invert opacity-30"
+        />
         {/* Top section */}
         <div className="grid grid-cols-1 md:grid-cols-3 relative">
           {/* Left block with video or badge */}
@@ -373,7 +375,7 @@ const Footer = () => {
       <div className="w-full overflow-hidden bg-black relative z-10">
         <img
           src="/images/LJSTD_WORDMARK.svg"
-          alt="LJ Studio Logo"
+          alt="LJ Studio Wordmark"
           className="w-full object-cover invert pt-8 pb-2 md:py-12"
         />
       </div>

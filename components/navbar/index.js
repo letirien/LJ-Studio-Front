@@ -126,7 +126,7 @@ export default function Navbar() {
           <div className={styles.navLayer}>
             <div className={`${styles.logo} ${styles.white}`} style={{ width: logoContainerSize }}>
               <div ref={whiteLogoRef}>
-                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio LOGO" />
+                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" />
               </div>
             </div>
             {menuBarsWhite}
@@ -136,7 +136,7 @@ export default function Navbar() {
           <div className={styles.navLayer}>
             <div className={`${styles.logo} ${styles.dark}`} style={{ width: logoContainerSize }}>
               <div ref={darkLogoRef}>
-                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio LOGO" />
+                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" />
               </div>
             </div>
             {menuBarsBlack}

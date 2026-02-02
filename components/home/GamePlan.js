@@ -253,7 +253,6 @@ export default function BrandingSection({ gamePlan }) {
         // labelPosition peut être un nombre (px) ou une string en pourcentage (ex: '50%')
         let labelLeft;
         if (item.labelPosition !== undefined) {
-          console.log(item.labelPosition)
           if (typeof item.labelPosition === 'string' && item.labelPosition.endsWith('%')) {
             const percent = parseFloat(item.labelPosition) / 100;
             const titleRef = titleRefs.current[index];

@@ -123,8 +123,9 @@ export default function RoundedIcon({
             ) : (
               <Image
                 src={backgroundSrc}
-                alt="fond"
+                alt="Decorative background"
                 fill
+                sizes="120px"
                 style={{ objectFit: "contain", ...blackBgStyle }}
               />
             )}
@@ -139,8 +140,9 @@ export default function RoundedIcon({
             ) : (
               <Image
                 src={iconSrc}
-                alt={`icone-${icon}`}
+                alt={`Icon ${icon}`}
                 fill
+                sizes="120px"
                 style={{ objectFit: "contain", ...invertStyle }}
               />
             )}
@@ -161,8 +163,9 @@ export default function RoundedIcon({
         >
           <Image
             src={iconCross}
-            alt="close"
+            alt="close icon"
             fill
+            sizes="60px"
             style={{ objectFit: "contain", ...invertStyle }}
           />
         </div>
@@ -172,8 +175,9 @@ export default function RoundedIcon({
       <div ref={circularRef} style={circularStyle}>
         <Image
           src={circularSrc}
-          alt="circular"
+          alt="Circular decorative text"
           fill
+          sizes="130px"
           style={{ objectFit: "contain", ...invertStyle }}
         />
       </div>

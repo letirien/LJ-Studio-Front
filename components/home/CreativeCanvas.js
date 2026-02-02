@@ -364,8 +364,9 @@ const CreativeCanvas = ({ images }) => {
                           <Image
                             quality={30}
                             src={thumbnailUrl}
-                            alt={image.fields.Name}
+                            alt={image.fields.Name || "Project thumbnail"}
                             fill
+                            sizes="(max-width: 768px) 25vw, 33vw"
                             className="blur-sm"
                             style={{
                               objectFit: 'contain',
@@ -374,14 +375,15 @@ const CreativeCanvas = ({ images }) => {
                             priority={index < 5} // Prioriser les 5 premières
                           />
                         )}
-                        
+
                         {/* Image haute qualité */}
                         {isLoadedImg ? (
                           <Image
                             quality={50}
                             src={url}
-                            alt={image.fields.Name}
+                            alt={image.fields.Name || "Project image"}
                             fill
+                            sizes="(max-width: 768px) 25vw, 33vw"
                             className="transition-opacity duration-300"
                             style={{
                               objectFit: 'contain',

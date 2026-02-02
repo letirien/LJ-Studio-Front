@@ -239,7 +239,7 @@ export default function ProjectSection({ projects, home }) {
               const projIndex = typeof block.projectIndex === 'number' ? block.projectIndex : i || 0;
               const imageObj = projects?.[projIndex]?.fields?.Image?.[0];
               const imageUrl = imageObj?.url;
-              const imageAlt = imageObj?.alt || 'overlay';
+              const imageAlt = imageObj?.alt || 'Project Overlay Image';
 
               if (!imageUrl) return null;
               return (
@@ -284,7 +284,7 @@ export default function ProjectSection({ projects, home }) {
               </div>
             </h2>
             <div className="mt-12">
-              <Image src={"/images/LJSTD_WORDMARK.svg"} alt="logo" width={200} height={24}/>
+              <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={200} height={24}/>
             </div>
           </div>
 

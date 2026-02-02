@@ -267,7 +267,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
 
           <div ref={wordmarkRef} className="h-[90px] md:h-[120px] w-full flex items-center -rotate-90 origin-bottom-right hidden 2xl:flex">
             <div className="block">
-              <Image src={"/images/LJSTD_WORDMARK.svg"} alt="logo" width={100} height={24}/>
+              <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={100} height={24}/>
             </div>
           </div>
         </div>
@@ -284,7 +284,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
             creative studio - french accent
           </p>
           <div ref={wordmarkRefMob} className="2xl:hidden">
-            <Image src={"/images/LJSTD_WORDMARK.svg"} alt="logo" width={100} height={24}/>
+            <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={100} height={24}/>
           </div>
         </div>
       </div>

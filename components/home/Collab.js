@@ -159,8 +159,9 @@ const Collab = ({logos}) => {
                   <a className="logo-wrapper" href={logo.fields?.URL} target='_blank'>
                     <Image
                       src={logo.fields.Logo[0].url}
-                      alt={`Partner logo ${index}`}
+                      alt={logo.fields?.Name || `Partner logo ${index + 1}`}
                       fill
+                      sizes="100px"
                       style={{ objectFit: 'contain' }}
                     />
                   </a>
@@ -190,8 +191,9 @@ const Collab = ({logos}) => {
                   <a className="logo-wrapper" href={logo.fields?.URL} target='_blank'>
                     <Image
                       src={logo.fields.Logo[0].url}
-                      alt={`Partner logo ${index}`}
+                      alt={logo.fields?.Name || `Partner logo ${index + 1}`}
                       fill
+                      sizes="100px"
                       style={{ objectFit: 'contain' }}
                     />
                   </a>

@@ -36,7 +36,7 @@ export default function CustomCursor() {
     >
       <img
         src="/images/CURSEUR_ROND_CENTRAL.svg"
-        alt=""
+        alt="custom cursor"
         className="w-[120px] h-[120px] transition-transform duration-300 ease-out"
       />
     </div>

@@ -305,7 +305,7 @@ function WebGLImageTransitionDemo5Internal({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const handleClick = () => { console.log("[WebGL] click -> next()"); next(); };
+    const handleClick = () => { next(); };
     el.addEventListener("click", handleClick);
     return () => el.removeEventListener("click", handleClick);
   }, []);
