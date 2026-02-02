@@ -1,11 +1,9 @@
 "use client"
-import { useState, useEffect, useMemo, useRef, useLayoutEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
-import { SeeMore } from '../SeeMoreResp';
-import GifDemo from "../../public/images/demo_gif.gif"
 import AppearText from '../AppearText.js';
 import { useLoading } from '../../lib/LoadingManager';
 
@@ -336,7 +334,7 @@ export default function BrandingSection({ gamePlan }) {
                 height={item.fields.Image[0].height || gamePlan[0].fields.Image[0].height}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 unoptimized={true}
-                // priority={index === 0}
+                priority={true}
               />
               {/* <SeeMore/> */}
             </div>

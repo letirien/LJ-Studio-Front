@@ -183,8 +183,29 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
     <Layout home>
       <div>
         <Head>
-          <title>LJ Studio</title>
-          <link rel="icon" href="/favicon.ico" />
+          {/* SEO Meta Tags */}
+          <title>LJ STUDIO™ - SPORT DESIGN</title>
+          <meta name="description" content="Designing the language of sport through visual identities, art direction and content for teams, brands, events and federations." />
+          <meta name="keywords" content="creative studio, sports design studio, art direction, branding, visual identity, logotype, brand territory, visual guidelines, key visuals, campaign, matchday visuals, social media templates, posters, motion, typographic animation, brand motion systems, video editing, 3D, stadium content, giant screen, LED animations, line-up reveals, goal animation, victory animation, matchday, fan engagement, storytelling, design system" />
+
+          {/* Open Graph / Facebook */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://ljstudio.xyz/" />
+          <meta property="og:title" content="LJ STUDIO™ - SPORT DESIGN" />
+          <meta property="og:description" content="Designing the language of sport through visual identities, art direction and content for teams, brands, events and federations." />
+          {/* <meta property="og:image" content="https://ljstudio.xyz/og-image.jpg" /> */}
+          <meta property="og:site_name" content="LJ STUDIO" />
+          <meta property="og:locale" content="en_US" />
+
+          {/* Twitter */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:url" content="https://ljstudio.xyz/" />
+          <meta name="twitter:title" content="LJ STUDIO™ - SPORT DESIGN" />
+          <meta name="twitter:description" content="Designing the language of sport through visual identities, art direction and content for teams, brands, events and federations." />
+          {/* <meta name="twitter:image" content="https://ljstudio.xyz/og-image.jpg" /> */}
+
+          {/* Additional SEO */}
+          <link rel="canonical" href="https://ljstudio.xyz/" />
         </Head>
         <Header headerImages={headerImages}/>
         <section
