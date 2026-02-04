@@ -48,7 +48,7 @@ export default function IconRain({ containerRef }) {
         transform: translateX(-50%);
         pointer-events: none;
         will-change: transform;
-        z-index: 10;
+        z-index: 30;
       `;
 
       const img = document.createElement('img');

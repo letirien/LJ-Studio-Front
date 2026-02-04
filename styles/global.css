@@ -559,3 +559,10 @@ body:has( [data-cursor]:hover) .cursor{
 .st1 {
   fill: #fff;
 }
+
+.footer-section {
+  /* position: sticky; */
+  bottom: 0;
+  will-change: transform;
+  isolation: isolate;
+}

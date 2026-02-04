@@ -9,7 +9,7 @@ import AnimateText from '../lib/animation/animationText';
 import dynamic from 'next/dynamic';
 import Footer from './footer';
 import AnimationPage from './home/HelloAnimation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 // Importer dynamiquement le Clock sans rendu côté serveur
 const Clock = dynamic(() => import('../components/clock').then(mod => mod.Clock), {
@@ -17,17 +17,7 @@ const Clock = dynamic(() => import('../components/clock').then(mod => mod.Clock)
 });
 
 export default function Layout({ children, home }) {
-  const [footerHeight, setFooterHeight] = useState(0);
   const [animationComplete, setAnimationComplete] = useState(false);
-
-  useEffect(() => {
-    const footer = window.document.querySelector('footer');
-    
-    if (footer) {
-      const isSmOrAbove = window.matchMedia('(min-width: 640px)').matches;
-      setFooterHeight(isSmOrAbove ? footer.getBoundingClientRect().height : 0);
-    }
-  }, []);
 
   return (
     <div className={`relative ${!animationComplete ? 'h-screen overflow-hidden' : ''}`}>
@@ -38,9 +28,11 @@ export default function Layout({ children, home }) {
       </Head>
 
       <div className="relative">
-        {/* Contenu principal, toujours visible */}
-        <main className="relative z-0" style={{ paddingBottom: `${footerHeight}px` }}>
-          {children}
+        <main className="relative">
+          {/* Contenu principal — au-dessus du footer fixe */}
+          <div className="content-above-footer relative z-10">
+            {children}
+          </div>
           <section id="contact">
             <Footer />
           </section>
