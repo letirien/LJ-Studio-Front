@@ -393,7 +393,7 @@ export default function AnimatedField() {
                     </div>
                     
                 </h2>
-                <p className='absolute uppercase robotoReg text-center bottom-[15%] text-[16px] hidden lg:block'>Game Plan Deployed</p>
+                <p className='absolute uppercase robotoReg text-center bottom-[22%] sm:bottom-[15%] text-[12px] sm:text-[16px]'>Game Plan Deployed</p>
             </div>
             <svg
                 ref={svgRef}
@@ -404,9 +404,9 @@ export default function AnimatedField() {
                 className="
                     transition-transform duration-500
                     max-[641px]:rotate-90
-                    max-[641px]:h-screen
-                    max-[641px]:w-[150%]!
-                    max-[641px]:-ml-[25%]!
+                    max-[641px]:h-[110vh]
+                    max-[641px]:w-[162%]!
+                    max-[641px]:-ml-[31%]!
                 "
                 style={{
                     width: '106%',
@@ -449,11 +449,11 @@ export default function AnimatedField() {
                 {/* Ligne centrale : version mobile (ligne complète, visible uniquement en mobile) */}
                 <g id="Calque_6">
                     {/* Ligne centrale mobile (complète) */}
-                    <path id="Centre_line" className="st0 max-[641px]:block hidden" d="M852.47,1077.51V31.89" />
+                    {/* <path id="Centre_line" className="st0 max-[641px]:block hidden" d="M852.47,1077.51V31.89" /> */}
                     {/* Version desktop : deux segments courts, visibles uniquement >= 641px */}
                     {/* 8% de la hauteur totale (1110) = 88.8px */}
-                    <path id="Centre_line_bottom" className="st0 max-[641px]:hidden block" d="M852.47,1077.51V988.71" />
-                    <path id="Centre_line_top" className="st0 max-[641px]:hidden block" d="M852.47,121.69V31.89" />
+                    <path id="Centre_line_bottom" className="st0" d="M852.47,1077.51V988.71" />
+                    <path id="Centre_line_top" className="st0 " d="M852.47,121.69V31.89" />
                 </g>
                 <g id="Calque_7">
                     <path id="Border" className="st0" d="M45.19,1077.51V31.89h1614.56v1045.62H45.19Z" />

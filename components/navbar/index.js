@@ -103,7 +103,7 @@ export default function Navbar() {
   const logoContainerSize = logoSize * 0.45;
 
   const menuBarsWhite = (
-    <div ref={whiteMenuRef} className="flex flex-col justify-center items-center scale-[0.8] sm:scale-100 gap-[8px] w-[60px]">
+    <div ref={whiteMenuRef} className="flex flex-col justify-center items-center scale-[0.6] sm:scale-100 gap-[8px] w-[60px]">
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-white ${isHovered ? 'w-[70%]' : 'w-2/4'}`} />
       <div className={`h-[3px] self-start transition-all duration-300 ease-out bg-white ${isHovered ? 'w-[70%]' : 'w-3/4'}`} />
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-white ${isHovered ? 'w-[70%] translate-x-0' : 'w-2/4 translate-x-full'}`} />
@@ -111,7 +111,7 @@ export default function Navbar() {
   );
 
   const menuBarsBlack = (
-    <div ref={darkMenuRef} className="flex flex-col justify-center items-center scale-[0.8] sm:scale-100 gap-[8px] w-[60px]">
+    <div ref={darkMenuRef} className="flex flex-col justify-center items-center scale-[0.6] sm:scale-100 gap-[8px] w-[60px]">
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-black ${isHovered ? 'w-[70%]' : 'w-2/4'}`} />
       <div className={`h-[3px] self-start transition-all duration-300 ease-out bg-black ${isHovered ? 'w-[70%]' : 'w-3/4'}`} />
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-black ${isHovered ? 'w-[70%] translate-x-0' : 'w-2/4 translate-x-full'}`} />
@@ -120,11 +120,11 @@ export default function Navbar() {
 
   return (
     <>
-      <nav id={styles.navbar} className="mainContainer pt-[2vh] sm:pt-[4vh] px-[3vw]" aria-label="Main Navigation">
+      <div id={styles.navbar} className="mainContainer pt-[2vh] sm:pt-[4vh] px-[3vw]" aria-label="Main Navigation">
         <div className={styles.navContent}>
           {/* White layer */}
           <div className={styles.navLayer}>
-            <div className={`${styles.logo} ${styles.white}`} style={{ width: logoContainerSize }}>
+            <div className={`${styles.logo} ${styles.white}`} style={{ width: isMobille ? logoSize:  logoContainerSize }}>
               <div ref={whiteLogoRef}>
                 <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" />
               </div>
@@ -134,7 +134,7 @@ export default function Navbar() {
 
           {/* Dark layer */}
           <div className={styles.navLayer}>
-            <div className={`${styles.logo} ${styles.dark}`} style={{ width: logoContainerSize }}>
+            <div className={`${styles.logo} ${styles.dark}`} style={{ width: isMobille ? logoSize:  logoContainerSize }}>
               <div ref={darkLogoRef}>
                 <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" />
               </div>
@@ -159,7 +159,7 @@ export default function Navbar() {
         </div>
 
         <SideMenu isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(!isMenuOpen)} />
-      </nav>
+      </div>
     </>
   );
 }

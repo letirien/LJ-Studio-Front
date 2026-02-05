@@ -31,8 +31,8 @@ export const Clock = () => {
     const seconds = String(currentTime.getSeconds()).padStart(2, '0');
 
     return (
-        <p ref={clockRef} className="robotoRegular text-[14pt] text-center">
-            game time:<span className="opacity-55">{hours}:{minutes}:{seconds} UTC+2</span>
+        <p ref={clockRef} className="robotoRegular text-[12px] sm:text-[14pt] text-center">
+            game time : <span className="opacity-55">{hours}:{minutes}:{seconds} UTC+2</span>
         </p>
     );
 }

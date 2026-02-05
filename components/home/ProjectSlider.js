@@ -303,7 +303,7 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
             ref={sectionRef}
             className={`relative transition-all duration-500 ease-in-out`}
         >
-            <button className="absolute right-[2%] bottom-[63%] sm:right-[-2vw] sm:bottom-[45%] md:right-[12vw] md:bottom-[20%] pointer-events-none z-3 group" onClick={() => { handleNavigation(1) }}>
+            <button className="absolute right-[5%] bottom-[12%] sm:right-[-2vw] sm:bottom-[45%] md:right-[12vw] md:bottom-[20%] pointer-events-none z-3 group" onClick={() => { handleNavigation(1) }}>
                 <div className="rotate-[-10deg] pointer-events-auto">
                     <motion.svg
                         width={isMobile ? "42" : "82 "}
@@ -361,7 +361,7 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                     </motion.svg>
                 </div>
             </button>
-            <div id="sliderContainer" className={`${home.sliderContainer} mx-auto rounded-md z-1`}>
+            <div id="sliderContainer" className={`${home.sliderContainer} lg:w-[70%] mx-auto rounded-md z-1`}>
                 <div className={`rounded-md ${home.sliderWrapper} relative overflow`} ref={containerRef}>
                     {/* Élément décoratif pour les transitions */}
                     <div className={`rounded-md ${home.deco}`} ref={decoRef} ></div>
@@ -399,7 +399,7 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                     ))}
                 </div>
             </div>
-            <div className={`${home.slideBlock} hidden sm:block`}>
+            <div className={`${home.slideBlock} hidden sm:block sm:mr-[-16px] lg:mr-auto`}>
                 <Section>
                     <div className={home.containerSlideInfo}>
                         <SliderDot
@@ -418,13 +418,13 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
             </div>
 
             <section>
-                <div className="sm:hidden"><SliderDot
+                <div className="sm:hidden mt-8"><SliderDot
                     Nb={totalProjects}
                     idProject={idProject}
                     home={home}
                 /></div>
-                <Section>
-                    <motion.div className={`items-top lg:items-start ${home.projectFooter} mx-auto mt-[60px] sm:mt-[32px]`} variants={fadeInUp}>
+                {isMobile ? (<></>) : (<Section>
+                    <motion.div className={`items-top lg:items-start ${home.projectFooter} lg:w-[70%] mx-auto mt-[60px] sm:mt-[32px]`} variants={fadeInUp}>
                         {['Team', 'Match Day', 'Game Plan', 'Perf'].map((field) => (
                             <div className={home.footerInfo} key={field}>
                                 <div className="container-txt flex flex-col lg:flex-row items-center flex-wrap gap-2">
@@ -442,7 +442,8 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
                             </p>
                         </div>
                     </motion.div>
-                </Section>
+                </Section>)}
+
             </section>
         </div>
     );

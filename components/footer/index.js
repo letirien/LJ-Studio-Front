@@ -270,7 +270,7 @@ useEffect(() => {
       <footer ref={footerRef} className="w-full bg-black text-white text-sm font-mono overflow-hidden relative">
 
         {/* Section 1: Grid contact */}
-        <div className="footer-section bg-black relative z-30">
+        <div className="footer-section bg-black relative z-9">
           <Image
             src="/images/ICONE_LJ-STUDIO_BLACK_OUTLINE.svg"
             alt="LJ Studio Logo"

@@ -200,7 +200,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
       >
         {/* MENU LINKS */}
         <div className="flex w-full items-top my-auto">
-          <div className="flex flex-1 flex-col space-y-6 font-bold uppercase text-black my-auto pl-[3vw]">
+          <nav className="flex flex-1 flex-col space-y-6 font-bold uppercase text-black my-auto pl-[3vw]">
             {["SERVICES", "WORK", "ARCHIVE", "ABOUT", "CONTACT"].map((label, i) => (
               <div className="relative overflow-hidden" key={i}>
                 <a
@@ -235,7 +235,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
                 </a>
               </div>
             ))}
-          </div>
+          </nav>
 
           {/* SOCIAL ICONS */}
         </div>

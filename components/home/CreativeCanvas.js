@@ -379,7 +379,7 @@ const CreativeCanvas = ({ images }) => {
                         {/* Image haute qualité */}
                         {isLoadedImg ? (
                           <Image
-                            quality={50}
+                            quality={isMobile ? 75 : 100}
                             src={url}
                             alt={image.fields.Name || "Project image"}
                             fill
@@ -387,7 +387,7 @@ const CreativeCanvas = ({ images }) => {
                             className="transition-opacity duration-300"
                             style={{
                               objectFit: 'contain',
-                              opacity: hoveredIndex === index ? 1 : 0.8
+                              opacity: isMobile ? 1 : hoveredIndex === index ? 1 : 0.8
                             }}
                             priority={index < 5}
                           />
@@ -404,7 +404,7 @@ const CreativeCanvas = ({ images }) => {
                         <div
                           className="absolute inset-0 bg-black/60 transition-opacity duration-300 flex items-end p-4"
                           style={{
-                            opacity: hoveredIndex === index ? 0.2 : 1
+                            opacity: isMobile ? 0 : hoveredIndex === index ? 0.2 : 1
                           }}
                         >
                         </div>

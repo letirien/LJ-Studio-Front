@@ -111,7 +111,7 @@ export function Header({ headerImages }) {
                 <div className="absolute inset-0 mb-[60px] sm:mb-[90px] md:mb-[180px] flex items-center justify-center pointer-events-none">
                     <svg
                         viewBox="0 0 689.83765 89.09131"
-                        className="w-[300px] sm:w-[400px] md:w-[400px] h-auto"
+                        className="w-[40vw] sm:w-[400px] md:w-[400px] h-auto"
                     >
                         {/* L */}
                         <g className="overflow-hidden">

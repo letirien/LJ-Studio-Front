@@ -15,6 +15,8 @@ export default function ProjectSection({ projects, home }) {
   const preTitleRef = useRef(null);
   const titleLine1Ref = useRef(null);
   const titleLine2Ref = useRef(null);
+  const titleLine3Ref = useRef(null);
+  const titleLine4Ref = useRef(null);
   const colorBlockRef = useRef(null);
   const orangeBgRef = useRef(null);
   const roundedIconRef = useRef(null);
@@ -54,7 +56,7 @@ export default function ProjectSection({ projects, home }) {
 
   useEffect(() => {
     if (!isReady || !ScrollTrigger || !lenis) return;
-    if (!sectionRef.current || !titleLine1Ref.current || !titleLine2Ref.current || !colorBlockRef.current || !slideMainContainer.current || !orangeBgRef.current)
+    if (!sectionRef.current || !titleLine1Ref.current || !titleLine2Ref.current  || !colorBlockRef.current || !slideMainContainer.current || !orangeBgRef.current)
       return;
 
     const updateLenis = (opts) => {
@@ -100,6 +102,17 @@ export default function ProjectSection({ projects, home }) {
       }, 
       0
     );
+    if (isMobile) {
+      tl.to(
+        roundedIconRef.current,
+        {
+          // opacity: 0, 
+          y: -150,         // ease: 'power2.inOut'
+          duration: 0.2
+        },
+        0.8
+      );
+    }
     tl.to(
       preTitleRef.current, 
       { 
@@ -142,6 +155,32 @@ export default function ProjectSection({ projects, home }) {
         0 // Démarre 0.08s après le début (après quelques mots de la ligne 1)
       );
     }
+    
+    if (isMobile && titleLine3Ref.current) {
+      tl.to(
+        titleLine3Ref.current,
+        {
+          y: '120%',
+          // opacity: 0,
+          ease: 'power2.in',
+          duration: 0.4
+        },
+        0 // Démarre 0.08s après le début (après quelques mots de la ligne 1)
+      );
+    }
+    if (isMobile && titleLine4Ref.current) {
+      tl.to(
+        titleLine4Ref.current,
+        {
+          y: '120%',
+          // opacity: 0,
+          ease: 'power2.in',
+          duration: 0.4
+        },
+        0 // Démarre 0.08s après le début (après quelques mots de la ligne 1)
+      );
+    }
+  
 
     // FOND ORANGE : réduction fluide de 100vh à 50vh (0 → 40%)
     tl.to(
@@ -272,19 +311,44 @@ export default function ProjectSection({ projects, home }) {
             <div className="mb-8 ">
               <p ref={preTitleRef} className={`capitalize text-black instrumentSerifRegular text-[8vw]/[0.8] tracking-tight sm:opacity-90 sm:text-[4vw]/[0.8]`}>Pitch Vision</p>
             </div>
-            <h2 ref={titleRef} className="bigH2 text-center">
-              <div className="overflow-hidden">
-                <div ref={titleLine1Ref} className="flex justify-center gap-2 md:gap-12">
-                  <span>highlights</span>
-                  <span>from</span>
+            {isMobile ? (
+              <h2 ref={titleRef} className="bigH2 !text-[30vw]/[0.8] text-center">
+                <div className="overflow-hidden">
+                  <div ref={titleLine1Ref} className="flex flex-col justify-center gap-2 md:gap-12">
+                    <span>highlights</span>
+                  </div>
                 </div>
-              </div>
-              <div className="overflow-hidden">
-                <p ref={titleLine2Ref}>our recent games</p>
-              </div>
-            </h2>
-            <div className="mt-12">
-              <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={200} height={24}/>
+                  <div className="overflow-hidden">
+                  <div ref={titleLine2Ref} className="flex flex-col justify-center gap-2 md:gap-12">
+                    <span>from our</span>
+                  </div>
+                </div>
+                <div className="overflow-hidden">
+                  <div ref={titleLine3Ref} className="flex flex-col justify-center gap-2 md:gap-12">
+                    <span>recent</span>
+                  </div>
+                </div>
+                <div className="overflow-hidden">
+                  <div ref={titleLine4Ref} className="flex flex-col justify-center gap-2 md:gap-12">
+                    <span>games</span>
+                  </div>
+                </div>
+              </h2>
+            ) :
+              (<h2 ref={titleRef} className="bigH2 text-center">
+                <div className="overflow-hidden">
+                  <div ref={titleLine1Ref} className="flex justify-center gap-2 md:gap-12">
+                    <span>highlights</span>
+                    <span>from</span>
+                  </div>
+                </div>
+                <div className="overflow-hidden">
+                  <p ref={titleLine2Ref}>our recent games</p>
+                </div>
+              </h2>)}
+
+            <div className="mt-8 sm:mt-12">
+              <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={isMobile ? 120 : 200} height={24}/>
             </div>
           </div>
 
@@ -301,7 +365,7 @@ export default function ProjectSection({ projects, home }) {
           </div>
           
         </div>
-        <div ref={roundedIconRef} className='absolute inset-0 flex items-center justify-center'>
+        <div ref={roundedIconRef} className='absolute bottom-[30vh] sm:inset-0 flex sm:items-center justify-center'>
             <RoundedIcon size={isMobile ? 90 : 120} color="black"/>
         </div>
       </section>
