@@ -214,7 +214,7 @@ export default function ProjectSection({ projects, home }) {
         // opacity: 0
       },
       {
-        y: isMobile ? '15vh' : '0vh',
+        y: isMobile ? '5vh' : '0vh',
         // opacity: 1,
         ease: 'linear',
         duration: 1

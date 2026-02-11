@@ -393,7 +393,7 @@ export default function AnimatedField() {
                     </div>
                     
                 </h2>
-                <p className='absolute uppercase robotoReg text-center bottom-[22%] sm:bottom-[15%] text-[12px] sm:text-[16px]'>Game Plan Deployed</p>
+                <p className='absolute uppercase robotoReg text-center bottom-[25%] sm:bottom-[15%] text-[12px] sm:text-[16px]'>Game Plan Deployed</p>
             </div>
             <svg
                 ref={svgRef}
@@ -404,9 +404,9 @@ export default function AnimatedField() {
                 className="
                     transition-transform duration-500
                     max-[641px]:rotate-90
-                    max-[641px]:h-[110vh]
-                    max-[641px]:w-[162%]!
-                    max-[641px]:-ml-[31%]!
+                    max-[641px]:h-[115vh]!
+                    max-[641px]:w-[115vh]!
+                    max-[641px]:ml-[calc((100vw-115vh)/2)]!
                 "
                 style={{
                     width: '106%',

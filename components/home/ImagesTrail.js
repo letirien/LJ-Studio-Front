@@ -22,9 +22,9 @@ export const ImagesTrails = ({ speed = 1, images}) => {
       } catch {}
     
     const wrapper = wrapperRef.current;
-    if (!wrapper || window.innerWidth < 992) {
-      return;
-    }
+    if (!wrapper) return;
+
+    const isMobile = window.innerWidth < 992;
 
     // config + defaults
     const trailImagesCount = wrapper.querySelectorAll('[data-trail="item"]').length;
@@ -170,19 +170,106 @@ export const ImagesTrails = ({ speed = 1, images}) => {
       }
     }
 
+    // Auto-trail for mobile: predefined path, replays each time section enters
+    let autoTrailRAF = null;
+
+    // Waypoints as % of wrapper size — natural mouse gesture
+    const waypoints = [
+      { x: 0.15, y: 0.18 },
+      { x: 0.30, y: 0.35 },
+      { x: 0.50, y: 0.50 },
+      { x: 0.70, y: 0.68 },
+      { x: 0.85, y: 0.82 },
+      { x: 0.78, y: 0.65 },
+      { x: 0.72, y: 0.48 },
+      { x: 0.80, y: 0.30 },
+      { x: 0.85, y: 0.18 },
+      // ligne quasi droite vers la gauche
+      { x: 0.55, y: 0.22 },
+      { x: 0.30, y: 0.25 },
+      { x: 0.12, y: 0.28 },
+    ];
+
+    // Catmull-Rom spline: smooth curves through all waypoints
+    // s = tangent strength (0.5 = standard, 1.0+ = rounder curves)
+    function catmullRom(p0, p1, p2, p3, t, s = 1.0) {
+      const t2 = t * t;
+      const t3 = t2 * t;
+      const h00 = 2 * t3 - 3 * t2 + 1;
+      const h10 = t3 - 2 * t2 + t;
+      const h01 = -2 * t3 + 3 * t2;
+      const h11 = t3 - t2;
+      return {
+        x: h00 * p1.x + h10 * s * (p2.x - p0.x) + h01 * p2.x + h11 * s * (p3.x - p1.x),
+        y: h00 * p1.y + h10 * s * (p2.y - p0.y) + h01 * p2.y + h11 * s * (p3.y - p1.y),
+      };
+    }
+
+    function getSplinePoint(points, t) {
+      const n = points.length - 1;
+      const seg = Math.min(Math.floor(t * n), n - 1);
+      const localT = t * n - seg;
+      const p0 = points[Math.max(seg - 1, 0)];
+      const p1 = points[seg];
+      const p2 = points[Math.min(seg + 1, n)];
+      const p3 = points[Math.min(seg + 2, n)];
+      return catmullRom(p0, p1, p2, p3, localT);
+    }
+
+    function runAutoTrail() {
+      const rect = wrapper.getBoundingClientRect();
+      const totalSteps = 20;
+      let currentStep = 0;
+
+      function step() {
+        if (currentStep >= totalSteps || !state.isActive) return;
+
+        const t = currentStep / (totalSteps - 1);
+        const pos = getSplinePoint(waypoints, t);
+
+        const x = pos.x * rect.width;
+        const y = pos.y * rect.height;
+
+        const lead = state.trailImages[state.globalIndex % state.trailImages.length];
+        const tail =
+          state.trailImages[
+            (state.globalIndex - options.trailLength) % state.trailImages.length
+          ];
+        activate(lead, x, y);
+        fadeOutTrailImage(tail);
+        state.globalIndex++;
+        currentStep++;
+
+        autoTrailRAF = requestAnimationFrame(() => {
+          setTimeout(step, 180);
+        });
+      }
+
+      step();
+    }
+
     function startTrail() {
       if (state.isActive) return;
-
       state.isActive = true;
-      wrapper.addEventListener("mousemove", handleOnMove);
+
+      if (isMobile) {
+        runAutoTrail();
+      } else {
+        wrapper.addEventListener("mousemove", handleOnMove);
+      }
       state.trailInterval = setInterval(cleanupTrailImages, 100);
     }
 
     function stopTrail() {
       if (!state.isActive) return;
-
       state.isActive = false;
-      wrapper.removeEventListener("mousemove", handleOnMove);
+
+      if (isMobile) {
+        cancelAnimationFrame(autoTrailRAF);
+        autoTrailRAF = null;
+      } else {
+        wrapper.removeEventListener("mousemove", handleOnMove);
+      }
       clearInterval(state.trailInterval);
       state.trailInterval = null;
 
@@ -208,12 +295,14 @@ export const ImagesTrails = ({ speed = 1, images}) => {
       triggers.push(t);
     }
 
-    // Clean up on window resize
+    // On mobile, start immediately via ScrollTrigger (no resize guard needed)
     const handleResize = () => {
-      if (window.innerWidth < options.minWidth && state.isActive) {
-        stopTrail();
-      } else if (window.innerWidth >= options.minWidth && !state.isActive) {
-        startTrail();
+      if (!isMobile) {
+        if (window.innerWidth < options.minWidth && state.isActive) {
+          stopTrail();
+        } else if (window.innerWidth >= options.minWidth && !state.isActive) {
+          startTrail();
+        }
       }
     };
 
@@ -285,6 +374,13 @@ export const ImagesTrails = ({ speed = 1, images}) => {
           height: 16em;
           position: absolute;
           overflow: hidden;
+        }
+
+        @media (max-width: 991px) {
+          .trail-item {
+            width: 7em;
+            height: 9.5em;
+          }
         }
 
         .trail-item__img {

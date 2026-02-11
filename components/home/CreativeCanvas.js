@@ -329,7 +329,7 @@ const CreativeCanvas = ({ images }) => {
               }}
               transition={{ type: "spring", stiffness: 180, damping: 18, mass: 0.9 }}
             >
-              <div className="flex gap-3 py-8" style={{ minWidth: 'max-content' }}>
+              <div className="flex gap-3 pt-8 sm:py-8" style={{ minWidth: 'max-content' }}>
                 {infiniteImages.map((image, index) => {
                   const url = image.fields.IMAGE[0].url;
                   const thumbnailUrl = image.fields.IMAGE[0].thumbnails?.large?.url ||

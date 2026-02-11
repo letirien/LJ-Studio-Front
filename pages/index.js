@@ -31,6 +31,7 @@ import { useLoading } from '../lib/LoadingManager';
 export default function Home({ projects, gamePlan, logoClients, sliderImages, headerImages, headerClients }) {
   const { setDataLoaded, setEffectsReady, setPageImagesProgress } = useLoading();
   const [isMobileOrSafari, setIsMobileOrSafari] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Ref pour la section FC Nantes
   const fcNantesRef = useRef(null);
@@ -78,6 +79,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   useEffect(() => {
     const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    setIsMobile(isMobile)
     setIsMobileOrSafari(isMobile || isSafari);
   }, []);
 
@@ -431,7 +434,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 quality={100}
                 style={{
                   objectFit: 'cover',
-                  objectPosition: 'top left'
+                  objectPosition: isMobile ? '10% top' :'top left'
                 }}
                 alt="Client highlight background"
               />
@@ -456,25 +459,25 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             )}
 
           </div>
-          <div className="flex flex-wrap w-full items-center gap-8 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[20vh]">
+          <div className="flex flex-wrap w-full items-center gap-18 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[20vh]">
             <div className="mx-auto">
-              <h2 className={`flex flex-col items-center w-min collaborationTitle text-[21vw] sm:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
+              <h2 className={`flex flex-col items-center w-min collaborationTitle text-[16vw] sm:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
                 <p className="flex items-center gap-2"><span className="prefix text-[38px] sm:[54pt] capitalize">On</span>Every Pitch...</p>
                 <p className="flex">OUR CLIENT</p>
                 <div className=''>
-                  <p className="flex items-start"><span>COLLABORATIONS</span><span className="flex items-center leading-[60px] text-[24px] !sm:text-[96pt] roboto"><span className="">(</span>*<span className="">)</span></span></p>                             
+                  <p className="flex items-start"><span>COLLABORATIONS</span><span className="flex items-center leading-[1.2] text-[24px] !sm:text-[96pt] roboto"><span className="">(</span>*<span className="">)</span></span></p>                             
                 </div>
               </h2>
             </div>
             <div className="flex md:w-2/3 flex-wrap flex-col gap-6 justify-around md:flex-row xl:pr-[3vw] flex-1">
               <div className="md:w-max">
                 <h3 className="text-center">
-                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">Small roster,</p>
-                  <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">French accent.</p>
+                  <p className="uppercase helveticaNowDisplayMedium text-[7vw] sm:text-[25pt] leading-[0.9]">Small roster,</p>
+                  <p className="uppercase helveticaNowDisplayMedium text-[7vw] sm:text-[25pt] leading-[0.9]">French accent.</p>
                 </h3>
-                <p className="instrumentSerifRegular mt-2 opacity-75 !text-[18pt] sm:!text-[20pt] w-[70%] mx-auto text-center tracking-tighter	leading-[1]">Sport-focused design studio, born in Paris.</p>
+                <p className="instrumentSerifRegular mt-2 opacity-75 !text-[16pt] sm:!text-[20pt] w-[50%] mx-auto text-center tracking-tighter	leading-[1]">Sport-focused design studio, born in Paris.</p>
               </div>
-              <div className="md:w-max">
+              <div className="hidden sm:block  md:w-max">
                 <h3 className="text-center">
                   <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">Shaped by</p>
                   <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">emotion.</p>
@@ -486,11 +489,11 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <Collab logos={logoClients} />
         </motion.section>
         <a href="https://www.behance.net/LJ-Studio" target="_blank">
-          <motion.section id="archive" className="relative bg-white py-42 intersectLogo white px-[4vw] bg-black">
-            <div className="absolute right-[10%] top-[-90px] z-[3]">
+          <motion.section id="archive" className="flex relative bg-white h-screen intersectLogo white px-[4vw] bg-black">
+            <div className="absolute right-[10%] top-[-60px] sm:top-[-90px] z-[3]">
               <RoundedIcon icon="yeux" size={160} rotationFactor={0.45} />
             </div>
-            <div ref={galerySection} className="relative">
+            <div ref={galerySection} className="self-center items-center mx-auto">
               <motion.h2 style={{lineHeight}} className="hidden sm:block text-center gallery text-[9vw]/[0.8] sm:text-[8vw]/[0.8] mx-xl text-black">
                 <p className="flex items-center gap-3 justify-center">BEYOND <span className="instrumentSerifRegular text-[4vw] capitalize">The</span> SURFACE...</p>
                 <p>STEP INSIDE OUR</p>

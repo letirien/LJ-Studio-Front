@@ -11,7 +11,7 @@ const Etiquette = ({ text }) => {
   const duration = Math.max(8, text.length * 0.15);
 
   return (
-    <div className="relative w-[130px] h-[20px] overflow-hidden bg-[#fa6218] roboto text-black text-xs flex items-center">
+    <div className="relative w-[70px] sm:w-[130px] h-[14px] sm:h-[20px] overflow-hidden bg-[#fa6218] roboto text-black text-[8px] sm:text-xs flex items-center">
       <motion.div
         className="whitespace-nowrap flex"
         animate={{ x: ["0%", "-50%"] }}
@@ -272,7 +272,7 @@ export default function BrandingSection({ gamePlan }) {
         return (
           <motion.div
             key={index}
-            className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-3 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
+            className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-6 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
             style={{
               position: 'sticky',
               top: 0,
@@ -288,7 +288,7 @@ export default function BrandingSection({ gamePlan }) {
               )
             }}
           >
-            <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-3 sm:gap-6 mx-6 sm:mx-0'>
+            <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-6 sm:gap-6 mx-6 sm:mx-0'>
               <div className="inline-block">
                 <h2
                   ref={(el) => (titleRefs.current[index] = el)}
@@ -309,7 +309,7 @@ export default function BrandingSection({ gamePlan }) {
                   </div>
                 </h2>
               </div>
-              <p className={`lg:w-3/4 ${getTextColor(index)} text-[#707777] robotoReg text-[12px] sm:text-[20px]  ${index % 3 === 2 ? "!opacity-100": ""}`}>
+              <p className={`lg:w-3/4 ${getTextColor(index)} text-[#707777] robotoReg text-[14px] sm:text-[20px]  ${index % 3 === 2 ? "!opacity-100": ""}`}>
                 {item.fields['DESCRIPTION METIER']}
               </p>
               <Link 

@@ -277,22 +277,30 @@ useEffect(() => {
             width={800}
             height={300}
             loading="eager"
-            className="absolute left-[-300px] top-[50px] object-cover invert opacity-30"
+            className="absolute left-[-150px] sm:left-[-300px] top-[50px] object-cover invert opacity-35"
           />
           <div className="grid grid-cols-1 md:grid-cols-3 relative">
             {/* Left block with video or badge */}
-            <div ref={iconRainContainerRef} className="w-full h-full flex py-20 relative overflow-hidden">
-              <div className="flex flex-col items-center justify-center gap-4 m-auto">
+            <div ref={iconRainContainerRef} className="w-full justify-between items-center h-full flex py-20 relative overflow-hidden">
+              <div className='pl-[6vw] h-fit sm:hidden'>
+                <EmailLink />
+              </div>
+              <div className="hidden sm:block flex flex-col items-center justify-center gap-4 m-auto">
                 <PixelPlayIcon size={80} onClick={triggerRain} />
               </div>
+              <div className="sm:hidden mr-[12vw]">
+                <PixelPlayIcon size={50} onClick={triggerRain} />
+              </div>
               <div className="hidden md:block absolute right-0 top-0 bottom-0 w-[1px] bg-white"></div>
-              <div className="md:block absolute bottom-0 left-0 bottom-0 h-[1px] w-full lg:w-[97%] bg-white"></div>
+              <div className="md:block absolute bottom-0 left-[6vw] sm:left-0 bottom-0 h-[1px] w-[calc(100%-12vw)] sm:w-full lg:w-[97%] bg-white"></div>
             </div>
 
             {/* Contact */}
-            <div className="col-span-2 flex flex-col gap-8 sm:gap-16 py-6 sm:py-20 pr-[12vw] pl-[6vw] relative">
+            <div className="col-span-2 flex flex-col gap-8 sm:gap-16 py-6 sm:py-20 pr-[6vw] pl-[6vw] relative">
               <div className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-0">
-                <EmailLink />
+                <div className='hidden sm:block'>
+                  <EmailLink />
+                </div>
                 <div className="hidden md:block text-end text-white text-[19pt] text-[18pt] sm:text-[22px] leading-[0.9] robotoBold">
                   <span className="text-[#fa6218]">thanks </span><span className="text-[#4a4e52]"><span className='tenTwentyThin'>for</span><br></br> your visit</span>
                 </div>  
@@ -386,7 +394,7 @@ useEffect(() => {
                   </div>
                 </div>
               </div>
-              <div className="md:block absolute bottom-0 right-0 bottom-0 h-[1px] w-[100%] lg:w-[98.5%] bg-white"></div>
+              <div className="hidden md:block absolute bottom-0 right-0 bottom-0 h-[1px] w-[100%] lg:w-[98.5%] bg-white"></div>
             </div>
           </div>
         </div>
