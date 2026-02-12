@@ -26,7 +26,7 @@ const Etiquette = ({ text, width, height }) => {
   const duration = Math.max(8, text.length * 0.15); // Minimum 8s, +0.15s par caractère
   
   return (
-    <div  ref={ref} className="absolute top-[35%] left-[28%] md:top-[28%] md:left-[28%] rotate-[-6deg] h-[16px] sm:h-[20px] pt-[1px] overflow-hidden bg-[#fa6218] roboto text-black text-[10px] sm:text-[12px] flex items-center transition-[width] delay-150 ease-in-out duration-200" style={{width: isInView ? width+'vw' : '0px'}}>
+    <div  ref={ref} className="absolute top-[35%] left-[28%] md:top-[28%] md:left-[28%] rotate-[-6deg] h-[14px] sm:h-[20px] pt-[1px] overflow-hidden bg-[#fa6218] roboto text-black text-[8px] sm:text-[12px] flex items-center transition-[width] delay-150 ease-in-out duration-200" style={{width: isInView ? width+'vw' : '0px'}}>
       <motion.div
         className="whitespace-nowrap flex"
         animate={{ x: ["0%", "-50%"] }} // Aller jusqu'à -50% au lieu de -100%
@@ -368,7 +368,7 @@ export default function AnimatedField() {
     }, []);
 
     return (
-        <section ref={sectionRef} className="w-screen overflow-hidden relative bg-black -mt-[1px]">
+        <section ref={sectionRef} className="mt-[-10vh] w-screen overflow-hidden relative bg-black sm:-mt-[1px]">
             <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none'>
                 <h2 className='text-center text-[14vw]/[0.8] sm:text-[8vw]/[0.8] uppercase relative helveticaNowDisplayBold'>
                     <p className="instrumentSerifRegular !capitalize text-[8vw]/[0.8] tracking-tight sm:text-[4vw]/[0.8] mb-9">Design field</p>
@@ -376,8 +376,8 @@ export default function AnimatedField() {
                     <motion.p >you play,</motion.p> 
                     <motion.p >we're by</motion.p> 
                     <motion.p style={{ x: leftx }}>your side</motion.p>
-                    <div className="block md:hidden absolute bottom-[-4%] right-[45%]">
-                        <RoundedIcon icon="main" size={60} circularContinue={true} />
+                    <div className="block md:hidden absolute bottom-[-8%] right-[45%]">
+                        <RoundedIcon icon="main" size={50} circularContinue={true} />
                     </div>
                     <div className="hidden md:block xl:hidden absolute bottom-[-10%] right-[44%]">
                         <RoundedIcon icon="main" size={70} circularContinue={true} />

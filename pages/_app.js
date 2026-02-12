@@ -2,13 +2,14 @@ import '/styles/global.css';
 import Head from 'next/head';
 import { AnimatePresence } from 'framer-motion';
 import { ReactLenis } from 'lenis/react';
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import gsap from 'gsap';
 import dynamic from 'next/dynamic';
 import CustomCursor from "../components/CustomCursor";
 import { LoadingProvider } from '../lib/LoadingManager';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import CookieBanner from '../components/CookieConsent';
 
 const Cursor = dynamic(() => import('../components/Cursor'), {
   ssr: false
@@ -25,6 +26,11 @@ if (typeof window !== 'undefined') {
 
 function App({ Component, pageProps }) {
   const router = useRouter();
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
+
+  const handleConsentChange = useCallback((accepted) => {
+    setAnalyticsEnabled(accepted);
+  }, []);
 
   useEffect(() => {
     function update(time) {
@@ -55,7 +61,8 @@ function App({ Component, pageProps }) {
           <meta name="robots" content="noindex, nofollow" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        <CookieBanner onConsentChange={handleConsentChange} />
+        {analyticsEnabled && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
         <LoadingProvider>
           <ReactLenis root options={lenisOptions}>
             <Cursor key="cursor" />

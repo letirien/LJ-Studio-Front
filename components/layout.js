@@ -16,8 +16,8 @@ const Clock = dynamic(() => import('../components/clock').then(mod => mod.Clock)
   ssr: false,
 });
 
-export default function Layout({ children, home }) {
-  const [animationComplete, setAnimationComplete] = useState(false);
+export default function Layout({ children, home, skipIntro = false }) {
+  const [animationComplete, setAnimationComplete] = useState(skipIntro);
 
   return (
     <div className={`relative ${!animationComplete ? 'h-screen overflow-hidden' : ''}`}>

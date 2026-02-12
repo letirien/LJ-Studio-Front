@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import AppearText from '../AppearText';
 import IconRain from '../IconRain';
 import PixelPlayIcon from '../PixelPlayIcon';
+import Link from 'next/link';
 
 // Animation hover email avec GSAP (même style que AppearText)
 const EmailLink = () => {
@@ -297,7 +298,7 @@ useEffect(() => {
 
             {/* Contact */}
             <div className="col-span-2 flex flex-col gap-8 sm:gap-16 py-6 sm:py-20 pr-[6vw] pl-[6vw] relative">
-              <div className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-0">
+              <div className="hidden sm:block flex flex-col sm:flex-row justify-between gap-6 sm:gap-0">
                 <div className='hidden sm:block'>
                   <EmailLink />
                 </div>
@@ -320,7 +321,7 @@ useEffect(() => {
                   {/* Menu */}
                   <div className='flex justify-between sm:flex-1 flex-wrap sm:flex-nowrap'>
                     <div className="flex flex-col gap-1 robotoRegular text-[12pt] sm:text-[18px]">
-                      <a href="#home" onClick={(e) => scrollToSection(e, '/')} className="hover:text-[#fa6218] overflow-hidden">
+                      <a href="/" className="hover:text-[#fa6218] overflow-hidden">
                         <AppearText type="words" hover={true}>
                           Home
                         </AppearText>
@@ -405,7 +406,7 @@ useEffect(() => {
             <img
               src="/images/LJSTD_WORDMARK.svg"
               alt="LJ Studio Wordmark"
-              className="w-full object-cover invert pt-8 pb-2 md:py-12"
+              className="w-full object-cover invert sm:pt-8 pb-2 md:py-12"
             />
           </div>
         </div>
@@ -413,7 +414,7 @@ useEffect(() => {
         {/* Section 3: Barre orange */}
         <div className="footer-section bg-[#fa6218] text-black z-10">
           <div className="w-full flex justify-between items-center px-[4vw] py-8 text-xs">
-            <a className='roboto text-[7pt] sm:text-[12pt] uppercase'>privacy policy</a>
+            <Link href="/legal" className='roboto text-[7pt] sm:text-[12pt] uppercase'>legal & privacy</Link>
             <span className='roboto text-[7pt] sm:text-[12pt]'>© {new Date().getFullYear()} | LJ Studio · All rights reserved</span>
             <BackToTopLink onClick={scrollToTop} />
           </div>

@@ -566,3 +566,27 @@ body:has( [data-cursor]:hover) .cursor{
   will-change: transform;
   isolation: isolate;
 }
+
+
+/* Couleurs du bandeau */
+#cc-main .cm {
+  background: #111;
+  color: #000;
+  border-radius: 12px;
+  font-family: helveticaNowDisplayBold;
+
+  p{
+    font-family: "Roboto Mono";
+    font-weight: 400;
+  }
+  /* Boutons */
+  .cm__btn {
+    background: #fa6218;
+    color: white;
+    font-family: "Roboto Mono";
+    border: none;
+  }
+  .cm__btn--secondary{
+    background: transparent; color: #fa6218; border: 1px solid #fa6218;
+  }
+}
