@@ -588,5 +588,6 @@ body:has( [data-cursor]:hover) .cursor{
   }
   .cm__btn--secondary{
     background: transparent; color: #fa6218; border: 1px solid #fa6218;
+    &:hover{ background: #fa6218; color: white; }
   }
 }
