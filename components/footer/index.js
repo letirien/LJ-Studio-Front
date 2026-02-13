@@ -206,7 +206,27 @@ useEffect(() => {
 
   const sections = footer.querySelectorAll('.footer-section');
 
-  // Parallax : les sections partent remontées et descendent progressivement
+  // Mobile + CSS scroll-driven animations : le CSS gère le parallax sur le compositor thread (zero stutter)
+  const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const supportsScrollTimeline = CSS.supports && CSS.supports('animation-timeline', 'view()');
+
+  if (isTouchDevice && supportsScrollTimeline) {
+    const updateCSSVars = () => {
+      const s0h = sections[0]?.offsetHeight || 0;
+      const s1h = sections[1]?.offsetHeight || 0;
+      footer.style.setProperty('--s0-height', s0h + 'px');
+      footer.style.setProperty('--s01-height', (s0h + s1h) + 'px');
+    };
+    updateCSSVars();
+    footer.classList.add('footer-scroll-driven');
+
+    window.addEventListener('resize', () => updateCSSVars(), { passive: true });
+    return () => {
+      footer.classList.remove('footer-scroll-driven');
+    };
+  }
+
+  // Desktop : parallax JS (Lenis ou scroll natif)
   const updateParallax = (scroll, maxScroll) => {
     const footerTop = footer.offsetTop;
     const footerHeight = footer.offsetHeight;

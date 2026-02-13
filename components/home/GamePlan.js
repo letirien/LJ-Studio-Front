@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
 import AppearText from '../AppearText.js';
 import { useLoading } from '../../lib/LoadingManager';
@@ -214,13 +213,10 @@ export default function BrandingSection({ gamePlan }) {
     setShowGif(index);
   };
 
-  const [containerRef, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: false
-  });
+  const sectionRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: sectionRef,
     offset: ["start start", "end start"]
   });
 
@@ -246,7 +242,7 @@ export default function BrandingSection({ gamePlan }) {
   };
   
   return (
-    <section id="services" ref={containerRef} className="">
+    <section id="services" ref={sectionRef} className="">
       {gamePlan && gamePlan.map((item, index) => {
         // labelPosition peut être un nombre (px) ou une string en pourcentage (ex: '50%')
         let labelLeft;
@@ -280,13 +276,7 @@ export default function BrandingSection({ gamePlan }) {
               transform: 'translateZ(0)',
             }}
             initial={{ y: index * 100 }}
-            animate={{
-              y: useTransform(
-                scrollYProgress,
-                [0, 1],
-                [index * 100, 0]
-              )
-            }}
+            animate={{ y: yTransform }}
           >
             <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-6 sm:gap-6 mx-6 sm:mx-0'>
               <div className="inline-block">

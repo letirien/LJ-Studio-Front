@@ -567,6 +567,46 @@ body:has( [data-cursor]:hover) .cursor{
   isolation: isolate;
 }
 
+/* Footer: CSS Scroll-Driven Animations pour mobile (compositor thread, zero stutter) */
+@keyframes footer-appear {
+  from { transform: translateY(-180px); }
+  to { transform: translateY(0); }
+}
+
+@keyframes footer-s1-parallax {
+  from { transform: translateY(calc(-1 * var(--s0-height, 300px))); }
+  to { transform: translateY(0); }
+}
+
+@keyframes footer-s2-parallax {
+  from { transform: translateY(calc(-1 * var(--s01-height, 400px))); }
+  to { transform: translateY(0); }
+}
+
+@supports (animation-timeline: view()) {
+  .footer-scroll-driven {
+    view-timeline: --footer block;
+  }
+
+  .footer-scroll-driven .footer-section:nth-child(1) {
+    animation: footer-appear linear both;
+    animation-timeline: --footer;
+    animation-range: entry 0% entry 100%;
+  }
+
+  .footer-scroll-driven .footer-section:nth-child(2) {
+    animation: footer-s1-parallax linear both;
+    animation-timeline: --footer;
+    animation-range: entry 0% entry 100%;
+  }
+
+  .footer-scroll-driven .footer-section:nth-child(3) {
+    animation: footer-s2-parallax linear both;
+    animation-timeline: --footer;
+    animation-range: entry 0% entry 100%;
+  }
+}
+
 
 /* Couleurs du bandeau */
 #cc-main .cm {
