@@ -37,6 +37,17 @@ export default function BrandingSection({ gamePlan }) {
   const [positionsReady, setPositionsReady] = useState(false);
   const [showGif, setShowGif] = useState(null);
   const [preloadedGifs, setPreloadedGifs] = useState(new Set());
+  const [isMobile, setIsMobile] = useState(false);
+  const [isMobileCSS, setIsMobileCSS] = useState(false);
+
+  useEffect(() => {
+    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    setIsMobile(isTouchDevice);
+    if (isTouchDevice) {
+      const supportsScrollTimeline = CSS.supports && CSS.supports('animation-timeline', 'view()');
+      setIsMobileCSS(supportsScrollTimeline);
+    }
+  }, []);
 
   // Précharger tous les GIFs au montage
   useEffect(() => {
@@ -242,7 +253,7 @@ export default function BrandingSection({ gamePlan }) {
   };
   
   return (
-    <section id="services" ref={sectionRef} className="">
+    <section id="services" ref={sectionRef} className={isMobileCSS ? 'gameplan-scroll-driven' : ''}>
       {gamePlan && gamePlan.map((item, index) => {
         // labelPosition peut être un nombre (px) ou une string en pourcentage (ex: '50%')
         let labelLeft;
@@ -273,10 +284,14 @@ export default function BrandingSection({ gamePlan }) {
               position: 'sticky',
               top: 0,
               zIndex: index,
-              transform: 'translateZ(0)',
+              ...(isMobileCSS && { '--card-offset': `${index * 100}px` }),
+              ...(!isMobile && { transform: 'translateZ(0)' }),
             }}
-            initial={{ y: index * 100 }}
-            animate={{ y: yTransform }}
+            {...(!isMobile && {
+              initial: { y: index * 100 },
+              animate: { y: yTransform },
+            })}
+            
           >
             <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-6 sm:gap-6 mx-6 sm:mx-0'>
               <div className="inline-block">

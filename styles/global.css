@@ -567,6 +567,24 @@ body:has( [data-cursor]:hover) .cursor{
   isolation: isolate;
 }
 
+/* GamePlan: CSS Scroll-Driven Animations pour mobile (compositor thread, zero stutter) */
+@keyframes gameplan-parallax {
+  from { transform: translateY(var(--card-offset, 0px)) translateZ(0); }
+  to { transform: translateY(0) translateZ(0); }
+}
+
+@supports (animation-timeline: view()) {
+  .gameplan-scroll-driven {
+    view-timeline: --services block;
+  }
+
+  .gameplan-scroll-driven > div {
+    animation: gameplan-parallax linear both;
+    animation-timeline: --services;
+    animation-range: entry 0% entry 100%;
+  }
+}
+
 /* Footer: CSS Scroll-Driven Animations pour mobile (compositor thread, zero stutter) */
 @keyframes footer-appear {
   from { transform: translateY(-180px); }
