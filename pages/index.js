@@ -422,7 +422,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         <AnimatedField/>
         <BrandingSection gamePlan={gamePlan} />
         <motion.section ref={fcNantesRef} className="w-full h-full bg-black" style={{ y: fcNantesY }}>
-          <div className="w-full h-[100vh] relative overflow-hidden">
+          <div className="w-full h-[100svh] relative overflow-hidden">
             <div className="absolute -bottom-1 left-0 right-0 h-[60vh] z-3" style={{
               background: 'linear-gradient(to top, #000000ff 12vh, transparent 100%)'
             }}></div>

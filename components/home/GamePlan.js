@@ -28,6 +28,101 @@ const Etiquette = ({ text }) => {
   );
 };
 
+// Fonctions utilitaires déplacées hors du composant (pas de dépendance au state React)
+const getBackgroundColor = (index) => {
+  const colors = ['bg-white', 'bg-black', 'bg-[#fa6218]'];
+  const bgColor = colors[index % colors.length];
+  const logoClass = bgColor === 'bg-white' ? 'white' : 'black';
+  return `intersectLogo ${logoClass} ${bgColor}`;
+};
+
+const getTextColor = (index) => {
+  // Seul le bloc orange (index % 3 === 2) doit être text-white, le reste text-[#707777]
+  if (index % 3 === 2) return 'text-white';
+  return 'text-[#707777]';
+};
+
+const getTitleColor = (index) => index % 3 === 1 ? 'text-white' : 'text-black';
+
+// Composant carte extrait — corrige 2 bugs :
+// 1. useTransform ne peut pas être appelé dans un .map() (violation règles des hooks React)
+// 2. style={{ y: yTransform }} au lieu de animate={{ y: yTransform }}
+//    (les MotionValues s'utilisent dans style, pas dans animate —
+//     animate re-snapshot la valeur au re-render ce qui reset la position au hover)
+function GamePlanCard({
+  item, index, showGif, setGif, setShowGif,
+  scrollYProgress, isMobile, isMobileCSS,
+  positionsReady, labelLeft, titleRefs,
+}) {
+  const yTransform = useTransform(scrollYProgress, [0, 1], [index * 100, 0]);
+
+  return (
+    <motion.div
+      className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-6 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} rounded-t-3xl`}
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: index,
+        ...(isMobileCSS && { '--card-offset': `${index * 100}px` }),
+        ...(!isMobile && { transform: 'translateZ(0)' }),
+      }}
+      {...(!isMobile && {
+        initial: { y: index * 100 },
+        animate: { y: yTransform },
+      })}
+    >
+      <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-6 sm:gap-6 mx-6 sm:mx-0'>
+        <div className="inline-block">
+          <h2
+            ref={(el) => { titleRefs.current[index] = el; }}
+            className={`bigH2 z-20 gamePlan  text-[22vw] md:!text-[12vw]/[0.85] !text-left mx-xl relative ${item.fields["TITRE METIER"].length > 13 ? 'text-nowrap sm:text-wrap': 'text-nowrap'} w-min ${getTitleColor(index)}`}
+          >
+            {item.fields["TITRE METIER"]}
+            <div
+              className="absolute transition-opacity duration-300"
+              style={{
+                top: item.fields["TITRE METIER"].length > 13 ? '80%' : '50%',
+                left: `${labelLeft}px`,
+                rotate: '-12deg',
+                willChange: 'transform',
+                opacity: positionsReady ? 1 : 0,
+              }}
+            >
+              <Etiquette text={item.fields["SOUS METIERS"]}/>
+            </div>
+          </h2>
+        </div>
+        <p className={`lg:w-3/4 ${getTextColor(index)} text-[#707777] robotoReg text-[14px] sm:text-[20px]  ${index % 3 === 2 ? "!opacity-100": ""}`}>
+          {item.fields['DESCRIPTION METIER']}
+        </p>
+        <Link
+          className={`${getTextColor(index)} uppercase w-max robotoMonoBold text-[12px] sm:text-[16px] mt-4 ${index % 3 === 2 ? "!opacity-100": ""}`}
+          href={`${item.fields['LIEN URL']}`}
+          target="_blank"
+        >
+          <AppearText type="words" hover={true}>
+            › check an highlight
+          </AppearText>
+        </Link>
+      </div>
+      <div className={`mx-6 sm:mx-0 md:w-1/2 flex-grow relative md:my-auto xl:my-0`}>
+        <Image
+          onMouseOver={() => setGif(index)}
+          onMouseLeave={() => setShowGif(null)}
+          className={`w-full h-auto object-cover`}
+          src={showGif === index && item.fields.GIF ? item.fields.GIF[0].url : item.fields.Image[0].url}
+          alt={item.fields.Image[0].filename || 'Game plan image'}
+          width={item.fields.Image[0].width || 0}
+          height={item.fields.Image[0].height || 0}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          unoptimized={true}
+          priority={true}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
 export default function BrandingSection({ gamePlan }) {
   const { setRefsReady, onLoadingComplete, isComplete } = useLoading();
   const titleRefs = useRef([]);
@@ -231,27 +326,6 @@ export default function BrandingSection({ gamePlan }) {
     offset: ["start start", "end start"]
   });
 
-  const getBackgroundColor = (index) => {
-    const colors = ['bg-white', 'bg-black', 'bg-[#fa6218]'];
-    const bgColor = colors[index % colors.length];
-    const logoClass = bgColor === 'bg-white' ? 'white' : 'black';
-    return `intersectLogo ${logoClass} ${bgColor}`;
-  };
-
-  const getTextColor = (index) => {
-    // Seul le bloc orange (index % 3 === 2) doit être text-white, le reste text-[#707777]
-    if (index % 3 === 2) return 'text-white';
-    return 'text-[#707777]';
-  };
-
-  const getTitleColor = (index) => {
-    return index % 3 === 1 ? 'text-white' : 'text-black';
-  };
-
-  const hasRadius = (index) => {
-    return 'rounded-t-3xl';
-  };
-  
   return (
     <section id="services" ref={sectionRef} className={isMobileCSS ? 'gameplan-scroll-driven' : ''}>
       {gamePlan && gamePlan.map((item, index) => {
@@ -263,87 +337,28 @@ export default function BrandingSection({ gamePlan }) {
             const titleRef = titleRefs.current[index];
             const titleWidth = titleRef ? titleRef.getBoundingClientRect().width : 0;
             labelLeft = Math.round(titleWidth * percent);
-          } else {  
+          } else {
             labelLeft = item.labelPosition;
           }
         } else {
           labelLeft = calculateLabelPosition(index);
         }
-        
-        const yTransform = useTransform(
-          scrollYProgress,
-          [0, 1],
-          [index * 100, 0]
-        );
 
         return (
-          <motion.div
+          <GamePlanCard
             key={index}
-            className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-6 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} ${hasRadius(index)}`}
-            style={{
-              position: 'sticky',
-              top: 0,
-              zIndex: index,
-              ...(isMobileCSS && { '--card-offset': `${index * 100}px` }),
-              ...(!isMobile && { transform: 'translateZ(0)' }),
-            }}
-            {...(!isMobile && {
-              initial: { y: index * 100 },
-              animate: { y: yTransform },
-            })}
-            
-          >
-            <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-6 sm:gap-6 mx-6 sm:mx-0'>
-              <div className="inline-block">
-                <h2
-                  ref={(el) => (titleRefs.current[index] = el)}
-                  className={`bigH2 z-20 gamePlan  text-[22vw] md:!text-[12vw]/[0.85] !text-left mx-xl relative ${item.fields["TITRE METIER"].length > 13 ? 'text-nowrap sm:text-wrap': 'text-nowrap'} w-min ${getTitleColor(index)}`}
-                >
-                  {item.fields["TITRE METIER"]}
-                  <div
-                    className="absolute transition-opacity duration-300"
-                    style={{
-                      top: item.fields["TITRE METIER"].length > 13 ? '80%' : '50%',
-                      left: `${labelLeft}px`,
-                      rotate: '-12deg',
-                      willChange: 'transform',
-                      opacity: positionsReady ? 1 : 0,
-                    }}
-                  >
-                    <Etiquette text={item.fields["SOUS METIERS"]}/>
-                  </div>
-                </h2>
-              </div>
-              <p className={`lg:w-3/4 ${getTextColor(index)} text-[#707777] robotoReg text-[14px] sm:text-[20px]  ${index % 3 === 2 ? "!opacity-100": ""}`}>
-                {item.fields['DESCRIPTION METIER']}
-              </p>
-              <Link 
-                className={`${getTextColor(index)} uppercase w-max robotoMonoBold text-[12px] sm:text-[16px] mt-4 ${index % 3 === 2 ? "!opacity-100": ""}`} 
-                href={`${item.fields['LIEN URL']}`}
-                target="_blank"
-              >
-                <AppearText type="words" hover={true}>
-                  › check an highlight
-                </AppearText>
-                
-              </Link>
-            </div>
-            <div className={`mx-6 sm:mx-0 md:w-1/2 flex-grow relative md:my-auto xl:my-0`}>
-              <Image
-                onMouseOver={() => setGif(index)}
-                onMouseLeave={() => setShowGif(null)}
-                className={`w-full h-auto object-cover`}
-                src={showGif === index && item.fields.GIF ? item.fields.GIF[0].url : item.fields.Image[0].url}
-                alt={item.fields.Image[0].filename || 'Game plan image'}
-                width={item.fields.Image[0].width || gamePlan[0].fields.Image[0].width}
-                height={item.fields.Image[0].height || gamePlan[0].fields.Image[0].height}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                unoptimized={true}
-                priority={true}
-              />
-              {/* <SeeMore/> */}
-            </div>
-          </motion.div>
+            item={item}
+            index={index}
+            showGif={showGif}
+            setGif={setGif}
+            setShowGif={setShowGif}
+            scrollYProgress={scrollYProgress}
+            isMobile={isMobile}
+            isMobileCSS={isMobileCSS}
+            positionsReady={positionsReady}
+            labelLeft={labelLeft}
+            titleRefs={titleRefs}
+          />
         );
       })}
     </section>

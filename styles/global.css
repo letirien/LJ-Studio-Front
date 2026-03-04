@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 body{
-  scroll-behavior: smooth;
+  /* scroll-behavior géré par Lenis — ne pas mettre smooth ici, ça conflicte avec Safari */
 }
 *{
   font-synthesis: none;
@@ -296,6 +296,7 @@ button {
   z-index: 55;
   width: 100vw;
   height: 100vh;
+  height: 100svh;
   background: linear-gradient(
     180deg,
     rgba(55, 55, 55, 1) 0%,

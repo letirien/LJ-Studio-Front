@@ -30,7 +30,8 @@ export default function RoundedIcon({
   const isBlack = color === "black";
 
   const circularRef = useRef(null);
-  const [angle, setAngle] = useState(0);
+  // Angle stocké en ref (pas en state) pour éviter les re-renders React par frame de scroll
+  const angleRef = useRef(0);
 
   const iconSrc =
     icon === "main"
@@ -63,11 +64,20 @@ export default function RoundedIcon({
       if (!rafId) {
         rafId = requestAnimationFrame(() => {
           rafId = 0;
-          setAngle((prev) => prev + pendingDelta);
+          angleRef.current += pendingDelta;
           pendingDelta = 0;
+          // Mutation DOM directe — pas de setState, pas de re-render React
+          if (circularRef.current) {
+            circularRef.current.style.transform = `rotate(${angleRef.current}deg)`;
+          }
         });
       }
     };
+
+    // Initialise la rotation à 0 via le DOM (pas via le style React)
+    if (circularRef.current) {
+      circularRef.current.style.transform = 'rotate(0deg)';
+    }
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
@@ -99,7 +109,8 @@ export default function RoundedIcon({
   const circularStyle = {
     position: "absolute",
     inset: isWhite ? "-4%" : "-1%",
-    transform: `rotate(${angle}deg)`,
+    // transform géré directement via circularRef.current.style (évite les re-renders React)
+    // Pour circularContinue, la CSS animation "spin" prend le relais
     transformOrigin: "50% 50%",
     willChange: "transform",
     animation: circularContinue ? "spin 20s linear infinite" : "none",

@@ -182,11 +182,12 @@ export default function ProjectSection({ projects, home }) {
     }
   
 
-    // FOND ORANGE : réduction fluide de 100vh à 50vh (0 → 40%)
+    // FOND ORANGE : réduction fluide vers 50% de la hauteur visible
+    // Fonction recalculée à chaque ScrollTrigger.refresh() pour coller à window.innerHeight
     tl.to(
       orangeBgRef.current,
       {
-        height: '50vh',
+        height: () => window.innerHeight * 0.5,
         ease: "linear",
         duration: 1
       },
@@ -207,15 +208,15 @@ export default function ProjectSection({ projects, home }) {
     );
 
     // SLIDER : animation fluide du bas vers le centre (15% → 100%)
+    // On utilise des fonctions () => pour que GSAP recalcule les valeurs
+    // à chaque ScrollTrigger.refresh() (ex: barres du navigateur mobile qui bougent)
     tl.fromTo(
       slideMainContainer.current,
       {
-        y: '100vh',
-        // opacity: 0
+        y: () => window.innerHeight,  // recalculé à chaque refresh
       },
       {
-        y: isMobile ? '5vh' : '0vh',
-        // opacity: 1,
+        y: () => isMobile ? window.innerHeight * 0.05 : 0,  // recalculé à chaque refresh
         ease: 'linear',
         duration: 1
       },
@@ -244,7 +245,7 @@ export default function ProjectSection({ projects, home }) {
         <div
           ref={orangeBgRef}
           className="absolute inset-x-0 top-0 pointer-events-none z-[0]"
-          style={{ height: '100vh', backgroundColor: defaultColor }}
+          style={{ height: 'var(--app-height, 100svh)', backgroundColor: defaultColor }}
         />
 
         {/* BLOCS COULEUR */}
@@ -355,7 +356,7 @@ export default function ProjectSection({ projects, home }) {
           <div
             ref={slideMainContainer}
             className="slider-container relative !z-[4]"
-            style={{ transform: 'translateY(100vh)'}}
+            style={{ transform: 'translateY(var(--app-height, 100svh))'}}
           >
             <Projects
               projects={projects}

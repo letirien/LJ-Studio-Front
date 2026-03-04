@@ -178,7 +178,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
     <>
       <div
         ref={bellowContainerRef}
-        className="fixed top-0 right-0 h-[100vh] w-[100vw] sm:w-[50vw] z-[400]"
+        className="fixed top-0 right-0 h-[100svh] w-[100vw] sm:w-[50vw] z-[400]"
         style={{ transform: "translateX(100%)" }}
       >
         <div
@@ -195,7 +195,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
 
       <div
         ref={menuContainerRef}
-        className="fixed top-0 right-0 h-[100vh] w-[100vw] sm:w-[50vw] bg-[#fa6218] flex flex-col items-start py-[4vh] px-[3vw] z-[500]"
+        className="fixed top-0 right-0 h-[100svh] w-[100vw] sm:w-[50vw] bg-[#fa6218] flex flex-col items-start py-[4vh] px-[3vw] z-[500]"
         style={{ transform: "translateX(100%)" }}
       >
         {/* MENU LINKS */}

@@ -75,8 +75,13 @@ function WebGLImageTransitionDemo5Internal({
     let cleanupResize = () => {};
 
     try {
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      // Sur mobile/Safari, limiter le pixelRatio à 1 pour réduire la charge GPU
+      const isMobileDevice = window.navigator.maxTouchPoints > 1 ||
+        /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const maxPixelRatio = isMobileDevice ? 1 : 2;
+
+      const renderer = new THREE.WebGLRenderer({ antialias: !isMobileDevice, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxPixelRatio));
       renderer.setSize(container.clientWidth || 1, container.clientHeight || 1);
       container.appendChild(renderer.domElement);
       rendererRef.current = renderer;

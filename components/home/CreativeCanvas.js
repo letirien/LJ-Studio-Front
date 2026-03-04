@@ -1,16 +1,90 @@
 // Hooks React et libs d'animation/observateur
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+
+// Composant extrait pour pouvoir appeler useTransform par item
+// sans violer les règles des hooks dans un .map()
+// Cela évite les re-renders React sur chaque event scroll (scrollProgressMV est un MotionValue)
+function CanvasItem({ image, index, originalIndex, isMobile, hoveredIndex, setHoveredIndex, loadedImages, scrollProgressMV, randomPositions }) {
+  const clampedPos = Math.max(-32, Math.min(32, randomPositions[originalIndex] || 0));
+  // Décalage 1/2 + animation vers 0 au scroll — identique sur mobile et desktop
+  const y = useTransform(scrollProgressMV, [0, 1], [clampedPos, 0]);
+
+  const url = image.fields.IMAGE[0].url;
+  const thumbnailUrl = image.fields.IMAGE[0].thumbnails?.large?.url ||
+                       image.fields.IMAGE[0].thumbnails?.small?.url;
+  const isLoadedImg = loadedImages[url];
+
+  return (
+    <motion.div
+      className="relative flex-shrink-0 group"
+      style={{ y }}
+      onMouseEnter={() => setHoveredIndex(index)}
+      onMouseLeave={() => setHoveredIndex(null)}
+      whileHover={{ scale: 1.02 }}
+      data-cursor
+    >
+      <div className="relative w-full overflow-hidden" style={{
+        width: !isMobile ? `${image.fields.IMAGE[0].width / 3}px` : `${image.fields.IMAGE[0].width / 4}px`,
+        height: !isMobile ? `${image.fields.IMAGE[0].height / 3}px` : `${image.fields.IMAGE[0].height / 4}px`,
+        background: "#222"
+      }}>
+        {/* Thumbnail en arrière-plan (chargement immédiat) */}
+        {thumbnailUrl && !isLoadedImg && (
+          <Image
+            quality={30}
+            src={thumbnailUrl}
+            alt={image.fields.Name || "Project thumbnail"}
+            fill
+            sizes="(max-width: 768px) 25vw, 33vw"
+            className="blur-sm"
+            style={{
+              objectFit: 'contain',
+              filter: 'grayscale(100%) brightness(0.75) blur(4px)'
+            }}
+            priority={index < 5}
+          />
+        )}
+
+        {/* Image haute qualité */}
+        {isLoadedImg ? (
+          <Image
+            quality={isMobile ? 75 : 100}
+            src={url}
+            alt={image.fields.Name || "Project image"}
+            fill
+            sizes="(max-width: 768px) 25vw, 33vw"
+            className="transition-opacity duration-300"
+            style={{
+              objectFit: 'contain',
+              opacity: isMobile ? 1 : hoveredIndex === index ? 1 : 0.8
+            }}
+            priority={index < 5}
+          />
+        ) : (
+          !thumbnailUrl && (
+            <div style={{ width: "100%", height: "100%", background: "#fa6218" }} />
+          )
+        )}
+        <div
+          className="absolute inset-0 bg-black/60 transition-opacity duration-300 flex items-end p-4"
+          style={{ opacity: isMobile ? 0 : hoveredIndex === index ? 0.2 : 1 }}
+        />
+      </div>
+    </motion.div>
+  );
+}
 
 const CreativeCanvas = ({ images }) => {
   // Etats d'UI
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [randomPositions, setRandomPositions] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isDragging, setIsDragging] = useState(false); // eslint-disable-line no-unused-vars
+  // MotionValue au lieu de useState → mise à jour sans re-render React
+  const scrollProgressMV = useMotionValue(0);
 
   // Pour suivre le chargement individuel des images
   const [loadedImages, setLoadedImages] = useState({});
@@ -80,7 +154,7 @@ const CreativeCanvas = ({ images }) => {
   }, []);
 
   // Déclenche les animations d'entrée quand la section est visible
-  const [inViewRef, inView] = useInView({
+  const [inViewRef] = useInView({ // eslint-disable-line no-unused-vars
     threshold: 0.2,
     triggerOnce: false,
     rootMargin: '0px 0px 0px 0px'
@@ -96,6 +170,7 @@ const CreativeCanvas = ({ images }) => {
   }, [images]);
 
   // Calcul de la progression du scroll (alignement progressif)
+  // Utilise scrollProgressMV (MotionValue) pour éviter les re-renders React au scroll
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -111,25 +186,22 @@ const CreativeCanvas = ({ images }) => {
       const screenCenter = windowHeight / 2;
       const elementCenter = elementTop + elementHeight / 2;
 
-      // Déterminer si on est au-dessus, centré ou en-dessous
-      if (elementCenter > screenCenter) {
-        // Section en dessous du centre (pas encore arrivée)
-        // Calculer la progression d'entrée (0 = loin en bas, 1 = centré)
-        const distanceToCenter = elementCenter - screenCenter;
-        const maxDistance = windowHeight / 2 + elementHeight / 2;
-        const progress = Math.max(0, Math.min(1, 1 - (distanceToCenter / maxDistance)));
-        setScrollProgress(progress);
-      } else {
-        // Section au centre ou au-dessus du centre
-        // Une fois centrée, elle reste centrée (progress = 1)
-        setScrollProgress(1);
-      }
-
+      let progress;
       // Si on scroll au-dessus de la section (elle sort complètement par le haut)
       if (elementBottom < 0) {
-        // Remettre le décalage initial
-        setScrollProgress(0);
+        progress = 0;
+      } else if (elementCenter > screenCenter) {
+        // Section en dessous du centre (pas encore arrivée)
+        const distanceToCenter = elementCenter - screenCenter;
+        const maxDistance = windowHeight / 2 + elementHeight / 2;
+        progress = Math.max(0, Math.min(1, 1 - (distanceToCenter / maxDistance)));
+      } else {
+        // Section au centre ou au-dessus : progress fixé à 1
+        progress = 1;
       }
+
+      // Met à jour le MotionValue sans déclencher de re-render React
+      scrollProgressMV.set(progress);
     };
 
     handleScroll();
@@ -140,7 +212,7 @@ const CreativeCanvas = ({ images }) => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
-  }, []);
+  }, [scrollProgressMV]);
 
   const lastDragRef = useRef({ time: 0, pos: 0, velocity: 0 }); // dernier échantillon vitesse
 
@@ -331,85 +403,20 @@ const CreativeCanvas = ({ images }) => {
             >
               <div className="flex gap-3 pt-8 sm:py-8" style={{ minWidth: 'max-content' }}>
                 {infiniteImages.map((image, index) => {
-                  const url = image.fields.IMAGE[0].url;
-                  const thumbnailUrl = image.fields.IMAGE[0].thumbnails?.large?.url ||
-                                      image.fields.IMAGE[0].thumbnails?.small?.url;
-                  const isLoadedImg = loadedImages[url];
                   const originalIndex = index % (images?.length || 1);
-
                   return (
-                    <motion.div
+                    <CanvasItem
                       key={image.uniqueKey}
-                      className="relative flex-shrink-0 group"
-                      style={{
-                        y: Math.max(-32, Math.min(32, randomPositions[originalIndex] * (1 - scrollProgress)))
-                      }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 20
-                      }}
-                      onMouseEnter={() => setHoveredIndex(index)}
-                      onMouseLeave={() => setHoveredIndex(null)}
-                      whileHover={{ scale: 1.02 }}
-                      data-cursor
-                    >
-                      <div className={`relative w-full overflow-hidden`} style={{
-                        width: !isMobile ? `${image.fields.IMAGE[0].width / 3}px` : `${image.fields.IMAGE[0].width / 4}px`,
-                        height: !isMobile ? `${image.fields.IMAGE[0].height / 3}px` : `${image.fields.IMAGE[0].height / 4}px`,
-                        background: "#222"
-                      }}>
-                        {/* Thumbnail en arrière-plan (chargement immédiat) */}
-                        {thumbnailUrl && !isLoadedImg && (
-                          <Image
-                            quality={30}
-                            src={thumbnailUrl}
-                            alt={image.fields.Name || "Project thumbnail"}
-                            fill
-                            sizes="(max-width: 768px) 25vw, 33vw"
-                            className="blur-sm"
-                            style={{
-                              objectFit: 'contain',
-                              filter: 'grayscale(100%) brightness(0.75) blur(4px)'
-                            }}
-                            priority={index < 5} // Prioriser les 5 premières
-                          />
-                        )}
-
-                        {/* Image haute qualité */}
-                        {isLoadedImg ? (
-                          <Image
-                            quality={isMobile ? 75 : 100}
-                            src={url}
-                            alt={image.fields.Name || "Project image"}
-                            fill
-                            sizes="(max-width: 768px) 25vw, 33vw"
-                            className="transition-opacity duration-300"
-                            style={{
-                              objectFit: 'contain',
-                              opacity: isMobile ? 1 : hoveredIndex === index ? 1 : 0.8
-                            }}
-                            priority={index < 5}
-                          />
-                        ) : (
-                          // Fallback si pas de thumbnail - fond orange uniquement
-                          !thumbnailUrl && (
-                            <div style={{
-                              width: "100%",
-                              height: "100%",
-                              background: "#fa6218"
-                            }} />
-                          )
-                        )}
-                        <div
-                          className="absolute inset-0 bg-black/60 transition-opacity duration-300 flex items-end p-4"
-                          style={{
-                            opacity: isMobile ? 0 : hoveredIndex === index ? 0.2 : 1
-                          }}
-                        >
-                        </div>
-                      </div>
-                    </motion.div>
+                      image={image}
+                      index={index}
+                      originalIndex={originalIndex}
+                      isMobile={isMobile}
+                      hoveredIndex={hoveredIndex}
+                      setHoveredIndex={setHoveredIndex}
+                      loadedImages={loadedImages}
+                      scrollProgressMV={scrollProgressMV}
+                      randomPositions={randomPositions}
+                    />
                   );
                 })}
               </div>
