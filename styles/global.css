@@ -218,8 +218,8 @@ body {
 .bigH2{
     text-align: center;
     font-family: HardbopUltraBold;
-    font-size: 285pt;
-    line-height: 217pt;
+    /* font-size: 285pt; */
+    /* line-height: 217pt; */
     /* font-size: 13vw;
     line-height: 10vw; */
     text-transform: uppercase;
@@ -539,12 +539,6 @@ body:has( [data-cursor]:hover) .cursor{
 }
 
 @media screen and (max-width: 1620px) {
-  .bigH2{
-    font-size: 22vw;
-    line-height: 19vw;
-    /* Optionnel: ajuster l'espacement */
-    /* letter-spacing: -0.02em; */
-  }
   .bigH2 .gamePlan{
     font-size: 21vw; 
   }
@@ -637,6 +631,7 @@ body:has( [data-cursor]:hover) .cursor{
   p{
     font-family: "Roboto Mono";
     font-weight: 400;
+    color: rgba(255, 255, 255, 0.55);
   }
   /* Boutons */
   .cm__btn {

@@ -6,7 +6,7 @@ import { SideMenu } from '../home/SideMenu';
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [isMobille, setIsMobille] = useState(false);
+  const [logoSize, setLogoSize] = useState(98);
 
   const whiteLogoRef = useRef(null);
   const darkLogoRef = useRef(null);
@@ -14,7 +14,15 @@ export default function Navbar() {
   const darkMenuRef = useRef(null);
 
   useEffect(() => {
-    setIsMobille(window.innerWidth <= 768);
+    const update = () => {
+      const w = window.innerWidth;
+      if (w < 768) setLogoSize(48);
+      else if (w < 1536) setLogoSize(72);
+      else setLogoSize(98);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
   }, []);
 
   useEffect(() => {
@@ -99,11 +107,11 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const logoSize = isMobille ? 48 : 98;
+  const isMobile = logoSize === 48;
   const logoContainerSize = logoSize * 0.45;
 
   const menuBarsWhite = (
-    <div ref={whiteMenuRef} className="flex flex-col justify-center items-center scale-[0.6] sm:scale-100 gap-[8px] w-[60px]">
+    <div ref={whiteMenuRef} className="flex flex-col justify-center items-center scale-[0.6] sm:scale-[0.8] 2xl:scale-100 gap-[8px] w-[60px]">
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-white ${isHovered ? 'w-[70%]' : 'w-2/4'}`} />
       <div className={`h-[3px] self-start transition-all duration-300 ease-out bg-white ${isHovered ? 'w-[70%]' : 'w-3/4'}`} />
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-white ${isHovered ? 'w-[70%] translate-x-0' : 'w-2/4 translate-x-full'}`} />
@@ -111,7 +119,7 @@ export default function Navbar() {
   );
 
   const menuBarsBlack = (
-    <div ref={darkMenuRef} className="flex flex-col justify-center items-center scale-[0.6] sm:scale-100 gap-[8px] w-[60px]">
+    <div ref={darkMenuRef} className="flex flex-col justify-center items-center scale-[0.6] sm:scale-[0.8] 2xl:scale-100 gap-[8px] w-[60px]">
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-black ${isHovered ? 'w-[70%]' : 'w-2/4'}`} />
       <div className={`h-[3px] self-start transition-all duration-300 ease-out bg-black ${isHovered ? 'w-[70%]' : 'w-3/4'}`} />
       <div className={`h-[3px] transition-all duration-300 ease-out self-start bg-black ${isHovered ? 'w-[70%] translate-x-0' : 'w-2/4 translate-x-full'}`} />
@@ -124,7 +132,7 @@ export default function Navbar() {
         <div className={styles.navContent}>
           {/* White layer */}
           <div className={styles.navLayer}>
-            <div className={`${styles.logo} ${styles.white}`} style={{ width: isMobille ? logoSize:  logoContainerSize }}>
+            <div className={`${styles.logo} ${styles.white}`} style={{ width: isMobile ? logoSize:  logoContainerSize }}>
               <div ref={whiteLogoRef}>
                 <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" />
               </div>
@@ -134,7 +142,7 @@ export default function Navbar() {
 
           {/* Dark layer */}
           <div className={styles.navLayer}>
-            <div className={`${styles.logo} ${styles.dark}`} style={{ width: isMobille ? logoSize:  logoContainerSize }}>
+            <div className={`${styles.logo} ${styles.dark}`} style={{ width: isMobile ? logoSize:  logoContainerSize }}>
               <div ref={darkLogoRef}>
                 <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" />
               </div>
@@ -149,7 +157,7 @@ export default function Navbar() {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="cursor-pointer flex flex-col justify-center items-center scale-[0.8] sm:scale-100 gap-[8px] w-[60px] bg-transparent border-none p-0 opacity-0"
+              className="cursor-pointer flex flex-col justify-center items-center scale-[0.6] sm:scale-[0.8] 2xl:scale-100 gap-[8px] w-[60px] bg-transparent border-none p-0 opacity-0"
             >
               <div className="h-[3px] w-2/4 self-start" />
               <div className="h-[3px] w-3/4 self-start" />

@@ -256,7 +256,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
               </li>
             ))}
           </ul>
-          <div className="h-[90px] md:h-[120px] w-full flex  items-center -rotate-90 origin-bottom-right hidden 2xl:flex">
+          <div className="h-[90px] md:h-[120px] w-full flex  items-center -rotate-90 origin-bottom-right hidden xl:flex">
             <p
               ref={sideTextRef}
               className=" text-nowrap uppercase roboto text-[10pt] text-black/55 border-r-2 pr-4"
@@ -265,7 +265,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
             </p>
           </div>
 
-          <div ref={wordmarkRef} className="h-[90px] md:h-[120px] w-full flex items-center -rotate-90 origin-bottom-right hidden 2xl:flex">
+          <div ref={wordmarkRef} className="h-[90px] md:h-[120px] w-full flex items-center -rotate-90 origin-bottom-right hidden xl:flex">
             <div className="block">
               <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={100} height={24}/>
             </div>
@@ -279,11 +279,11 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           </button>
         </div>
 
-        <div ref={sideTextRefMob} className="w-full flex justify-center gap-6 2xl:hidden">
+        <div ref={sideTextRefMob} className="w-full flex justify-center gap-6 xl:hidden">
           <p className="uppercase roboto text-[10pt] text-black/55">
             creative studio - french accent
           </p>
-          <div ref={wordmarkRefMob} className="2xl:hidden">
+          <div ref={wordmarkRefMob} className="xl:hidden">
             <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={100} height={24}/>
           </div>
         </div>

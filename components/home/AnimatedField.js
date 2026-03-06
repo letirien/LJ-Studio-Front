@@ -26,7 +26,7 @@ const Etiquette = ({ text, width, height }) => {
   const duration = Math.max(8, text.length * 0.15); // Minimum 8s, +0.15s par caractère
   
   return (
-    <div  ref={ref} className="absolute top-[35%] left-[28%] md:top-[28%] md:left-[28%] rotate-[-6deg] h-[14px] sm:h-[20px] pt-[1px] overflow-hidden bg-[#fa6218] roboto text-black text-[8px] sm:text-[12px] flex items-center transition-[width] delay-150 ease-in-out duration-200" style={{width: isInView ? width+'vw' : '0px'}}>
+    <div  ref={ref} className="absolute z-2 top-[35%] left-[28%] md:top-[28%] md:left-[28%] rotate-[-6deg] h-[14px] sm:h-[20px] pt-[1px] overflow-hidden bg-[#fa6218] roboto text-black text-[8px] sm:text-[12px] flex items-center transition-[width] delay-150 ease-in-out duration-200" style={{width: isInView ? width+'vw' : '0px'}}>
       <motion.div
         className="whitespace-nowrap flex"
         animate={{ x: ["0%", "-50%"] }} // Aller jusqu'à -50% au lieu de -100%
@@ -37,8 +37,8 @@ const Etiquette = ({ text, width, height }) => {
           repeatType: "loop", // Assure une boucle parfaite
         }}
       >
-        <span className="px-2">{text}</span>
-        <span className="px-2">{text}</span>
+        <span className="">{text}</span>
+        <span className="">{text}</span>
       </motion.div>
     </div>
   );
@@ -377,19 +377,19 @@ export default function AnimatedField() {
                     <motion.p >we're by</motion.p> 
                     <motion.p style={{ x: leftx }}>your side</motion.p>
                     <div className="block md:hidden absolute bottom-[-8%] right-[45%]">
-                        <RoundedIcon icon="main" size={50} circularContinue={true} />
+                        <RoundedIcon icon="intro" size={50} circularContinue={true} />
                     </div>
                     <div className="hidden md:block xl:hidden absolute bottom-[-10%] right-[44%]">
-                        <RoundedIcon icon="main" size={70} circularContinue={true} />
+                        <RoundedIcon icon="intro" size={70} circularContinue={true} />
                     </div>
                         <div className="hidden xl:block absolute bottom-[-8%] right-[44%]">
-                        <RoundedIcon icon="main" size={100} circularContinue={true} />
+                        <RoundedIcon icon="intro" size={100} circularContinue={true} />
                     </div>
                     <div className="sm:hidden">
-                        <Etiquette width={18} text="DESIGN / MOTION / 3D / DEVELOPMENT" />
+                        <Etiquette width={18} text="./ BRANDING ./ ART DIRECTION ./ MOTION DESIGN ./ STADIUM CONTENT" />
                     </div>
                     <div className="hidden sm:block">
-                        <Etiquette width={11} text="DESIGN / MOTION / 3D / DEVELOPMENT" />
+                        <Etiquette width={11} text="./ BRANDING ./ ART DIRECTION ./ MOTION DESIGN ./ STADIUM CONTENT" />
                     </div>
                     
                 </h2>

@@ -281,20 +281,22 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               >
                  TROUGH CREATIVE
                 <div className="absolute right-[22.5%] bottom-[-50%] hidden sm:block xl:hidden">
-                  <RoundedIcon icon="" size={80} rotationFactor={0.45} />
+                  <RoundedIcon icon="" size={60} rotationFactor={0.45} />
                 </div>
-                <div className="absolute right-[22.5%] bottom-[-30%] hidden xl:block">
+                <div className="absolute right-[22.5%] bottom-[-30%] hidden xl:block 2xl:hidden">
+                  <RoundedIcon icon="" size={90} rotationFactor={0.45} />
+                </div>
+                <div className="absolute right-[22.5%] bottom-[-30%] hidden 2xl:block">
                   <RoundedIcon icon="" size={120} rotationFactor={0.45} />
-
                 </div>
               </HighlightText>
-              <HighlightText 
+              <HighlightText
                 initial="hidden"
                 variants={titleAnimation}
                 custom={3}
-                fadedValue={0.2}         
+                fadedValue={0.2}
                 staggerValue={0.085}
-                className="relative"         
+                className="relative"
               >
                 CANVAS.
                 <div className="absolute right-[40%] bottom-[-60%] sm:hidden">
@@ -307,7 +309,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               className={`${home.defaultText} text-center w-[90vw] sm:w-[70vw] xl:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible sm:h-[400px] shadow-[inset_0px_-50px_19px_-10px_#000000] sm:shadow-none` }
             >
               {/* lineHeight animé uniquement sur desktop non-Safari, sinon fixe */}
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.2" : pLineHeightMotion}} className="uppercase mb-12 robotoRegular text-[12px] sm:text-[20px] tracking-[0.7px] text-white !font-[400]">LJ Studio was born from a passion for sport and image, two languages that speak through emotion.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.2" : pLineHeightMotion}} className="uppercase mb-12 robotoRegular text-[12px] sm:text-[20px] tracking-[0.7px] text-white !font-[400]">LJ Studio was born from a passion for sport and image,<br/>two languages that speak through emotion.</motion.p>
               <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[12px] sm:text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
               <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[12px] sm:text-[20px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
               <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[12px] sm:text-[20px]">We believe every sport has its own language: we design the way it's told.</motion.p>
