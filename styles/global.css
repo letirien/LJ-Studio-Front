@@ -642,11 +642,30 @@ body:has( [data-cursor]:hover) .cursor{
   .cm__btn {
     background: #fa6218;
     color: white;
-    font-family: "Roboto Mono";
+    font-family: "Roboto Mono"; 
     border: none;
+    &:hover{
+      color:black;
+      background: #fa6218;
+    }
   }
-  .cm__btn--secondary{
+  .cm__title{
+    color:white;
+  }
+
+  /* .cm__btn--secondary{
     background: transparent; color: #fa6218; border: 1px solid #fa6218;
     &:hover{ background: #fa6218; color: white; }
+  } */
+}
+
+#cc-main{
+  .cm{
+    background: rgba(0, 0, 0, 0.5)!important;
+    backdrop-filter: blur(10px);
+  }
+  .cm__btns {
+    border-top: none!important;
+    /* padding-top:0 !important */
   }
 }

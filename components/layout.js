@@ -9,7 +9,8 @@ import AnimateText from '../lib/animation/animationText';
 import dynamic from 'next/dynamic';
 import Footer from './footer';
 import AnimationPage from './home/HelloAnimation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSiteReady } from '../lib/SiteReadyContext';
 
 // Importer dynamiquement le Clock sans rendu côté serveur
 const Clock = dynamic(() => import('../components/clock').then(mod => mod.Clock), {
@@ -18,6 +19,11 @@ const Clock = dynamic(() => import('../components/clock').then(mod => mod.Clock)
 
 export default function Layout({ children, home, skipIntro = false }) {
   const [animationComplete, setAnimationComplete] = useState(skipIntro);
+  const { setSiteReady } = useSiteReady();
+
+  useEffect(() => {
+    if (skipIntro) setSiteReady(true);
+  }, [skipIntro, setSiteReady]);
 
   return (
     <div className={`relative ${!animationComplete ? 'h-screen overflow-hidden' : ''}`}>
@@ -40,7 +46,10 @@ export default function Layout({ children, home, skipIntro = false }) {
 
         {/* Animation d'introduction par-dessus */}
         {!animationComplete && (
-          <AnimationPage onAnimationComplete={() => setAnimationComplete(true)} />
+          <AnimationPage onAnimationComplete={() => {
+            setAnimationComplete(true);
+            setSiteReady(true);
+          }} />
         )}
       </div>
     </div>

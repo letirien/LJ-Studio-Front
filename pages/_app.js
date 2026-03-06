@@ -10,6 +10,7 @@ import CustomCursor from "../components/CustomCursor";
 import { LoadingProvider } from '../lib/LoadingManager';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import CookieBanner from '../components/CookieConsent';
+import { SiteReadyProvider } from '../lib/SiteReadyContext';
 
 const Cursor = dynamic(() => import('../components/Cursor'), {
   ssr: false
@@ -129,19 +130,21 @@ function App({ Component, pageProps }) {
           <meta name="robots" content="noindex, nofollow" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
-        <CookieBanner onConsentChange={handleConsentChange} />
         {analyticsEnabled && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
-        <LoadingProvider>
-          <ReactLenis root options={lenisOptions}>
-            <ViewportHeightSync />
-            <LenisGSAPSync />
-            <Cursor key="cursor" />
-            <AnimatePresence mode="wait" initial={false}>
-              <Component key={router.asPath} {...pageProps} />
-            </AnimatePresence>
-            <CustomCursor key="custom-cursor" />
-          </ReactLenis>
-        </LoadingProvider>
+        <SiteReadyProvider>
+          <CookieBanner onConsentChange={handleConsentChange} />
+          <LoadingProvider>
+            <ReactLenis root options={lenisOptions}>
+              <ViewportHeightSync />
+              <LenisGSAPSync />
+              <Cursor key="cursor" />
+              <AnimatePresence mode="wait" initial={false}>
+                <Component key={router.asPath} {...pageProps} />
+              </AnimatePresence>
+              <CustomCursor key="custom-cursor" />
+            </ReactLenis>
+          </LoadingProvider>
+        </SiteReadyProvider>
       </>
   );
 }

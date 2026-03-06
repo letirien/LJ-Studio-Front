@@ -69,7 +69,7 @@ export default function Legal() {
         <hr className="border-white/20 mb-24" />
 
         {/* ── Privacy Policy ── */}
-        <section id="privacy-policy">
+        <section id="privacy-policy robotoRegular">
           <h1 className="text-4xl sm:text-5xl uppercase helveticaNowDisplayBold mb-16">Privacy Policy</h1>
 
           <div className="space-y-12 text-sm sm:text-base leading-relaxed max-w-3xl">
