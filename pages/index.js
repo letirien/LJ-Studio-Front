@@ -79,8 +79,6 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   useEffect(() => {
     const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    const w = window.innerWidth;
-    if (w > 1536) setIsLarge(true);
     setIsMobile(isMobile)
     setIsMobileOrSafari(isMobile || isSafari);
   }, []);
