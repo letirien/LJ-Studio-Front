@@ -377,7 +377,7 @@ const CreativeCanvas = ({ images }) => {
   }, [images, controls]);
 
   return (
-    <section ref={containerRef} className="bg-black text-white py-12 sm:py-24">
+    <section ref={containerRef} className="bg-black text-white py-12 sm:py-16">
       <div ref={inViewRef} onMouseEnter={() => !isMobile ? window.dispatchEvent(new Event("cursor-show")) : null}
                             onMouseLeave={() => !isMobile ? window.dispatchEvent(new Event("cursor-hide")) : null}>
         <motion.div className="max-w-none" >

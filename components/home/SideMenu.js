@@ -207,7 +207,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
                   ref={(el) => (menuLinksRef.current[i] = el)}
                   href={`#${label.toLowerCase()}`}
                   onClick={(e) => scrollToSection(e, label.toLowerCase())}
-                  className="hardbopBlack block relative w-min text-[21vw] sm:text-[6vw] hover:text-white"
+                  className="hardbopBlack block relative w-min text-[21vw] sm:text-[8vw] 2xl:text-[6vw] hover:text-white"
                   onMouseEnter={() => handleLinkHover(i, true)}
                   onMouseLeave={() => handleLinkHover(i, false)}
                 >
@@ -240,7 +240,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           {/* SOCIAL ICONS */}
         </div>
 
-        <div className="absolute right-[3vw] top-[40%] sm:top-[200px] w-[90px] md:w-[120px]">
+        <div className="absolute right-[3vw] top-[40%] sm:top-[200px] w-[90px] md:w-[120px] md:scale-90 2xl:scale-100">
           <ul id="socials" className="text-black flex flex-col justify-center items-center md:mb-3">
             {[[LinkedInIcon, 'https://www.linkedin.com/company/lj-stration/'], [XIcon, 'https://x.com/LjStration'], [InstagramIcon, 'https://www.instagram.com/lj_stration/?hl=en'], [BehanceIcon, 'https://www.behance.net/LJ-Studio']].map(([IconComponent, url], i) => (
               <li key={i} className="!mb-2">

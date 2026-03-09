@@ -79,7 +79,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   useEffect(() => {
     const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
+    const w = window.innerWidth;
+    if (w > 1536) setIsLarge(true);
     setIsMobile(isMobile)
     setIsMobileOrSafari(isMobile || isSafari);
   }, []);
@@ -306,13 +307,13 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             </h1>
             <div
               ref={aboutUsRef}
-              className={`${home.defaultText} text-center w-[90vw] sm:w-[70vw] xl:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible sm:h-[400px] shadow-[inset_0px_-50px_19px_-10px_#000000] sm:shadow-none` }
+              className={`${home.defaultText} text-center w-[90vw] lg:w-[70vw] xl:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible sm:h-[400px] shadow-[inset_0px_-50px_19px_-10px_#000000] sm:shadow-none` }
             >
               {/* lineHeight animé uniquement sur desktop non-Safari, sinon fixe */}
               <motion.p style={{lineHeight: isMobileOrSafari ? "1.2" : pLineHeightMotion}} className="uppercase mb-12 robotoRegular text-[12px] sm:text-[20px] tracking-[0.7px] text-white !font-[400]">LJ Studio was born from a passion for sport and image,<br/>two languages that speak through emotion.</motion.p>
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[12px] sm:text-[20px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[12px] sm:text-[20px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="!opacity-55 robotoRegular text-[12px] sm:text-[20px]">We believe every sport has its own language: we design the way it's told.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="px-[4vw] !opacity-55 robotoRegular text-[12px] sm:text-[16px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="px-[4vw] !opacity-55 robotoRegular text-[12px] sm:text-[16px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="px-[4vw] !opacity-55 robotoRegular text-[12px] sm:text-[16px]">We believe every sport has its own language: we design the way it's told.</motion.p>
               {/* {[
                 {
                   className: 'uppercase mb-12 robotoRegular tracking-[0.7px] text-white',
@@ -461,30 +462,32 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             )}
 
           </div>
-          <div className="flex flex-wrap w-full items-center gap-18 sm:gap-[126px] px-[3vw] relative z-3 pb-12 -mt-[20vh]">
-            <div className="mx-auto">
-              <h2 className={`flex flex-col items-center w-min collaborationTitle text-[16vw] sm:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
-                <p className="flex items-center gap-2"><span className="prefix text-[38px] sm:[54pt] capitalize">On</span>Every Pitch...</p>
-                <p className="flex">OUR CLIENT</p>
-                <div className=''>
-                  <p className="flex items-start"><span>COLLABORATIONS</span><span className="flex items-center leading-[1.2] text-[24px] !sm:text-[96pt] roboto"><span className="">(</span>*<span className="">)</span></span></p>                             
-                </div>
-              </h2>
-            </div>
-            <div className="flex md:w-2/3 flex-wrap flex-col gap-6 justify-around md:flex-row xl:pr-[3vw] flex-1">
-              <div className="md:w-max">
+          <div className="flex flex-wrap w-full px-[3vw] relative z-3 pb-12 -mt-[20vh]">
+
+            <div className="flex md:w-2/3 flex-wrap flex-col gap-6 justify-between items-center lg:flex-row xl:pr-[3vw] flex-1">
+              <div className="flex-1">
+                <h2 className={`flex flex-col items-center w-min collaborationTitle text-[16vw] sm:text-[70pt] 2xl:text-[80pt] uppercase text-center xl:ml-[4vw]`}>
+                  <p className="flex items-center gap-2"><span className="prefix text-[38px] sm:[54pt] capitalize">On</span>Every Pitch...</p>
+                  <p className="flex">OUR CLIENT</p>
+                  <div className=''>
+                    <p className="flex items-start"><span>COLLABORATIONS</span><span className="flex items-center leading-[1.2] text-[24px] !sm:text-[96pt] roboto"><span className="">(</span>*<span className="">)</span></span></p>
+                  </div>
+                </h2>
+              </div>
+
+              <div className="lg:w-max flex-1">
                 <h3 className="text-center">
                   <p className="uppercase helveticaNowDisplayMedium text-[7vw] sm:text-[25pt] leading-[0.9]">Small roster,</p>
                   <p className="uppercase helveticaNowDisplayMedium text-[7vw] sm:text-[25pt] leading-[0.9]">French accent.</p>
                 </h3>
-                <p className="instrumentSerifRegular mt-2 opacity-75 !text-[16pt] sm:!text-[20pt] w-[50%] mx-auto text-center tracking-tighter	leading-[1]">Sport-focused design studio, born in Paris.</p>
+                <p className="instrumentSerifRegular mt-2 opacity-75 !text-[16pt] sm:!text-[20pt] mx-auto text-center tracking-tighter	leading-[1]">Sport-focused design studio,<br /> born in Paris.</p>
               </div>
-              <div className="hidden sm:block  md:w-max">
+              <div className="hidden sm:block  md:w-max flex-1">
                 <h3 className="text-center">
                   <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">Shaped by</p>
                   <p className="uppercase helveticaNowDisplayMedium text-[8vw] sm:text-[25pt] leading-[0.9]">emotion.</p>
                 </h3>
-                <p className="instrumentSerifRegular mt-2 opacity-75 !text-[18pt] sm:!text-[20pt] w-[60%] mx-auto text-center tracking-tighter	leading-[1]">Designing for the feelings sport leaves behind.</p>
+                <p className="instrumentSerifRegular mt-2 opacity-75 !text-[18pt] sm:!text-[20pt] mx-auto text-center tracking-tighter	leading-[1]">Designing for the feelings<br /> sport leaves behind.</p>
               </div>
             </div>
           </div>
@@ -492,7 +495,10 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         </motion.section>
         <a href="https://www.behance.net/LJ-Studio" target="_blank">
           <motion.section id="archive" className="flex relative bg-white h-screen intersectLogo white px-[4vw] bg-black">
-            <div className="absolute right-[10%] top-[-60px] sm:top-[-90px] z-[3]">
+            <div className="absolute right-[10%] top-[-40px] sm:top-[-70px] z-[3] xl:block 2xl:hidden">
+              <RoundedIcon icon="yeux" size={140} rotationFactor={0.45} />
+            </div>
+            <div className="absolute right-[10%] top-[-60px] sm:top-[-90px] z-[3] hidden 2xl:block">
               <RoundedIcon icon="yeux" size={160} rotationFactor={0.45} />
             </div>
             <div ref={galerySection} className="self-center items-center mx-auto">

@@ -75,7 +75,7 @@ function GamePlanCard({
         <div className="inline-block">
           <h2
             ref={(el) => { titleRefs.current[index] = el; }}
-            className={`bigH2 z-20 gamePlan  text-[22vw] md:!text-[12vw]/[0.85] !text-left mx-xl relative ${item.fields["TITRE METIER"].length > 13 ? 'text-nowrap sm:text-wrap': 'text-nowrap'} w-min ${getTitleColor(index)}`}
+            className={`bigH2 z-20 gamePlan  text-[22vw]/[0.9] md:!text-[12vw]/[0.85] !text-left mx-xl relative ${item.fields["TITRE METIER"].length > 13 ? 'text-nowrap sm:text-wrap': 'text-nowrap'} w-min ${getTitleColor(index)}`}
           >
             {item.fields["TITRE METIER"]}
             <div
