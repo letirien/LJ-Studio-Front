@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import RoundedIcon from '../RoundedIcon.js';
 import { motion, useInView, useTransform, useScroll } from 'framer-motion';
@@ -60,6 +60,19 @@ export default function AnimatedField() {
     });
     const rightx = useTransform(scrollYProgress, [0, 1], [0, 80]);
     const leftx = useTransform(scrollYProgress, [1, 0], [-80, 0]);
+    const rightxMob = useTransform(scrollYProgress, [0, 1], [0, 25]);   // mobile
+    const leftxMob = useTransform(scrollYProgress, [1, 0], [-25, 0]);   // mobile
+
+
+    const [isMobile, setIsMobile] = useState(() =>
+        typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
+    );
+    useEffect(() => {
+        const mql = window.matchMedia('(max-width: 768px)');
+        const handler = (e) => setIsMobile(e.matches);
+        mql.addEventListener('change', handler);
+        return () => mql.removeEventListener('change', handler);
+    }, []);
     // Facteurs de vitesse
     const PLAY_SPEED = 0.8; // vitesse globale lecture
     const RESET_SPEED = 1; // vitesse globale reset
@@ -372,10 +385,13 @@ export default function AnimatedField() {
             <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none'>
                 <h2 className='text-center text-[14vw]/[0.8] sm:text-[8vw]/[0.8] uppercase relative helveticaNowDisplayBold'>
                     <p className="instrumentSerifRegular !capitalize text-[8vw]/[0.8] tracking-tight sm:text-[4vw]/[0.8] mb-9">Design field</p>
-                    <motion.p style={{ x: rightx }}>wherever</motion.p>
+                    <motion.p style={!isMobile ? { x: rightx } : {}}>wherever</motion.p>
                     <motion.p >you play,</motion.p> 
-                    <motion.p >we're by</motion.p> 
-                    <motion.p style={{ x: leftx }}>your side</motion.p>
+                    <motion.p className="hidden md:block">we're by</motion.p> 
+                    <motion.p  style={isMobile ? { x: rightx } : {}} className="md:hidden">we're</motion.p> 
+                    <motion.p className="md:hidden">by your</motion.p> 
+                    <motion.p style={{ x: leftx }}className="hidden md:block">your side</motion.p>
+                    <motion.p style={{ x: leftx }} className="md:hidden">side</motion.p>
                     <div className="block md:hidden absolute bottom-[-8%] right-[45%]">
                         <RoundedIcon icon="intro" size={50} circularContinue={true} />
                     </div>

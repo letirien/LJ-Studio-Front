@@ -243,12 +243,12 @@ export default function AnimationPage({ onAnimationComplete }) {
       <div className="absolute inset-0 flex items-center justify-center z-30">
         <div className="text-center space-y-4 px-8 relative">
           {/* CREATIVE STUDIO / Logo / FRENCH ACCENT - au dessus du titre */}
-          <div className={`absolute bottom-full left-0 right-0 mb-8 transition-all duration-500`}>
+          <div className={`absolute bottom-full left-0 right-0 mb-3 sm:mb-8 transition-all duration-500`}>
             <div className="flex items-center justify-center space-x-6 sm:space-x-8 text-sm text-black sm:whitespace-nowrap">
               {/* CREATIVE STUDIO avec overflow-hidden */}
               <div className="">
                 <span
-                  className={`inline-block robotoRegular text-[12pt] sm:text-[14pt] text-center leading-[0.8] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                  className={`inline-block text-nowrap robotoRegular text-[10px] sm:text-[19px] text-center leading-[0.8] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
                     !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-[600%] opacity-0' : 'translate-y-0 opacity-100'
                   }`}
                   style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '0ms' : '200ms' }}
@@ -272,7 +272,7 @@ export default function AnimationPage({ onAnimationComplete }) {
               {/* FRENCH ACCENT avec overflow-hidden */}
               <div className="">
                 <span
-                  className={`inline-block robotoRegular text-[12pt] sm:text-[14pt] text-center leading-[0.8] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
+                  className={`inline-block text-nowrap robotoRegular text-[10px] sm:text-[19px] text-center leading-[0.8] transform transition-all duration-700 ease-[cubic-bezier(0.12, 0, 0.88, 1)] ${
                     !loaderTextVisible ? 'translate-y-full opacity-0' : !loaderVisible ? '-translate-y-[600%] opacity-0' : 'translate-y-0 opacity-100'
                   }`}
                   style={{ transitionDelay: !loaderTextVisible ? '0ms' : !loaderVisible ? '0ms' : '200ms' }}
@@ -288,7 +288,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             <div className="flex flex-wrap items-center justify-center gap-x-4">
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black  transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
+                  className={`inline-block text-[28vw] md:text-[180pt] font-black text-black  transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
                     textVisible.line1 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -302,7 +302,7 @@ export default function AnimationPage({ onAnimationComplete }) {
               </div>
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
+                  className={`inline-block text-[28vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
                     textVisible.line1 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -320,7 +320,7 @@ export default function AnimationPage({ onAnimationComplete }) {
             <div className="flex flex-wrap items-center justify-center gap-x-4">
               <div className="overflow-hidden">
                 <span
-                  className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
+                  className={`inline-block text-[28vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
                     textVisible.line2 && !textDisappear
                       ? 'translate-y-0'
                       : textDisappear
@@ -336,7 +336,7 @@ export default function AnimationPage({ onAnimationComplete }) {
                 {/* Texte (reste overflow-hidden pour l'anim) */}
                 <div className="overflow-hidden">
                   <span
-                    className={`inline-block text-[22vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
+                    className={`inline-block text-[28vw] md:text-[180pt] font-black text-black transform transition-all duration-500 ease-[ cubic-bezier(0.12, 0, 0.88, 1)] ${
                       textVisible.line2 && !textDisappear
                         ? 'translate-y-0'
                         : textDisappear
@@ -351,7 +351,17 @@ export default function AnimationPage({ onAnimationComplete }) {
 
                 {/* Icône ancrée au mot, mais hors overflow */}
                 <div
-                  className="absolute left-1/2 top-full z-30 pointer-events-none"
+                  className="absolute left-1/2 bottom-[-30px] z-30 pointer-events-none sm:hidden"
+                  style={{
+                    transform: `translateX(-50%) translateY(-50%) scale(${roundedVisible && !roundedDisappear ? 1 : 0})`,
+                    transformOrigin: 'center center',
+                    transition: 'transform 0.4s cubic-bezier(0.12,0,0.88,1)',
+                  }}
+                >
+                  <RoundedIcon icon="intro" size={60} circularContinue color="white" />
+                </div>
+                <div
+                  className="absolute left-1/2 top-full z-30 pointer-events-none hidden sm:block"
                   style={{
                     transform: `translateX(-50%) translateY(-50%) scale(${roundedVisible && !roundedDisappear ? 1 : 0})`,
                     transformOrigin: 'center center',
@@ -366,7 +376,7 @@ export default function AnimationPage({ onAnimationComplete }) {
         </div>
 
         {/* KickOff Loading - positionné par rapport au viewport */}
-        <div className={`absolute bottom-[4vh] left-0 right-0 transition-all duration-500 text-black`}>
+        <div className={`absolute bottom-[25vh] sm:bottom-[4vh] left-0 right-0 transition-all duration-500 text-black`}>
           <div className='flex items-center justify-center space-x-2'>
             {/* KickOff Loading avec overflow-hidden */}
             <div className="overflow-hidden">

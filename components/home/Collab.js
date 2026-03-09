@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLoading } from '../../lib/LoadingManager';
@@ -31,30 +31,27 @@ const Collab = ({logos}) => {
       // Refresh ScrollTrigger pour recalculer les positions
       ScrollTrigger.refresh();
 
-      // Initialize each marquee
+      // Initialize each marquee — collect animations + directions for the shared trigger
+      const marqueeAnims = []; // { animation, direction, marquee }
+
       document.querySelectorAll('[data-marquee-scroll-direction]').forEach((marquee) => {
-        // Query marquee elements
         const marqueeScroll = marquee.querySelector('[data-marquee-scroll]');
         const marqueeCollections = marquee.querySelectorAll('[data-marquee-collection]');
 
         if (!marqueeScroll || !marqueeCollections.length) return;
 
-        // Get data attributes
         const speed = parseFloat(marquee.dataset.marqueeSpeed) || 20;
-        const direction = marquee.dataset.marqueeDirection === 'right' ? 1 : -1; // 1 for right, -1 for left
+        const direction = marquee.dataset.marqueeDirection === 'right' ? 1 : -1;
         const scrollSpeed = parseFloat(marquee.dataset.marqueeScrollSpeed) || 10;
 
-        // Calculate appropriate speed based on content width and viewport
         const speedMultiplier = window.innerWidth < 479 ? 0.25 : window.innerWidth < 991 ? 0.5 : 1;
         const collectionWidth = marqueeCollections[0].offsetWidth;
         const viewportWidth = window.innerWidth;
         const marqueeSpeed = speed * (collectionWidth / viewportWidth) * speedMultiplier;
 
-        // Set width and margin for the scroll container to create parallax effect
         marqueeScroll.style.marginLeft = `${scrollSpeed * -1}%`;
         marqueeScroll.style.width = `${(scrollSpeed * 2) + 100}%`;
 
-        // Ensure enough logos to cover the screen by duplicating collections if needed
         if (marqueeCollections.length < 3) {
           const fragment = document.createDocumentFragment();
           for (let i = 0; i < 3 - marqueeCollections.length; i++) {
@@ -63,43 +60,22 @@ const Collab = ({logos}) => {
           marqueeScroll.appendChild(fragment);
         }
 
-        // Get all collections after potentially adding clones
         const allCollections = marquee.querySelectorAll('[data-marquee-collection]');
 
-        // Create the main animation for infinite scrolling
         const animation = gsap.to(allCollections, {
-          xPercent: -100, // Move completely out of view
+          xPercent: -100,
           repeat: -1,
           duration: marqueeSpeed,
           ease: 'none'
         }).totalProgress(0.5);
 
         animationsRef.current.push(animation);
-
-        // Initialize marquee in the correct direction
-        gsap.set(allCollections, { xPercent: direction === 1 ? 0 : -100 });
         animation.timeScale(direction);
-
-        // Set initial status
         marquee.setAttribute('data-marquee-status', 'normal');
 
-        // ScrollTrigger for direction inversion
-        const st1 = ScrollTrigger.create({
-          trigger: marquee,
-          start: 'top bottom',
-          end: 'bottom top',
-          onUpdate: (self) => {
-            const isInverted = self.direction === 1; // Scrolling down
-            const currentDirection = isInverted ? -direction : direction;
+        marqueeAnims.push({ animation, direction, marquee });
 
-            // Update animation direction and marquee status
-            animation.timeScale(currentDirection);
-            marquee.setAttribute('data-marquee-status', isInverted ? 'inverted' : 'normal');
-          }
-        });
-        scrollTriggersRef.current.push(st1);
-
-        // Extra parallax effect on scroll
+        // Extra parallax effect on scroll (independant du trigger de direction)
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: marquee,
@@ -111,13 +87,37 @@ const Collab = ({logos}) => {
         scrollTriggersRef.current.push(tl.scrollTrigger);
 
         const scrollStart = direction === -1 ? scrollSpeed : -scrollSpeed;
-        const scrollEnd = -scrollStart;
-
         tl.fromTo(marqueeScroll,
           { x: `${scrollStart}vw` },
-          { x: `${scrollEnd}vw`, ease: 'none' }
+          { x: `${-scrollStart}vw`, ease: 'none' }
         );
       });
+
+      // Un seul ScrollTrigger sur le container pour synchroniser les deux lignes
+      // → évite que Lenis fire onEnter sur l'une et onEnterBack sur l'autre
+      if (marqueeAnims.length > 0) {
+        const setAll = (inverted) => {
+          marqueeAnims.forEach(({ animation, direction, marquee }) => {
+            animation.timeScale(inverted ? -direction : direction);
+            marquee.setAttribute('data-marquee-status', inverted ? 'inverted' : 'normal');
+          });
+        };
+
+        let lastDir = 0;
+        const st1 = ScrollTrigger.create({
+          trigger: containerRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          onUpdate: (self) => {
+            if (self.direction === lastDir) return; // évite les micro-oscillations Lenis
+            lastDir = self.direction;
+            setAll(self.direction === 1);
+          },
+          onLeave: () => setAll(true),
+          onLeaveBack: () => setAll(false),
+        });
+        scrollTriggersRef.current.push(st1);
+      }
     };
 
     // Attendre que le loader soit terminé avant d'initialiser
@@ -262,8 +262,8 @@ const Collab = ({logos}) => {
         
         @media (max-width: 768px) {
           .logo-wrapper {
-            width: 100px;
-            height: 60px;
+            width: 80px;
+            height: 40px;
           }
           
           .marquee-advanced__item {

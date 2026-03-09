@@ -308,10 +308,10 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
               className={`${home.defaultText} text-center w-[90vw] lg:w-[70vw] xl:w-[50vw] ml-auto mr-auto mt-16 md:mt-32 overflow-visible sm:h-[400px] shadow-[inset_0px_-50px_19px_-10px_#000000] sm:shadow-none` }
             >
               {/* lineHeight animé uniquement sur desktop non-Safari, sinon fixe */}
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.2" : pLineHeightMotion}} className="uppercase mb-12 robotoRegular text-[12px] sm:text-[20px] tracking-[0.7px] text-white !font-[400]">LJ Studio was born from a passion for sport and image,<br/>two languages that speak through emotion.</motion.p>
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="px-[4vw] !opacity-55 robotoRegular text-[12px] sm:text-[16px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="px-[4vw] !opacity-55 robotoRegular text-[12px] sm:text-[16px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
-              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="px-[4vw] !opacity-55 robotoRegular text-[12px] sm:text-[16px]">We believe every sport has its own language: we design the way it's told.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.2" : pLineHeightMotion}} className="uppercase mb-12 robotoRegular text-[12px] sm:text-[20px] tracking-[0.7px] text-white !font-[400]">LJ Studio was born from a passion for sport and image,<br className="hidden sm:block"/>two languages that speak through emotion.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="px-[4vw] sm:px-[4vw] !opacity-55 robotoRegular text-[12px] sm:text-[16px] mb-6">Since 2018, we've been crafting visual identities and creative systems that translate the emotion and energy of sport into meaningful stories.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="px-[4vw] sm:px-[4vw] !opacity-55 robotoRegular text-[12px] sm:text-[16px] mb-6">Over time, the studio has grown alongside its clients  - shaping art direction, brand universes and content for teams, events and federations who share the same passion for the game.</motion.p>
+              <motion.p style={{lineHeight: isMobileOrSafari ? "1.4" : pLineHeightMotion}} className="px-[4vw] sm:px-[4vw] !opacity-55 robotoRegular text-[12px] sm:text-[16px]">We believe every sport has its own language: we design the way it's told.</motion.p>
               {/* {[
                 {
                   className: 'uppercase mb-12 robotoRegular tracking-[0.7px] text-white',
@@ -452,7 +452,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                   quality={100}
                   style={{
                     objectFit: 'cover',
-                    objectPosition: 'top left'
+                    objectPosition: isMobile ? '10% top': 'top left'
                   }}
                   alt="Client highlight people decoration"
                 />
@@ -460,7 +460,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             )}
 
           </div>
-          <div className="flex flex-wrap w-full px-[3vw] relative z-3 pb-12 -mt-[20vh]">
+          <div className="flex flex-wrap w-full px-[3vw] relative z-3 pb-12 mt-[-45vh] md:-mt-[20vh]">
 
             <div className="flex md:w-2/3 flex-wrap flex-col gap-6 justify-between items-center lg:flex-row xl:pr-[3vw] flex-1">
               <div className="flex-1">
