@@ -53,10 +53,10 @@ const EmailLink = () => {
 
   const renderWords = (setIndex) => (
     <span className='flex items-baseline'>
-      <span className='lowercase tenTwentyThin text-[20pt] sm:text-[32px] overflow-hidden inline-block'>
+      <span className='lowercase tenTwentyThin text-[24px] sm:text-[32px] overflow-hidden inline-block'>
         <span ref={el => wordsRef.current[setIndex][0] = el} className='inline-block'>jean</span>
       </span>
-      <span className='overflow-hidden inline-block'>
+      <span className='overflow-hidden inline-block text-[18px] sm:text-[26px] '>
         <span ref={el => wordsRef.current[setIndex][1] = el} className='inline-block'>@LJSTUDIO.xyz</span>
       </span>
     </span>
@@ -330,8 +330,8 @@ useEffect(() => {
               <div>
                 <div className="flex sm:flex-col md:flex-row justify-between gap-8 flex-wrap">
                   <div className="flex flex-col w-max sm:flex-1">
-                    <h4 className="robotoBold text-[#4a4e52] text-[14pt] sm:text-[20px] mb-1">OUR FIELD</h4>
-                    <p className="robotoRegular text-[12pt] sm:text-[18px] leading-[1.1]">
+                    <h4 className="robotoBold text-[#4a4e52] text-[16px] sm:text-[20px] mb-1">OUR FIELD</h4>
+                    <p className="robotoRegular text-[14px] sm:text-[18px] leading-[1.1]">
                       128 rue de la Boetie<br />
                       75008 | Paris<br />
                       FRANCE
@@ -340,7 +340,7 @@ useEffect(() => {
 
                   {/* Menu */}
                   <div className='flex justify-between sm:flex-1 flex-wrap sm:flex-nowrap'>
-                    <div className="flex flex-col gap-1 robotoRegular text-[12pt] sm:text-[18px]">
+                    <div className="flex flex-col gap-1 robotoRegular text-[14px] sm:text-[18px] mr-[4vw]">
                       <a href="/" className="hover:text-[#fa6218] overflow-hidden">
                         <AppearText type="words" hover={true}>
                           Home
@@ -433,7 +433,7 @@ useEffect(() => {
 
         {/* Section 3: Barre orange */}
         <div className="footer-section bg-[#fa6218] text-black z-10">
-          <div className="w-full flex justify-between items-center px-[4vw] py-8 text-xs">
+          <div className="w-full flex justify-between items-center px-[4vw] py-4 sm:py-8 text-xs">
             <Link href="/legal" className='roboto text-[7pt] sm:text-[12pt] uppercase'>legal & privacy</Link>
             <span className='roboto text-[7pt] sm:text-[12pt]'>© {new Date().getFullYear()} | LJ Studio · All rights reserved</span>
             <BackToTopLink onClick={scrollToTop} />

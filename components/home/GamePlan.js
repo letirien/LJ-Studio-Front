@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import AppearText from '../AppearText.js';
 import { useLoading } from '../../lib/LoadingManager';
@@ -44,32 +44,14 @@ const getTextColor = (index) => {
 
 const getTitleColor = (index) => index % 3 === 1 ? 'text-white' : 'text-black';
 
-// Composant carte extrait — corrige 2 bugs :
-// 1. useTransform ne peut pas être appelé dans un .map() (violation règles des hooks React)
-// 2. style={{ y: yTransform }} au lieu de animate={{ y: yTransform }}
-//    (les MotionValues s'utilisent dans style, pas dans animate —
-//     animate re-snapshot la valeur au re-render ce qui reset la position au hover)
 function GamePlanCard({
   item, index, showGif, setGif, setShowGif,
-  scrollYProgress, isMobile, isMobileCSS,
   positionsReady, labelLeft, titleRefs,
 }) {
-  const yTransform = useTransform(scrollYProgress, [0, 1], [index * 100, 0]);
-
   return (
-    <motion.div
+    <div
       className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-6 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} rounded-t-3xl`}
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: index,
-        ...(isMobileCSS && { '--card-offset': `${index * 100}px` }),
-        ...(!isMobile && { transform: 'translateZ(0)' }),
-      }}
-      {...(!isMobile && {
-        initial: { y: index * 100 },
-        animate: { y: yTransform },
-      })}
+      style={{ position: 'sticky', top: 0, zIndex: index }}
     >
       <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-6 sm:gap-6 mx-6 sm:mx-0'>
         <div className="inline-block">
@@ -119,63 +101,39 @@ function GamePlanCard({
           priority={true}
         />
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 export default function BrandingSection({ gamePlan }) {
-  const { setRefsReady, onLoadingComplete, isComplete } = useLoading();
+  const { setRefsReady, onLoadingComplete } = useLoading();
   const titleRefs = useRef([]);
   const labelPositions = useRef({});
   const labelRatios = useRef({});
   const [positionsVersion, setPositionsVersion] = useState(0);
   const [positionsReady, setPositionsReady] = useState(false);
   const [showGif, setShowGif] = useState(null);
-  const [preloadedGifs, setPreloadedGifs] = useState(new Set());
-  const [isMobile, setIsMobile] = useState(false);
-  const [isMobileCSS, setIsMobileCSS] = useState(false);
 
-  useEffect(() => {
-    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-    setIsMobile(isTouchDevice);
-    if (isTouchDevice) {
-      const supportsScrollTimeline = CSS.supports && CSS.supports('animation-timeline', 'view()');
-      setIsMobileCSS(supportsScrollTimeline);
-    }
-  }, []);
-
-  // Précharger tous les GIFs au montage
+  // Précharger tous les GIFs au montage, signaler au LoadingManager quand c'est fait
   useEffect(() => {
     if (!gamePlan) return;
 
     let loadedCount = 0;
     const totalGifs = gamePlan.filter(item => item.fields.GIF && item.fields.GIF[0]?.url).length;
 
+    if (totalGifs === 0) {
+      setRefsReady();
+      return;
+    }
+
     gamePlan.forEach((item) => {
       if (item.fields.GIF && item.fields.GIF[0]?.url) {
         const img = new window.Image();
         img.src = item.fields.GIF[0].url;
-        img.onload = () => {
-          loadedCount++;
-          setPreloadedGifs((prev) => new Set([...prev, item.fields.GIF[0].url]));
-          // Signaler que les refs sont prêts quand tous les GIFs sont préchargés
-          if (loadedCount >= totalGifs) {
-            setRefsReady();
-          }
-        };
-        img.onerror = () => {
-          loadedCount++;
-          if (loadedCount >= totalGifs) {
-            setRefsReady();
-          }
-        };
+        img.onload = () => { if (++loadedCount >= totalGifs) setRefsReady(); };
+        img.onerror = () => { if (++loadedCount >= totalGifs) setRefsReady(); };
       }
     });
-
-    // Si pas de GIFs, signaler immédiatement
-    if (totalGifs === 0) {
-      setRefsReady();
-    }
   }, [gamePlan, setRefsReady]);
 
   const calculateLabelPosition = (index) => {
@@ -319,15 +277,8 @@ export default function BrandingSection({ gamePlan }) {
     setShowGif(index);
   };
 
-  const sectionRef = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"]
-  });
-
   return (
-    <section id="services" ref={sectionRef} className={isMobileCSS ? 'gameplan-scroll-driven' : ''}>
+    <section id="services">
       {gamePlan && gamePlan.map((item, index) => {
         // labelPosition peut être un nombre (px) ou une string en pourcentage (ex: '50%')
         let labelLeft;
@@ -352,9 +303,6 @@ export default function BrandingSection({ gamePlan }) {
             showGif={showGif}
             setGif={setGif}
             setShowGif={setShowGif}
-            scrollYProgress={scrollYProgress}
-            isMobile={isMobile}
-            isMobileCSS={isMobileCSS}
             positionsReady={positionsReady}
             labelLeft={labelLeft}
             titleRefs={titleRefs}

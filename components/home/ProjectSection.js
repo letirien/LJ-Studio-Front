@@ -336,9 +336,9 @@ export default function ProjectSection({ projects, home }) {
                 </div>
               </h2>
             ) :
-              (<h2 ref={titleRef} className="bigH2 xl:text-[17vw] xl:leading-[13vw] 2xl:text-[19vw] 2xl:leading-[15vw] text-center">
+              (<h2 ref={titleRef} className="bigH2 text-[17vw] leading-[13vw] 2xl:text-[19vw] 2xl:leading-[15vw] text-center">
                 <div className="overflow-hidden">
-                  <div ref={titleLine1Ref} className="flex justify-center gap-2 md:gap-12">
+                  <div ref={titleLine1Ref} className="flex justify-center gap-8 2xl:gap-12">
                     <span>highlights</span>
                     <span>from</span>
                   </div>

@@ -32,6 +32,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   const { setDataLoaded, setEffectsReady, setPageImagesProgress } = useLoading();
   const [isMobileOrSafari, setIsMobileOrSafari] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [studioBannerHeight, setStudioBannerHeight] = useState(0);
 
   // Ref pour la section FC Nantes
   const fcNantesRef = useRef(null);
@@ -45,9 +46,10 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
     offset: ["start end", "start start"]
   });
 
-  // FC Nantes commence à -300px (cachée sous GamePlan) et descend à 0 (position normale)
-  // L'effet s'arrête à 0, elle ne descend pas plus
-  const fcNantesY = useTransform(fcNantesProgress, [0, 1], [-300, 0]);
+  // FC Nantes a un marginTop de -300px (overlap physique avec GamePlan).
+  // y va de 0 à 300 pour compenser : au départ FC Nantes est "dans" GamePlan, puis descend à sa position finale.
+  // Cela évite le fond noir visible entre les sections quand on remonte lentement sur mobile.
+  const fcNantesY = useTransform(fcNantesProgress, [0, 1], [0, 300]);
 
   // Parallax : le gradient du bas grandit quand la section scroll hors de l'écran
   const { scrollYProgress: fcNantesGrowthProgress } = useScroll({
@@ -79,8 +81,15 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   useEffect(() => {
     const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    setIsMobile(isMobile)
+    setIsMobile(isMobile);
     setIsMobileOrSafari(isMobile || isSafari);
+
+    const bannerEl = document.getElementById('studio-banner');
+    if (bannerEl) {
+      const ro = new ResizeObserver(([entry]) => setStudioBannerHeight(entry.contentRect.height));
+      ro.observe(bannerEl);
+      return () => ro.disconnect();
+    }
   }, []);
 
   const pLineHeightMotion = useTransform(scrollYTextGalleryProgress, [0, 1], ["1.6", "1.2"]);
@@ -422,7 +431,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         */}
         <AnimatedField/>
         <BrandingSection gamePlan={gamePlan} />
-        <motion.section ref={fcNantesRef} className="w-full h-full bg-black" style={{ y: fcNantesY }}>
+        <motion.section ref={fcNantesRef} className="w-full h-full bg-black" style={{ y: fcNantesY, marginTop: '-300px', paddingBottom: '300px' }}>
           <div className="w-full h-[100svh] relative overflow-hidden">
             <div className="absolute -bottom-1 left-0 right-0 h-[60vh] z-3" style={{
               background: 'linear-gradient(to top, #000000ff 12vh, transparent 100%)'
@@ -492,7 +501,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <Collab logos={logoClients} />
         </motion.section>
         <a href="https://www.behance.net/LJ-Studio" target="_blank">
-          <motion.section id="archive" className="flex relative bg-white h-screen intersectLogo white px-[4vw] bg-black">
+          <motion.section id="archive" className="flex relative bg-white intersectLogo white px-[4vw] bg-black" style={{ height: studioBannerHeight && isMobile ? `calc(100svh - ${studioBannerHeight}px)` : '100svh' }}>
             <div className="absolute right-[10%] top-[-40px] sm:top-[-70px] z-[3] xl:block 2xl:hidden">
               <RoundedIcon icon="yeux" size={140} rotationFactor={0.45} />
             </div>
