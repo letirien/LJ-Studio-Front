@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import AnimatedEyes from "./AnimatedEyes";
 import IntroIcons from "./IntroIcons";
+import { useMediaQuery } from "../lib/useMediaQuery.js";
 
 export default function RoundedIcon({
   color = "",
@@ -11,19 +12,10 @@ export default function RoundedIcon({
   className = "",
   circularContinue = false,
   menu = false,
+  maxWidth = 768,
 }) {
-  function useIsMobile(maxWidth = 768) {
-    const [isMobile, setIsMobile] = useState(false);
 
-    useEffect(() => {
-      const check = () => setIsMobile(window.innerWidth <= maxWidth);
-      check();
-      window.addEventListener("resize", check);
-      return () => window.removeEventListener("resize", check);
-    }, [maxWidth]);
-
-    return isMobile;
-  }
+  const isMobile = useMediaQuery(`(max-width: ${maxWidth}px)`);
 
   const isIntro = icon === "intro";
   const isWhite = color === "white";
@@ -86,7 +78,6 @@ export default function RoundedIcon({
     };
   }, [rotationFactor, circularContinue]);
 
-  const isMobile = useIsMobile();
   const shrinkFactor = isMobile ? 0.75 : 1;
 
   const containerStyle = {

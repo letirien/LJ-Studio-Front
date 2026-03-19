@@ -3,6 +3,7 @@ import { useLenis } from 'lenis/react';
 import gsap from 'gsap';
 import Projects from './ProjectSlider.js';
 import { useScrollTrigger } from '../../lib/useScrollTrigger.js';
+import { useMediaQuery } from '../../lib/useMediaQuery.js';
 import Image from "next/image";
 import RoundedIcon from '../RoundedIcon.js';
 
@@ -25,9 +26,7 @@ export default function ProjectSection({ projects, home }) {
   const lenis = useLenis();
   const { ScrollTrigger, isReady } = useScrollTrigger();
 
-  const [isMobile, setIsMobile] = useState(false);
-    
-
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const defaultColor = '#FA6218';
 
@@ -35,10 +34,6 @@ export default function ProjectSection({ projects, home }) {
   useEffect(() => {
     const firstColor = projects?.[0]?.fields?.['#hexa'] || defaultColor;
     setColorBlocks([{ id: Date.now(), color: firstColor, entering: false, initial: true, projectIndex: 0 }]);
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
   }, [projects]);
 
   // Gestion du changement de slide (couleur)

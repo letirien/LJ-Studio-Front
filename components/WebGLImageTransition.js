@@ -341,7 +341,7 @@ function WebGLImageTransitionDemo5Internal({
     return () => {
       if (autoplayTimerRef.current) clearTimeout(autoplayTimerRef.current);
     };
-  }, [autoplay, autoplayDelay, transitionDuration]);
+  }, [autoplay, autoplayDelay]);
 
   let fallbackIndex = 0;
   try {

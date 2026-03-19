@@ -25,14 +25,17 @@ import ProjectSection from "../components/home/ProjectSection.js";
 import HighlightText from "../components/home/HighlightText.js";
 import AppearText from '../components/AppearText.js';
 import { useLoading } from '../lib/LoadingManager';
+import { useMediaQuery } from '../lib/useMediaQuery.js';
 
 
 
 export default function Home({ projects, gamePlan, logoClients, sliderImages, headerImages, headerClients }) {
   const { setDataLoaded, setEffectsReady, setPageImagesProgress } = useLoading();
-  const [isMobileOrSafari, setIsMobileOrSafari] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [studioBannerHeight, setStudioBannerHeight] = useState(0);
+
+  const isMobile = useMediaQuery("(max-width: 640px)");
+  const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const isMobileOrSafari = isMobile || isSafari;
 
   // Ref pour la section FC Nantes
   const fcNantesRef = useRef(null);
@@ -77,13 +80,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   const lineHeight = useTransform(scrollYGalleryProgress, [0, 1], ["1.1", "0.7"]);
 
   // Animation lineHeight : utilise useTransform sauf sur mobile/Safari
-  // Détection mobile/Safari côté client uniquement pour éviter les erreurs d'hydratation
   useEffect(() => {
-    const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    setIsMobile(isMobile);
-    setIsMobileOrSafari(isMobile || isSafari);
-
     const bannerEl = document.getElementById('studio-banner');
     if (bannerEl) {
       const ro = new ResizeObserver(([entry]) => setStudioBannerHeight(entry.contentRect.height));
@@ -154,8 +151,20 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
   };
 
   useEffect(() => {
-    // Calculer après le premier rendu
+    
+    // 1. Calculer la position du bouton après le rendu
     const timer = setTimeout(calculateButtonPosition, 100);
+
+    // 2. Marquer les données comme chargées (chargées via getServerSideProps)
+    setDataLoaded();
+    
+    // 3. Marquer les images de la page comme chargées (on ne les preload pas)
+    setPageImagesProgress(100, 100);
+    
+    // 4. Attendre que GSAP et ScrollTrigger s'initialisent
+    const effectsTimer = setTimeout(() => {
+      setEffectsReady();
+    }, 500);
 
     // Recalculer lors du redimensionnement
     const handleResize = () => {
@@ -166,28 +175,10 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
 
     return () => {
       clearTimeout(timer);
+      clearTimeout(effectsTimer);
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
-
-  // Marquer les données comme chargées dès le montage du composant
-  // (puisque getServerSideProps les charge côté serveur)
-  useEffect(() => {
-    setDataLoaded();
-    // Marquer les images de la page comme chargées immédiatement
-    // (on ne les preload pas pour éviter les conflits et le lag)
-    setPageImagesProgress(100, 100);
-  }, [setDataLoaded, setPageImagesProgress]);
-
-  // Marquer les effets comme prêts après l'initialisation de GSAP et des animations
-  useEffect(() => {
-    // Donner un peu de temps pour que GSAP et ScrollTrigger s'initialisent
-    const timer = setTimeout(() => {
-      setEffectsReady();
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [setEffectsReady]);
+  }, [setDataLoaded, setPageImagesProgress, setEffectsReady]);
 
   // Paragraph animations are handled by AppearText (GSAP inside component)
   return (

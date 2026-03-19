@@ -10,6 +10,7 @@ import { Clock } from "../clock";
 import dynamic from "next/dynamic";
 import React, { useEffect, useRef, useMemo, useState } from "react";
 import { useLoading } from "../../lib/LoadingManager";
+import { useLenis } from "lenis/react";
 
 // Charger WebGLImageTransition en dehors du composant pour éviter les re-créations
 const WebGLImageTransition = dynamic(
@@ -19,6 +20,7 @@ const WebGLImageTransition = dynamic(
 
 export function Header({ headerImages }) {
     const { setWebGLProgress, isComplete } = useLoading();
+    const lenis = useLenis();
 
     const imagesArray = useMemo(() => headerImages.map(img => img.fields.IMAGE[0].url), [headerImages]);
     const webglRef = useRef(null);
@@ -28,17 +30,17 @@ export function Header({ headerImages }) {
     const imgBottomRef = useRef(null);
     const [logoVisible, setLogoVisible] = useState(false);
 
-    // Effet parallax : les décorations du bas grandissent au scroll
+    // Parallax : les décorations du bas grandissent au scroll
     useEffect(() => {
         const header = headerRef.current;
-        if (!header) return;
+        if (!header || !lenis) return;
 
         let ticking = false;
 
         const handleScroll = () => {
             if (!ticking) {
                 requestAnimationFrame(() => {
-                    const scrollY = window.scrollY;
+                    const scrollY = lenis.scroll;
                     const headerHeight = header.offsetHeight;
 
                     // progress 0 → 1 quand le header sort de l'écran
@@ -60,9 +62,9 @@ export function Header({ headerImages }) {
             }
         };
 
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        lenis.on('scroll', handleScroll);
+        return () => lenis.off('scroll', handleScroll);
+    }, [lenis]);
 
     // Animation du logo lettre par lettre quand l'animation est complète
     useEffect(() => {

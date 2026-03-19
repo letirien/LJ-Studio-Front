@@ -1,29 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import styles from './navbar.module.scss';
 import Image from 'next/image';
 import { SideMenu } from '../home/SideMenu';
+import { useMediaQuery } from '../../lib/useMediaQuery.js';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [logoSize, setLogoSize] = useState(98);
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isLarge = useMediaQuery('(min-width: 1536px)');
+  
+  // Calculate logo size during render - no setState needed
+  const logoSize = useMemo(() => {
+    if (isMobile) return 48;
+    if (isLarge) return 98;
+    return 72;
+  }, [isMobile, isLarge]);
 
   const whiteLogoRef = useRef(null);
   const darkLogoRef = useRef(null);
   const whiteMenuRef = useRef(null);
   const darkMenuRef = useRef(null);
-
-  useEffect(() => {
-    const update = () => {
-      const w = window.innerWidth;
-      if (w < 768) setLogoSize(48);
-      else if (w < 1536) setLogoSize(72);
-      else setLogoSize(98);
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,7 +105,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isMobile = logoSize === 48;
   const logoContainerSize = logoSize * 0.45;
 
   const menuBarsWhite = (

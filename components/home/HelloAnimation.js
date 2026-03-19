@@ -73,7 +73,7 @@ export default function AnimationPage({ onAnimationComplete }) {
     return () => clearTimeout(timer);
   }, [fontsReady]);
 
-  // Apparition progressive du texte au fur et à mesure du chargement
+
   useEffect(() => {
     if (progress >= 20 && !textVisible.line1) {
       setTextVisible((prev) => ({ ...prev, line1: true }));
@@ -85,7 +85,7 @@ export default function AnimationPage({ onAnimationComplete }) {
       setTextVisible((prev) => ({ ...prev, line3: true }));
     }
     setRoundedVisible(true)
-  }, [progress, textVisible]);
+  }, [progress]);
 
   // Quand le chargement est complet (100%), lancer l'animation de sortie
   useEffect(() => {

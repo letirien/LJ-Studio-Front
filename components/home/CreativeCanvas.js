@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useMediaQuery } from '../../lib/useMediaQuery.js';
 
 // Composant extrait pour pouvoir appeler useTransform par item
 // sans violer les règles des hooks dans un .map()
@@ -81,10 +82,11 @@ const CreativeCanvas = ({ images }) => {
   // Etats d'UI
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [randomPositions, setRandomPositions] = useState([]);
-  const [isMobile, setIsMobile] = useState(false);
   const [isDragging, setIsDragging] = useState(false); // eslint-disable-line no-unused-vars
   // MotionValue au lieu de useState → mise à jour sans re-render React
   const scrollProgressMV = useMotionValue(0);
+
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   // Pour suivre le chargement individuel des images
   const [loadedImages, setLoadedImages] = useState({});
@@ -144,14 +146,6 @@ const CreativeCanvas = ({ images }) => {
   const velocityVisualRef = useRef(0);
   const [velocityVisual, setVelocityVisual] = useState(0);
   const isTouchRef = useRef(false);
-
-  // Détection responsive (mobile en-dessous de 768px)
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   // Déclenche les animations d'entrée quand la section est visible
   const [inViewRef] = useInView({ // eslint-disable-line no-unused-vars

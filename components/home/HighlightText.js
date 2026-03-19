@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect, useRef, Children } from 'react';
+import React from 'react';
+import { useEffect, useRef, useMemo, Children } from 'react';
 import { motion } from 'framer-motion';
 
 /**
- * Composant qui ajoute l'effet de highlight caractère par caractère au scroll
- * Remplace motion.p pour les textes qui doivent avoir l'effet
+ * HighlightText - Effet de mise en évidence caractère par caractère au scroll
  * 
- * Usage: Remplacez <motion.p> par <HighlightText> pour les textes sans catHighlight
+ * - Utilise React pour renderer les spans (pas d'innerHTML)
+ * - Calculs dérivés au lieu d'imperatives mutations
+ * - SSR compatible
  */
 export const HighlightText = ({ 
   children, 
@@ -22,75 +24,53 @@ export const HighlightText = ({
   scrollEnd = "center 40%",
   ...props 
 }) => {
-  const textRef = useRef(null);
   const containerRef = useRef(null);
   const charsRef = useRef([]);
 
-  useEffect(() => {
-    if (!textRef.current) return;
-
-    // Split le texte en mots
-    const text = textRef.current.textContent;
-    const words = text.split(' ');
+  const wordData = useMemo(() => {
+    // Extraire le contenu texte du children
+    const textContent = typeof children === 'string' 
+      ? children 
+      : Children.toArray(children)
+          .filter(child => typeof child === 'string')
+          .join('');
     
-    // Créer des spans pour chaque mot, puis pour chaque caractère
-    textRef.current.innerHTML = '';
+    if (!textContent) return [];
+    
+    const words = textContent.split(' ');
     let charIndex = 0;
     
-    words.forEach((word, wordIndex) => {
-      // Créer un span pour le mot (permet le wrap)
-      const wordSpan = document.createElement('span');
-      wordSpan.style.display = 'inline-block';
-      wordSpan.style.whiteSpace = 'nowrap'; // Empêche la coupure du mot
-      
-      // Créer des spans pour chaque caractère du mot
-      word.split('').forEach((char) => {
-        const charSpan = document.createElement('span');
-        charSpan.textContent = char;
-        charSpan.style.opacity = fadedValue.toString();
-        charSpan.style.transition = 'opacity 0.1s linear';
-        charSpan.style.display = 'inline-block';
-        wordSpan.appendChild(charSpan);
-        charsRef.current[charIndex] = charSpan;
-        charIndex++;
-      });
-      
-      textRef.current.appendChild(wordSpan);
-      
-      // Ajouter un espace après chaque mot sauf le dernier
-      if (wordIndex < words.length - 1) {
-        const spaceSpan = document.createElement('span');
-        spaceSpan.textContent = ' ';
-        spaceSpan.style.opacity = fadedValue.toString();
-        spaceSpan.style.transition = 'opacity 0.1s linear';
-        spaceSpan.style.display = 'inline-block';
-        spaceSpan.style.whiteSpace = 'pre';
-        textRef.current.appendChild(spaceSpan);
-        charsRef.current[charIndex] = spaceSpan;
-        charIndex++;
-      }
+    return words.map((word, wordIndex) => {
+      const charIndices = word.split('').map(() => charIndex++);
+      return { word, charIndices, wordIndex };
     });
+  }, [children]);
+
+  useEffect(() => {
+    if (!containerRef.current || wordData.length === 0) return;
+
+    // Calculer le total de caractères pour le stagger
+    const totalChars = wordData.reduce((sum, w) => sum + w.charIndices.length, 0);
+
+    const parseScrollValue = (value) => {
+      const match = value.match(/(top|center|bottom)\s+(\d+)%/);
+      if (!match) return window.innerHeight * 0.9;
+      
+      const position = match[1];
+      const percentage = parseFloat(match[2]) / 100;
+      
+      let base = 0;
+      if (position === 'center') base = window.innerHeight / 2;
+      if (position === 'bottom') base = window.innerHeight;
+      
+      return window.innerHeight * percentage;
+    };
 
     const handleScroll = () => {
       if (!containerRef.current) return;
 
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-
-      // Parser les valeurs de scroll start/end
-      const parseScrollValue = (value) => {
-        const match = value.match(/(top|center|bottom)\s+(\d+)%/);
-        if (!match) return windowHeight * 0.9;
-        
-        const position = match[1];
-        const percentage = parseFloat(match[2]) / 100;
-        
-        let base = 0;
-        if (position === 'center') base = windowHeight / 2;
-        if (position === 'bottom') base = windowHeight;
-        
-        return windowHeight * percentage;
-      };
 
       const startPoint = parseScrollValue(scrollStart);
       const endPoint = parseScrollValue(scrollEnd);
@@ -121,11 +101,10 @@ export const HighlightText = ({
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
-  }, [children, fadedValue, staggerValue, scrollStart, scrollEnd]);
+  }, [wordData, fadedValue, staggerValue, scrollStart, scrollEnd]);
 
   // Séparer le texte des autres éléments (comme RoundedIcon)
   const childrenArray = Children.toArray(children);
-  const textContent = childrenArray.filter(child => typeof child === 'string').join('');
   const otherElements = childrenArray.filter(child => typeof child !== 'string');
 
   return (
@@ -138,7 +117,36 @@ export const HighlightText = ({
       className={className}
       {...props}
     >
-      <span ref={textRef}>{textContent}</span>
+      {wordData.map((wordItem, wordIndex) => (
+        <React.Fragment key={wordIndex}>
+          <span
+            style={{
+              display: 'inline-block',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {wordItem.charIndices.map((charIndex) => {
+              const charPosition = charIndex;
+              return (
+                <span
+                  key={charIndex}
+                  ref={(el) => {
+                    charsRef.current[charIndex] = el;
+                  }}
+                  style={{
+                    display: 'inline-block',
+                    opacity: fadedValue,
+                    transition: 'opacity 0.1s linear',
+                  }}
+                >
+                  {wordItem.word[charPosition - wordItem.charIndices[0]]}
+                </span>
+              );
+            })}
+          </span>
+          {wordIndex < wordData.length - 1 && ' '}
+        </React.Fragment>
+      ))}
       {otherElements}
     </motion.div>
   );

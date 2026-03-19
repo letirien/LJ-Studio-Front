@@ -7,6 +7,7 @@ import Link from "next/link";
 import home from "../../styles/home.module.scss";
 import Section from './Section.js';
 import dynamic from 'next/dynamic';
+import { useMediaQuery } from "../../lib/useMediaQuery.js";
 import {
     fadeInRight,
     fadeInUp,
@@ -55,16 +56,10 @@ export default function ProjectSlider({ projects, navRef, onSlideChange }) {
     const slideInnerRefs = useRef([]);
     const decoRef = useRef(null);
     const totalProjects = projects.length;
-
-    const [isMobile, setIsMobile] = useState(false);
     const [sliderReady, setSliderReady] = useState(false);
 
-    useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth < 768);
-        checkMobile();
-        window.addEventListener("resize", checkMobile);
-        return () => window.removeEventListener("resize", checkMobile);
-    }, []);
+    const isMobile = useMediaQuery('(max-width: 768px)');
+
     // Initialiser les refs pour chaque slide
     useEffect(() => {
         // Créer des références DOM réelles pour tous les slides dès le début

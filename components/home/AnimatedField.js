@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import RoundedIcon from '../RoundedIcon.js';
 import { motion, useInView, useTransform, useScroll } from 'framer-motion';
+import { useMediaQuery } from '../../lib/useMediaQuery.js';
 
 
 // Ajout des deux segments de ligne centrale desktop
@@ -63,16 +64,8 @@ export default function AnimatedField() {
     const rightxMob = useTransform(scrollYProgress, [0, 1], [0, 25]);   // mobile
     const leftxMob = useTransform(scrollYProgress, [1, 0], [-25, 0]);   // mobile
 
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
-    const [isMobile, setIsMobile] = useState(() =>
-        typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
-    );
-    useEffect(() => {
-        const mql = window.matchMedia('(max-width: 768px)');
-        const handler = (e) => setIsMobile(e.matches);
-        mql.addEventListener('change', handler);
-        return () => mql.removeEventListener('change', handler);
-    }, []);
     // Facteurs de vitesse
     const PLAY_SPEED = 0.8; // vitesse globale lecture
     const RESET_SPEED = 1; // vitesse globale reset
