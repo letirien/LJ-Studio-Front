@@ -67,33 +67,36 @@ export const HighlightText = ({
     };
 
     const handleScroll = () => {
-      if (!containerRef.current) return;
+      requestAnimationFrame(() => {
+        if (!containerRef.current) return;
 
-      const rect = containerRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
+        const rect = containerRef.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
 
-      const startPoint = parseScrollValue(scrollStart);
-      const endPoint = parseScrollValue(scrollEnd);
-      
-      const scrollStartPos = rect.top - startPoint;
-      const scrollEndPos = rect.top + rect.height / 2 - endPoint;
-      
-      const totalDistance = Math.abs(scrollEndPos - scrollStartPos);
-      const currentDistance = Math.abs(scrollStartPos);
-      
-      const progress = Math.min(Math.max(currentDistance / totalDistance, 0), 1);
+        const startPoint = parseScrollValue(scrollStart);
+        const endPoint = parseScrollValue(scrollEnd);
+        
+        const scrollStartPos = rect.top - startPoint;
+        const scrollEndPos = rect.top + rect.height / 2 - endPoint;
+        
+        const totalDistance = Math.abs(scrollEndPos - scrollStartPos);
+        const currentDistance = Math.abs(scrollStartPos);
+        
+        const progress = Math.min(Math.max(currentDistance / totalDistance, 0), 1);
 
-      // Appliquer l'effet stagger sur chaque caractère
-      charsRef.current.forEach((span, index) => {
-        if (!span) return;
-        const charDelay = index * staggerValue;
-        const charProgress = Math.min(Math.max((progress - charDelay) / staggerValue, 0), 1);
-        const opacity = fadedValue + charProgress * (1 - fadedValue);
-        span.style.opacity = opacity.toString();
+        // Appliquer l'effet stagger sur chaque caractère
+        charsRef.current.forEach((span, index) => {
+          if (!span) return;
+          const charDelay = index * staggerValue;
+          const charProgress = Math.min(Math.max((progress - charDelay) / staggerValue, 0), 1);
+          const opacity = fadedValue + charProgress * (1 - fadedValue);
+          span.style.opacity = opacity.toString();
+        });
       });
     };
 
     handleScroll();
+    window.addEventListener('touchmove', handleScroll, { passive: true });
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
 
@@ -137,6 +140,9 @@ export const HighlightText = ({
                     display: 'inline-block',
                     opacity: fadedValue,
                     transition: 'opacity 0.1s linear',
+                    willChange: 'opacity',
+                    transform: 'translateZ(0)',
+                    WebkitFontSmoothing: 'antialiased',
                   }}
                 >
                   {wordItem.word[charPosition - wordItem.charIndices[0]]}
