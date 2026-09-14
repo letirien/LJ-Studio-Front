@@ -36,6 +36,29 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
     })();
   }, []);
 
+  const sideTextContainerRef = useRef(null);
+
+  useEffect(() => {
+    const container = sideTextContainerRef.current;
+    const text = sideTextRef.current;
+
+    if (!container || !text) return;
+
+    const updateSize = () => {
+      const { width, height } = text.getBoundingClientRect();
+
+      container.style.width = `${width}px`;
+      container.style.height = `${height}px`;
+    };
+
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(text);
+
+    updateSize();
+
+    return () => observer.disconnect();
+  }, []);
+
   // Initialiser la timeline GSAP une seule fois
   useEffect(() => {
     if (!gsapInstance) return;
@@ -174,6 +197,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen]);
 
+
   return (
     <>
       <div
@@ -240,35 +264,77 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           {/* SOCIAL ICONS */}
         </div>
 
-        <div className="absolute right-[3vw] top-[40%] sm:top-[200px] w-[90px] md:w-[120px] md:scale-90 2xl:scale-100">
-          <ul id="socials" className="text-black flex flex-col justify-center items-center md:mb-3">
-            {[[LinkedInIcon, 'https://www.linkedin.com/company/lj-stration/'], [XIcon, 'https://x.com/LjStration'], [InstagramIcon, 'https://www.instagram.com/lj_stration/?hl=en'], [BehanceIcon, 'https://www.behance.net/LJ-Studio']].map(([IconComponent, url], i) => (
-              <li key={i} className="!mb-2">
+        {/* RIGHT SIDE */}
+        <div
+          className="
+    absolute
+    right-[3vw]
+    top-1/2
+    -translate-y-1/2
+    w-[90px] md:w-[120px]
+    flex flex-col items-center
+  "
+        >
+          {/* SOCIALS */}
+          <ul
+            id="socials"
+            className="flex flex-col items-center justify-center mb-4 sm:mb-8"
+          >
+            {[
+              [LinkedInIcon, "https://www.linkedin.com/company/lj-stration/"],
+              [XIcon, "https://x.com/LjStration"],
+              [InstagramIcon, "https://www.instagram.com/lj_stration/?hl=en"],
+              [BehanceIcon, "https://www.behance.net/LJ-Studio"],
+            ].map(([IconComponent, url], i) => (
+              <li key={i} className="!mb-4">
                 <a
                   ref={(el) => (socialsRef.current[i] = el)}
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white hardbop-bold text-[17pt]"
+                  className="hover:text-white"
                 >
-                  <IconComponent width={24} height={24} className="inline-block mb-1" />
+                  <IconComponent width={24} height={24} />
                 </a>
               </li>
             ))}
           </ul>
-          <div className="h-[90px] md:h-[120px] w-full flex  items-center -rotate-90 origin-bottom-right hidden xl:flex">
+
+          {/* SLOGAN */}
+          <div
+            ref={sideTextContainerRef}
+            className="relative flex items-center justify-center sm:!mb-4 order-2 sm:order-1"
+          >
             <p
               ref={sideTextRef}
-              className=" text-nowrap uppercase roboto text-[10pt] text-black/55 border-r-2 pr-4"
+              className="
+        absolute
+        whitespace-nowrap
+        uppercase
+        roboto
+        text-[10pt]
+        text-black/55
+        border-r-2
+        pr-4
+        sm:pr-8
+        rotate-[-90deg]
+        origin-center
+      "
             >
               creative studio - french accent
             </p>
           </div>
 
-          <div ref={wordmarkRef} className="h-[90px] md:h-[120px] w-full flex items-center -rotate-90 origin-bottom-right hidden xl:flex">
-            <div className="block">
-              <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={100} height={24}/>
-            </div>
+          {/* WORDMARK */}
+          <div className="relative flex h-[120px] w-[100px] items-center justify-center order-1 sm:order-2 mb-2 sm:mb-0">
+            <Image
+              ref={wordmarkRef}
+              src="/images/LJSTD_WORDMARK.svg"
+              alt="LJ Studio wordmark"
+              width={100}
+              height={24}
+              className="rotate-[-90deg]"
+            />
           </div>
         </div>
 
@@ -279,14 +345,14 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           </button>
         </div>
 
-        <div ref={sideTextRefMob} className="w-full flex justify-center gap-6 xl:hidden">
-          <p className="uppercase roboto text-[10pt] text-black/55">
+        {/* <div ref={sideTextRefMob} className="w-full flex justify-center gap-6 xl:hidden">
+          <p className="uppercase roboto text-[8pt] text-black/55">
             creative studio - french accent
           </p>
           <div ref={wordmarkRefMob} className="xl:hidden">
             <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={100} height={24}/>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

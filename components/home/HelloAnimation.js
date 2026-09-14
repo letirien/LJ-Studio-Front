@@ -116,7 +116,7 @@ export default function AnimationPage({ onAnimationComplete }) {
   }, [isComplete, animationStarted, onAnimationComplete]);
 
   return (
-    <div className="absolute inset-0 w-screen h-screen overflow-hidden z-50">
+    <div className="absolute inset-0 w-screen h-svh overflow-hidden z-50">
       {/* Blocs orange animés (premier set - plus clair, au-dessus) */}
       <div className="absolute inset-0 z-20">
         {/* Bloc 1 - Gauche */}
