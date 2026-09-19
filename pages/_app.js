@@ -11,6 +11,7 @@ import { LoadingProvider } from '../lib/LoadingManager';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import CookieBanner from '../components/CookieConsent';
 import { SiteReadyProvider } from '../lib/SiteReadyContext';
+import { useBrowserChromeColor } from '../lib/useBrowserChromeColor';
 
 const Cursor = dynamic(() => import('../components/Cursor'), {
   ssr: false
@@ -105,6 +106,7 @@ function LenisGSAPSync() {
 function App({ Component, pageProps }) {
   const router = useRouter();
   const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
+  useBrowserChromeColor();
 
   const handleConsentChange = useCallback((accepted) => {
     setAnalyticsEnabled(accepted);
@@ -129,7 +131,7 @@ function App({ Component, pageProps }) {
       <>
         <Head>
           <meta name="robots" content="noindex, nofollow" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         </Head>
         {analyticsEnabled && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
         <SiteReadyProvider>

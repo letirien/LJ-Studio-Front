@@ -211,6 +211,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         </Head>
         <Header headerImages={headerImages}/>
         <section
+          data-browser-color="#000000"
           className={`${home.black} bg-black pt-12 sm:pt-32`}
           data-scroll
           id="about"
@@ -492,7 +493,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <Collab logos={logoClients} />
         </motion.section>
         <a href="https://www.behance.net/LJ-Studio" target="_blank">
-          <motion.section id="archive" className="flex relative bg-white intersectLogo white px-[4vw] bg-black" style={{ height: studioBannerHeight && isMobile ? `calc(100svh - ${studioBannerHeight}px)` : '100svh' }}>
+          <motion.section data-browser-color="#000000" id="archive" className="flex relative bg-white intersectLogo white px-[4vw] bg-black" style={{ height: studioBannerHeight && isMobile ? `calc(100svh - ${studioBannerHeight}px)` : '100svh' }}>
             <div className="absolute right-[10%] top-[-40px] sm:top-[-70px] z-[3] xl:block 2xl:hidden">
               <RoundedIcon icon="yeux" size={140} rotationFactor={0.45} />
             </div>

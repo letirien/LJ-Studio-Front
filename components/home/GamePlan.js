@@ -278,7 +278,7 @@ export default function BrandingSection({ gamePlan }) {
   };
 
   return (
-    <section id="services">
+    <section id="services" data-browser-color="#000000">
       {gamePlan && gamePlan.map((item, index) => {
         // labelPosition peut être un nombre (px) ou une string en pourcentage (ex: '50%')
         let labelLeft;

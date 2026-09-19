@@ -9,6 +9,7 @@ import RoundedIcon from "../RoundedIcon";
 import Image from "next/image";
 import { useMediaQuery } from "../../lib/useMediaQuery";
 import { useViewportLock } from "../../lib/useViewportLock";
+import { PRIMARY_COLOR, getVisibleSectionColor, setBrowserChromeColor } from "../../lib/browserChrome";
 
 export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
@@ -28,6 +29,18 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const wordmarkRefMob = useRef(null);
   const isMobile = useMediaQuery("(max-width: 639px)");
   useViewportLock(isOpen);
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    if (isOpen) {
+      root.dataset.browserChromeOverride = 'menu';
+      setBrowserChromeColor(PRIMARY_COLOR);
+    } else {
+      delete root.dataset.browserChromeOverride;
+      setBrowserChromeColor(getVisibleSectionColor());
+    }
+  }, [isOpen]);
   // Charger GSAP dynamiquement
   useEffect(() => {
     (async () => {
@@ -205,7 +218,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
     <>
       <div
         ref={bellowContainerRef}
-        className="fixed top-0 right-0 h-[var(--app-height,100dvh)] w-[100vw] sm:w-[50vw] z-[400]"
+        className="fixed inset-y-0 right-0 h-[100dvh] w-[100vw] sm:w-[50vw] z-[400]"
         style={{ transform: "translateX(100%)" }}
       >
         <div
@@ -222,7 +235,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
 
       <div
         ref={menuContainerRef}
-        className="fixed top-0 right-0 h-[var(--app-height,100dvh)] w-[100vw] sm:w-[50vw] bg-[#fa6218] flex flex-col items-start py-[4vh] px-[3vw] z-[500]"
+        className="fixed inset-y-0 right-0 h-[100dvh] w-[100vw] sm:w-[50vw] bg-[#fa6218] flex flex-col items-start py-[4vh] px-[3vw] z-[500]"
         style={{ transform: "translateX(100%)" }}
       >
         {/* MENU LINKS */}

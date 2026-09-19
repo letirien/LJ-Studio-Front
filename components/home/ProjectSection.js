@@ -233,6 +233,7 @@ export default function ProjectSection({ projects, home }) {
     <div ref={scrollWrapperRef} className="relative min-h-[150vh]">
       <section
         id="work"
+        data-browser-color="#fa6218"
         ref={sectionRef}
         className="bg-half-col relative overflow-hidden h-screen flex items-center justify-center"
       >
