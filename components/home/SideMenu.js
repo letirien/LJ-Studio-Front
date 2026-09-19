@@ -7,6 +7,7 @@ import InstagramIcon from "../../public/images/logosRs/INSTA.svg";
 import BehanceIcon from "../../public/images/logosRs/BEHANCE.svg";
 import RoundedIcon from "../RoundedIcon";
 import Image from "next/image";
+import { useMediaQuery } from "../../lib/useMediaQuery";
 
 export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
@@ -24,7 +25,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const tlRef = useRef(null);
   const wordmarkRef = useRef(null);
   const wordmarkRefMob = useRef(null);
-
+  const isMobile = useMediaQuery("(max-width: 639px)");
   // Charger GSAP dynamiquement
   useEffect(() => {
     (async () => {
@@ -286,7 +287,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
               [InstagramIcon, "https://www.instagram.com/lj_stration/?hl=en"],
               [BehanceIcon, "https://www.behance.net/LJ-Studio"],
             ].map(([IconComponent, url], i) => (
-              <li key={i} className="!mb-4">
+              <li key={i} className="!mb-2 sm:!mb-4 last:!mb-0">
                 <a
                   ref={(el) => (socialsRef.current[i] = el)}
                   href={url}
@@ -294,7 +295,11 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
                   rel="noopener noreferrer"
                   className="hover:text-white"
                 >
-                  <IconComponent width={24} height={24} />
+                  {isMobile ? (
+                    <IconComponent width={16} height={16} />
+                  ) : (
+                    <IconComponent width={24} height={24} />
+                  )}
                 </a>
               </li>
             ))}
@@ -303,35 +308,23 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           {/* SLOGAN */}
           <div
             ref={sideTextContainerRef}
-            className="relative flex items-center justify-center sm:!mb-4 order-2 sm:order-1"
+            className="relative flex items-center justify-center sm:!mb-6 order-2 sm:order-1"
           >
             <p
               ref={sideTextRef}
-              className="
-        absolute
-        whitespace-nowrap
-        uppercase
-        roboto
-        text-[10pt]
-        text-black/55
-        border-r-2
-        pr-4
-        sm:pr-8
-        rotate-[-90deg]
-        origin-center
-      "
+              className={`tagline-menu absolute whitespace-nowrap uppercase roboto text-black/70 pr-2 sm:pr-6 rotate-[-90deg] origin-center ${isMobile ? 'text-[7pt]' : 'text-[10pt]'}`}
             >
               creative studio - french accent
             </p>
           </div>
 
           {/* WORDMARK */}
-          <div className="relative flex h-[120px] w-[100px] items-center justify-center order-1 sm:order-2 mb-2 sm:mb-0">
+          <div className={`relative flex items-center justify-center order-1 sm:order-2 mb-2 sm:mb-0 ${isMobile ? 'h-[60px]' : 'h-[90px]'}`}>
             <Image
               ref={wordmarkRef}
               src="/images/LJSTD_WORDMARK.svg"
               alt="LJ Studio wordmark"
-              width={100}
+              width={isMobile ? 60 : 90}
               height={24}
               className="rotate-[-90deg]"
             />
