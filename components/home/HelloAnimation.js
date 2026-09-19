@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react';
 import { useLoading } from '../../lib/LoadingManager';
 import PixelatedLogo from './PixelatedLogo';
 import RoundedIcon from '../RoundedIcon';
+import { useViewportLock } from '../../lib/useViewportLock';
 
 export default function AnimationPage({ onAnimationComplete }) {
   const { progress, isComplete } = useLoading();
+
+  useViewportLock(true);
 
   const [textVisible, setTextVisible] = useState({ line1: false, line2: false, line3: false });
   const [textDisappear, setTextDisappear] = useState(false);
@@ -116,7 +119,7 @@ export default function AnimationPage({ onAnimationComplete }) {
   }, [isComplete, animationStarted, onAnimationComplete]);
 
   return (
-    <div className="absolute inset-0 w-screen h-svh overflow-hidden z-50">
+    <div className="absolute inset-0 w-screen h-[var(--app-height,100dvh)] overflow-hidden z-50">
       {/* Blocs orange animés (premier set - plus clair, au-dessus) */}
       <div className="absolute inset-0 z-20">
         {/* Bloc 1 - Gauche */}

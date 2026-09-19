@@ -37,10 +37,11 @@ function ViewportHeightSync() {
     let debounceTimer = null;
 
     const updateHeight = () => {
-      // window.innerHeight = hauteur visible réelle (exclut les barres)
+      // visualViewport.height suit la zone réellement visible sur Safari.
+      const viewportHeight = window.visualViewport?.height || window.innerHeight;
       document.documentElement.style.setProperty(
         '--app-height',
-        `${window.innerHeight}px`
+        `${viewportHeight}px`
       );
     };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import styles from './navbar.module.scss';
 import Image from 'next/image';
-import { SideMenu } from '../home/SideMenu';
+import SideMenu from '../home/SideMenu';
 import { useMediaQuery } from '../../lib/useMediaQuery.js';
 
 export default function Navbar() {
