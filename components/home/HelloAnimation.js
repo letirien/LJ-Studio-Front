@@ -5,7 +5,7 @@ import { useLoading } from '../../lib/LoadingManager';
 import PixelatedLogo from './PixelatedLogo';
 import RoundedIcon from '../RoundedIcon';
 import { useViewportLock } from '../../lib/useViewportLock';
-import { PRIMARY_COLOR, getVisibleSectionColor, setBrowserChromeColor } from '../../lib/browserChrome';
+import { PRIMARY_COLOR, getVisibleSectionColor, startBrowserChromeOverride, setBrowserChromeColor } from '../../lib/browserChrome';
 
 export default function AnimationPage({ onAnimationComplete }) {
   const { progress, isComplete } = useLoading();
@@ -13,11 +13,10 @@ export default function AnimationPage({ onAnimationComplete }) {
   useViewportLock(true);
 
   useEffect(() => {
-    document.documentElement.dataset.browserChromeOverride = 'intro';
-    setBrowserChromeColor(PRIMARY_COLOR);
+    const stopOverride = startBrowserChromeOverride(PRIMARY_COLOR, 'intro');
 
     return () => {
-      delete document.documentElement.dataset.browserChromeOverride;
+      stopOverride();
       setBrowserChromeColor(getVisibleSectionColor());
     };
   }, []);

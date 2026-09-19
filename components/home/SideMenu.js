@@ -9,7 +9,7 @@ import RoundedIcon from "../RoundedIcon";
 import Image from "next/image";
 import { useMediaQuery } from "../../lib/useMediaQuery";
 import { useViewportLock } from "../../lib/useViewportLock";
-import { PRIMARY_COLOR, setBrowserChromeColor } from "../../lib/browserChrome";
+import { PRIMARY_COLOR, startBrowserChromeOverride } from "../../lib/browserChrome";
 
 export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
@@ -31,20 +31,8 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   useViewportLock(isOpen);
 
   useEffect(() => {
-    const root = document.documentElement;
-
-    if (isOpen) {
-      root.dataset.browserChromeOverride = 'menu';
-      setBrowserChromeColor(PRIMARY_COLOR);
-    } else if (root.dataset.browserChromeOverride === 'menu') {
-      delete root.dataset.browserChromeOverride;
-    }
-
-    return () => {
-      if (root.dataset.browserChromeOverride === 'menu') {
-        delete root.dataset.browserChromeOverride;
-      }
-    };
+    if (!isOpen) return undefined;
+    return startBrowserChromeOverride(PRIMARY_COLOR, 'menu');
   }, [isOpen]);
   // Charger GSAP dynamiquement
   useEffect(() => {
