@@ -129,6 +129,14 @@ function App({ Component, pageProps }) {
 
   return (
       <>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-x-0 top-0 z-[9999] h-[6px] bg-[#39ff14]"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-x-0 bottom-0 z-[9999] h-[6px] bg-[#ff0000]"
+        />
         <Head>
           <meta name="robots" content="noindex, nofollow" />
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
