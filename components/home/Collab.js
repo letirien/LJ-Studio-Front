@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLoading } from '../../lib/LoadingManager';
+import { useLenis } from 'lenis/react';
 
 const Collab = ({logos}) => {
   const containerRef = useRef(null);
   const { onLoadingComplete } = useLoading();
+  const lenis = useLenis();
   const animationsRef = useRef([]);
   const scrollTriggersRef = useRef([]);
 
@@ -15,6 +17,7 @@ const Collab = ({logos}) => {
 
   useEffect(() => {
     let gsap, ScrollTrigger;
+    let cancelled = false;
 
     const initMarquees = async () => {
       // Dynamically import GSAP to avoid SSR issues
@@ -24,9 +27,12 @@ const Collab = ({logos}) => {
       // Import ScrollTrigger dynamically
       const scrollTriggerModule = await import('gsap/dist/ScrollTrigger');
       ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+      if (cancelled) return;
 
       // Register the plugin
       gsap.registerPlugin(ScrollTrigger);
+
+      if (lenis) lenis.on('scroll', ScrollTrigger.update);
 
       // Refresh ScrollTrigger pour recalculer les positions
       ScrollTrigger.refresh();
@@ -125,20 +131,22 @@ const Collab = ({logos}) => {
       // Double RAF pour s'assurer que le layout est stable
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          initMarquees();
+            if (!cancelled) initMarquees();
         });
       });
     });
 
     return () => {
+      cancelled = true;
       cleanup();
       // Cleanup animations
       animationsRef.current.forEach(anim => anim?.kill?.());
       scrollTriggersRef.current.forEach(st => st?.kill?.());
+      if (lenis) lenis.off('scroll', ScrollTrigger?.update);
       animationsRef.current = [];
       scrollTriggersRef.current = [];
     };
-  }, [onLoadingComplete]);
+  }, [onLoadingComplete, lenis]);
 
   return (
     <div className="section-collab sm:mt-24 pb-12 sm:pb-32 relative z-3 bg-black" ref={containerRef}>

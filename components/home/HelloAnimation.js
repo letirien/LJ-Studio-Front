@@ -5,7 +5,7 @@ import { useLoading } from '../../lib/LoadingManager';
 import PixelatedLogo from './PixelatedLogo';
 import RoundedIcon from '../RoundedIcon';
 import { useViewportLock } from '../../lib/useViewportLock';
-import { PRIMARY_COLOR, startBrowserChromeOverride, setBrowserChromeColor } from '../../lib/browserChrome';
+import { PRIMARY_COLOR, startBrowserChromeOverride } from '../../lib/browserChrome';
 
 export default function AnimationPage({ onAnimationComplete }) {
   const { progress, isComplete } = useLoading();
@@ -17,10 +17,6 @@ export default function AnimationPage({ onAnimationComplete }) {
 
     return () => {
       stopOverride();
-      document.documentElement.dataset.browserChromeOverride = 'post-intro';
-      document.documentElement.style.backgroundColor = '#000000';
-      document.body.style.backgroundColor = '#000000';
-      setBrowserChromeColor('#000000');
     };
   }, []);
 

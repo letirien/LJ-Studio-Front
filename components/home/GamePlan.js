@@ -50,7 +50,7 @@ function GamePlanCard({
 }) {
   return (
     <div
-      className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-6 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} rounded-t-3xl`}
+      className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-6 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} browser-color-${index % 3 === 0 ? 'white' : index % 3 === 1 ? 'black' : 'orange'} rounded-t-3xl`}
       style={{ position: 'sticky', top: 0, zIndex: index }}
     >
       <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-6 sm:gap-6 mx-6 sm:mx-0'>

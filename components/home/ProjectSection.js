@@ -235,7 +235,7 @@ export default function ProjectSection({ projects, home }) {
         id="work"
         data-browser-color="#fa6218"
         ref={sectionRef}
-        className="bg-half-col relative overflow-hidden h-screen flex items-center justify-center"
+        className="bg-half-col browser-color-orange relative overflow-hidden h-screen flex items-center justify-center"
       >
         {/* FOND ORANGE */}
         <div

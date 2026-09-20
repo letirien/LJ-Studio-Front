@@ -374,7 +374,7 @@ export default function AnimatedField() {
     }, []);
 
     return (
-        <section ref={sectionRef} className="mt-[-10vh] w-screen overflow-hidden relative bg-black sm:-mt-[1px]">
+        <section ref={sectionRef} className="mt-[-10vh] w-screen overflow-hidden relative bg-black browser-color-black sm:-mt-[1px]">
             <div className='absolute top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none'>
                 <h2 className='text-center text-[14vw]/[0.8] sm:text-[8vw]/[0.8] uppercase relative helveticaNowDisplayBold'>
                     <p className="instrumentSerifRegular !capitalize text-[8vw]/[0.8] tracking-tight sm:text-[4vw]/[0.8] mb-9">Design field</p>

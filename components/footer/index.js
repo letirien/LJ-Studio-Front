@@ -4,6 +4,7 @@ import AppearText from '../AppearText';
 import IconRain from '../IconRain';
 import PixelPlayIcon from '../PixelPlayIcon';
 import Link from 'next/link';
+import { useLenis } from 'lenis/react';
 
 // Animation hover email avec GSAP (même style que AppearText)
 const EmailLink = () => {
@@ -171,6 +172,7 @@ const BackToTopLink = ({ onClick }) => {
 const Footer = () => {
   const footerRef = useRef(null);
   const iconRainContainerRef = useRef(null);
+  const lenis = useLenis();
 
   const { triggerRain } = IconRain({ containerRef: footerRef });
 
@@ -219,18 +221,36 @@ useEffect(() => {
     };
     updateCSSVars();
     footer.classList.add('footer-scroll-driven');
+    const onResize = () => updateCSSVars();
 
-    window.addEventListener('resize', () => updateCSSVars(), { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
     return () => {
       footer.classList.remove('footer-scroll-driven');
+      window.removeEventListener('resize', onResize);
     };
   }
 
+  let layout = null;
+  const measureLayout = () => {
+    layout = {
+      footerTop: footer.offsetTop,
+      footerHeight: footer.offsetHeight,
+      windowHeight: window.innerHeight,
+      sectionHeights: Array.from(sections, (section) => section.offsetHeight),
+    };
+  };
+
+  measureLayout();
+  const resizeObserver = new ResizeObserver(measureLayout);
+
+  resizeObserver.observe(footer);
+  sections.forEach((section) => resizeObserver.observe(section));
+
   // Desktop : parallax JS (Lenis ou scroll natif)
   const updateParallax = (scroll, maxScroll) => {
-    const footerTop = footer.offsetTop;
-    const footerHeight = footer.offsetHeight;
-    const windowHeight = window.innerHeight;
+    if (!layout) return;
+
+    const { footerTop, footerHeight, windowHeight, sectionHeights } = layout;
     
     const revealStart = footerTop - windowHeight;
     const localScroll = Math.max(0, scroll - revealStart);
@@ -240,7 +260,7 @@ useEffect(() => {
 
       let totalHeightAbove = 0;
       for (let j = 0; j < i; j++) {
-        totalHeightAbove += sections[j].offsetHeight;
+        totalHeightAbove += sectionHeights[j];
       }
       if (i === 0) {
         // La première section commence avec un offset supplémentaire (l'apparition)
@@ -269,8 +289,8 @@ useEffect(() => {
     updateParallax(scroll, limit);
   };
 
-  if (window.lenis) {
-    window.lenis.on('scroll', onLenisScroll);
+  if (lenis) {
+    lenis.on('scroll', onLenisScroll);
   } else {
     window.addEventListener('scroll', onNativeScroll, { passive: true });
   }
@@ -279,16 +299,17 @@ useEffect(() => {
   onNativeScroll();
 
   return () => {
-    if (window.lenis) {
-      window.lenis.off('scroll', onLenisScroll);
+    resizeObserver.disconnect();
+    if (lenis) {
+      lenis.off('scroll', onLenisScroll);
     } else {
       window.removeEventListener('scroll', onNativeScroll);
     }
   };
-}, []);
+}, [lenis]);
 
   return (
-      <footer ref={footerRef} className="w-full bg-black text-white text-sm font-mono overflow-hidden relative">
+      <footer ref={footerRef} className="w-full bg-black browser-color-black text-white text-sm font-mono overflow-hidden relative">
 
         {/* Section 1: Grid contact */}
         <div className="footer-section bg-black relative z-9">
@@ -432,7 +453,7 @@ useEffect(() => {
         </div>
 
         {/* Section 3: Barre orange */}
-        <div className="footer-section bg-[#fa6218] text-black z-10">
+        <div className="footer-section browser-color-orange bg-[#fa6218] text-black z-10">
           <div className="w-full flex justify-between items-center px-[4vw] py-4 sm:py-8 text-xs">
             <Link href="/legal" className='roboto text-[7pt] sm:text-[12pt] uppercase'>legal & privacy</Link>
             <span className='roboto text-[7pt] sm:text-[12pt]'>© {new Date().getFullYear()} | LJ Studio · All rights reserved</span>

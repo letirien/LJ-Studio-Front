@@ -212,7 +212,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         <Header headerImages={headerImages}/>
         <section
           data-browser-color="#000000"
-          className={`${home.black} bg-black pt-12 sm:pt-32`}
+          className={`${home.black} bg-black browser-color-black pt-12 sm:pt-32`}
           data-scroll
           id="about"
           // style={{
@@ -423,7 +423,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
         */}
         <AnimatedField/>
         <BrandingSection gamePlan={gamePlan} />
-        <motion.section ref={fcNantesRef} className="w-full h-full bg-black" style={{ y: fcNantesY, marginTop: '-300px', paddingBottom: '300px' }}>
+        <motion.section ref={fcNantesRef} className="w-full h-full bg-black browser-color-black" style={{ y: fcNantesY, marginTop: '-300px', paddingBottom: '300px' }}>
           <div className="w-full h-[100svh] relative overflow-hidden">
             <div className="absolute -bottom-1 left-0 right-0 h-[60vh] z-3" style={{
               background: 'linear-gradient(to top, #000000ff 12vh, transparent 100%)'
@@ -493,7 +493,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <Collab logos={logoClients} />
         </motion.section>
         <a href="https://www.behance.net/LJ-Studio" target="_blank">
-          <motion.section data-browser-color="#000000" id="archive" className="flex relative bg-white intersectLogo white px-[4vw] bg-black" style={{ height: studioBannerHeight && isMobile ? `calc(100svh - ${studioBannerHeight}px)` : '100svh' }}>
+          <motion.section data-browser-color="#000000" id="archive" className="flex relative bg-white browser-color-white intersectLogo white px-[4vw] bg-black" style={{ height: studioBannerHeight && isMobile ? `calc(100svh - ${studioBannerHeight}px)` : '100svh' }}>
             <div className="absolute right-[10%] top-[-40px] sm:top-[-70px] z-[3] xl:block 2xl:hidden">
               <RoundedIcon icon="yeux" size={140} rotationFactor={0.45} />
             </div>
