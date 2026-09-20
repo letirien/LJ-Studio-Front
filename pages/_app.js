@@ -131,12 +131,12 @@ function App({ Component, pageProps }) {
       <>
         <div
           aria-hidden="true"
-          className="pointer-events-none fixed inset-x-0 top-0 z-[9999] h-[6px]"
+          className="pointer-events-none fixed inset-x-0 top-0 z-[9999] h-[12px]"
           style={{ backgroundColor: 'var(--browser-chrome-top-color, #000000)' }}
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none fixed inset-x-0 bottom-0 z-[9999] h-[6px]"
+          className="pointer-events-none fixed inset-x-0 bottom-[-8px] z-[9999] h-[12px]"
           style={{ backgroundColor: 'var(--browser-chrome-bottom-color, #000000)' }}
         />
         <Head>

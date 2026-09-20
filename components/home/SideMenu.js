@@ -13,6 +13,7 @@ import { PRIMARY_COLOR, startBrowserChromeOverride } from "../../lib/browserChro
 
 export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
+  const [isMenuVisible, setIsMenuVisible] = useState(initialIsOpen);
   const [gsapInstance, setGsapInstance] = useState(null);
 
   const menuContainerRef = useRef(null);
@@ -27,6 +28,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const tlRef = useRef(null);
   const wordmarkRef = useRef(null);
   const wordmarkRefMob = useRef(null);
+  const hideMenuTimerRef = useRef(null);
   const isMobile = useMediaQuery("(max-width: 639px)");
   useViewportLock(isOpen);
 
@@ -133,17 +135,29 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   // Synchroniser avec la prop isOpen
   useEffect(() => {
     setIsOpen(initialIsOpen);
+    if (initialIsOpen) {
+      clearTimeout(hideMenuTimerRef.current);
+      setIsMenuVisible(true);
+    } else {
+      hideMenuTimerRef.current = setTimeout(() => setIsMenuVisible(false), 650);
+    }
+
+    return () => clearTimeout(hideMenuTimerRef.current);
   }, [initialIsOpen]);
 
   // Jouer ou inverser la timeline selon l’état
   useEffect(() => {
     if (!tlRef.current) return;
     if (isOpen) {
+      clearTimeout(hideMenuTimerRef.current);
+      setIsMenuVisible(true);
       tlRef.current.timeScale(0.7);
       tlRef.current.play();
     } else {
       tlRef.current.timeScale(1.2);
       tlRef.current.reverse();
+      clearTimeout(hideMenuTimerRef.current);
+      hideMenuTimerRef.current = setTimeout(() => setIsMenuVisible(false), 650);
     }
   }, [isOpen]);
 
@@ -212,7 +226,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
       <div
         ref={bellowContainerRef}
         className="fixed inset-y-0 right-0 h-[100dvh] w-[100vw] sm:w-[50vw] z-[400]"
-        style={{ transform: "translateX(100%)" }}
+        style={{ display: isMenuVisible ? 'block' : 'none', transform: "translateX(100%)" }}
       >
         <div
           ref={menuBgBlockRef2}
@@ -229,7 +243,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
       <div
         ref={menuContainerRef}
         className="fixed inset-y-0 right-0 h-[100dvh] w-[100vw] sm:w-[50vw] bg-[#fa6218] flex flex-col items-start py-[4vh] px-[3vw] z-[500]"
-        style={{ transform: "translateX(100%)" }}
+        style={{ display: isMenuVisible ? 'flex' : 'none', transform: "translateX(100%)" }}
       >
         {/* MENU LINKS */}
         <div className="flex w-full items-top my-auto">
