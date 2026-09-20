@@ -132,12 +132,12 @@ function App({ Component, pageProps }) {
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-x-0 top-0 z-[9999] h-[6px]"
-          style={{ backgroundColor: 'var(--browser-chrome-top-color, #000000)', transition: 'background-color 220ms ease-out' }}
+          style={{ backgroundColor: 'var(--browser-chrome-top-color, #000000)' }}
         />
         <div
           aria-hidden="true"
           className="pointer-events-none fixed inset-x-0 bottom-0 z-[9999] h-[6px]"
-          style={{ backgroundColor: 'var(--browser-chrome-bottom-color, #000000)', transition: 'background-color 220ms ease-out' }}
+          style={{ backgroundColor: 'var(--browser-chrome-bottom-color, #000000)' }}
         />
         <Head>
           <meta name="robots" content="noindex, nofollow" />
