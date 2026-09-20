@@ -202,6 +202,27 @@ export default function ProjectSection({ projects, home }) {
       0.35
     );
 
+    // Une fois le rideau abaissé, le fond de la section devient entièrement noir.
+    tl.set(
+      sectionRef.current,
+      { backgroundImage: 'none', backgroundColor: '#000000' },
+      0.8
+    );
+
+    tl.to(
+      sectionRef.current,
+      {
+        duration: 0.001,
+        onStart: () => {
+          sectionRef.current.classList.replace('browser-color-orange', 'browser-color-black');
+        },
+        onReverseComplete: () => {
+          sectionRef.current.classList.replace('browser-color-black', 'browser-color-orange');
+        },
+      },
+      0.8
+    );
+
     // SLIDER : animation fluide du bas vers le centre (15% → 100%)
     // On utilise des fonctions () => pour que GSAP recalcule les valeurs
     // à chaque ScrollTrigger.refresh() (ex: barres du navigateur mobile qui bougent)
@@ -233,7 +254,6 @@ export default function ProjectSection({ projects, home }) {
     <div ref={scrollWrapperRef} className="relative min-h-[150vh]">
       <section
         id="work"
-        data-browser-color="#fa6218"
         ref={sectionRef}
         className="bg-half-col browser-color-orange relative overflow-hidden h-screen flex items-center justify-center"
       >

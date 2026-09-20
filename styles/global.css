@@ -1,4 +1,10 @@
 @import 'tailwindcss';
+
+html,
+body {
+  overflow-x: clip;
+}
+
 body{
   /* scroll-behavior géré par Lenis — ne pas mettre smooth ici, ça conflicte avec Safari */
 }
@@ -187,7 +193,6 @@ li{
   margin: 0!important;
 }
 body {
-  overflow-x: hidden;
   padding: 0;
   margin: 0;
   font-family: HelveticaRegular;

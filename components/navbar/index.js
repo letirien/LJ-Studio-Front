@@ -125,7 +125,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div id={styles.navbar} className="mainContainer pt-[2vh] sm:pt-[4vh] px-[3vw]" aria-label="Main Navigation">
+      <div id={styles.navbar} className="mainContainer pt-2 sm:pt-[4vh] px-[3vw]" aria-label="Main Navigation">
         <div className={styles.navContent}>
           {/* White layer */}
           <div className={styles.navLayer}>

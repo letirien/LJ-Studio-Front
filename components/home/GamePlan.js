@@ -48,9 +48,40 @@ function GamePlanCard({
   item, index, showGif, setGif, setShowGif,
   positionsReady, labelLeft, titleRefs,
 }) {
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    let rafId = null;
+    const updateRadius = () => {
+      rafId = null;
+      const { top, bottom } = card.getBoundingClientRect();
+      const isPinned = top <= 1 && bottom > 1;
+      card.style.borderTopLeftRadius = isPinned ? '0px' : '1.5rem';
+      card.style.borderTopRightRadius = isPinned ? '0px' : '1.5rem';
+    };
+
+    const scheduleUpdate = () => {
+      if (!rafId) rafId = requestAnimationFrame(updateRadius);
+    };
+
+    updateRadius();
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+
+    return () => {
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
   return (
     <div
-      className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-6 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} browser-color-${index % 3 === 0 ? 'white' : index % 3 === 1 ? 'black' : 'orange'} rounded-t-3xl`}
+      ref={cardRef}
+      className={`flex flex-col-reverse md:flex-row items-center min-h-[400px] py-12 sm:py-24 gap-6 md:gap-6 px-[3vw] sm:px-[9vw] ${getBackgroundColor(index)} browser-color-${index % 3 === 0 ? 'white' : index % 3 === 1 ? 'black' : 'orange'} rounded-t-3xl transition-[border-top-left-radius,border-top-right-radius] duration-300 ease-out`}
       style={{ position: 'sticky', top: 0, zIndex: index }}
     >
       <div className='md:w-1/2 w-content md:h-[90%] flex flex-col justify-around gap-6 sm:gap-6 mx-6 sm:mx-0'>
