@@ -36,7 +36,7 @@ export default function Layout({ children, home, skipIntro = false }) {
       <div className="relative">
         <main className="relative">
           {/* Contenu principal — au-dessus du footer fixe */}
-          <div className="content-above-footer relative z-700">
+          <div className="content-above-footer relative z-10">
             {children}
           </div>
           <section id="contact">
