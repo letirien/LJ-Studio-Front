@@ -12,6 +12,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import CookieBanner from '../components/CookieConsent';
 import { SiteReadyProvider } from '../lib/SiteReadyContext';
 import { useBrowserChromeColor } from '../lib/useBrowserChromeColor';
+import { isIOSSafari } from '../lib/browserChrome';
 
 const Cursor = dynamic(() => import('../components/Cursor'), {
   ssr: false
@@ -106,7 +107,12 @@ function LenisGSAPSync() {
 function App({ Component, pageProps }) {
   const router = useRouter();
   const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
+  const [showBrowserChromeBars, setShowBrowserChromeBars] = useState(false);
   useBrowserChromeColor();
+
+  useEffect(() => {
+    setShowBrowserChromeBars(isIOSSafari());
+  }, []);
 
   const handleConsentChange = useCallback((accepted) => {
     setAnalyticsEnabled(accepted);
@@ -129,16 +135,6 @@ function App({ Component, pageProps }) {
 
   return (
       <>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none fixed inset-x-0 top-0 z-[500] block h-[12px] sm:hidden"
-          style={{ backgroundColor: 'var(--browser-chrome-top-color, #000000)' }}
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none fixed inset-x-0 bottom-[-8px] z-[500] block h-[12px] sm:hidden"
-          style={{ backgroundColor: 'var(--browser-chrome-bottom-color, #000000)' }}
-        />
         <Head>
           <meta name="robots" content="noindex, nofollow" />
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -155,6 +151,20 @@ function App({ Component, pageProps }) {
                 <Component key={router.asPath} {...pageProps} />
               </AnimatePresence>
               <CustomCursor key="custom-cursor" />
+              {showBrowserChromeBars && (
+                <>
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none fixed inset-x-0 top-0 z-[600] h-[12px] sm:hidden"
+                    style={{ backgroundColor: 'var(--browser-chrome-top-color, #000000)' }}
+                  />
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none fixed inset-x-0 bottom-[-8px] z-[600] h-[12px] sm:hidden"
+                    style={{ backgroundColor: 'var(--browser-chrome-bottom-color, #000000)' }}
+                  />
+                </>
+              )}
             </ReactLenis>
           </LoadingProvider>
         </SiteReadyProvider>
