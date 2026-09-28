@@ -70,7 +70,7 @@ export default function ProjectSection({ projects, home }) {
         trigger: scrollWrapperRef.current, // wrapper long
         start: 'top top',
         end: 'bottom bottom',
-        scrub: true, // Pas de smoothing pour éviter les sauts de transition
+        scrub: true,
         pin: sectionRef.current, // section fixe
         pinSpacing: true, // Désactive le spacing pour éviter les sauts
         anticipatePin: 1,
@@ -182,8 +182,8 @@ export default function ProjectSection({ projects, home }) {
     tl.to(
       orangeBgRef.current,
       {
-        height: () => window.innerHeight * 0.5,
-        ease: "linear",
+        height: () => isMobile ? colorBlockRef.current.getBoundingClientRect().height * 0.5 : window.innerHeight * 0.5, // recalculé à chaque refresh
+        ease: 'linear',
         duration: 1
       },
       0
@@ -251,7 +251,7 @@ export default function ProjectSection({ projects, home }) {
   }, [isReady, ScrollTrigger, lenis, projects]);
 
   return (
-    <div ref={scrollWrapperRef} className="relative min-h-[150vh]">
+    <div ref={scrollWrapperRef} className="relative min-h-[150dvh]">
       <section
         id="work"
         ref={sectionRef}
@@ -261,7 +261,7 @@ export default function ProjectSection({ projects, home }) {
         <div
           ref={orangeBgRef}
           className="absolute inset-x-0 top-0 pointer-events-none z-[0]"
-          style={{ height: 'var(--app-height, 100svh)', backgroundColor: defaultColor }}
+          style={{ height: isMobile ? '100%' : 'var(--app-height, 100svh)', backgroundColor: defaultColor }}
         />
 
         {/* BLOCS COULEUR */}
