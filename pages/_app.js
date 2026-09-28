@@ -160,7 +160,7 @@ function App({ Component, pageProps }) {
                   />
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none fixed inset-x-0 bottom-[-12px] z-[600] h-[12px] sm:hidden"
+                    className="pointer-events-none fixed inset-x-0 bottom-[-8px] z-[600] h-[12px] sm:hidden"
                     style={{ backgroundColor: 'var(--browser-chrome-bottom-color, #000000)' }}
                   />
                 </>
