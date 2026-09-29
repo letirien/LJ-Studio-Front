@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import gsap from 'gsap';
 import dynamic from 'next/dynamic';
 import CustomCursor from "../components/CustomCursor";
+import Navbar from '../components/navbar';
 import { LoadingProvider } from '../lib/LoadingManager';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import CookieBanner from '../components/CookieConsent';
@@ -147,6 +148,7 @@ function App({ Component, pageProps }) {
               <ViewportHeightSync />
               <LenisGSAPSync />
               <Cursor key="cursor" />
+              <Navbar />
               <AnimatePresence mode="wait" initial={false}>
                 <Component key={router.asPath} {...pageProps} />
               </AnimatePresence>
@@ -155,12 +157,12 @@ function App({ Component, pageProps }) {
                 <>
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none fixed inset-x-0 top-0 z-[600] h-[12px] sm:hidden"
+                    className="pointer-events-none fixed inset-x-0 top-0 z-[20] h-[12px] sm:hidden"
                     style={{ backgroundColor: 'var(--browser-chrome-top-color, #000000)' }}
                   />
                   <div
                     aria-hidden="true"
-                    className="pointer-events-none fixed inset-x-0 bottom-[-8px] z-[600] h-[12px] sm:hidden"
+                    className="pointer-events-none fixed inset-x-0 bottom-[-8px] z-[20] h-[12px] sm:hidden"
                     style={{ backgroundColor: 'var(--browser-chrome-bottom-color, #000000)' }}
                   />
                 </>

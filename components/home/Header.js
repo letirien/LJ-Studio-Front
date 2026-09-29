@@ -1,7 +1,6 @@
 
 
 import styles from "../layout.module.scss";
-import Navbar from "../navbar";
 import Image from "next/image";
 import utilStyles from "../../styles/utils.module.css";
 import Link from "next/link";
@@ -81,7 +80,6 @@ export function Header({ headerImages }) {
     return (
         <header ref={headerRef} className={`${styles.header} intersectLogo header`}>
             <>
-                <Navbar />
                 <div className={`${styles.clock} !flex items-center block w-full -bottom-[0%] md:bottom-[4%]`}>
                     <div className="self-center mx-auto block"><Clock /></div>
                 </div>

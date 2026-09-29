@@ -2,7 +2,6 @@ import Head from 'next/head';
 import styles from './layout.module.scss';
 import utilStyles from '../styles/utils.module.css';
 import Link from 'next/link';
-import Navbar from './navbar';
 import Image from 'next/image';
 import { motion, useScroll } from 'framer-motion';
 import AnimateText from '../lib/animation/animationText';
@@ -36,7 +35,7 @@ export default function Layout({ children, home, skipIntro = false }) {
       <div className="relative">
         <main className="relative">
           {/* Contenu principal — au-dessus du footer fixe */}
-          <div className="content-above-footer relative z-[9999]">
+          <div className="content-above-footer relative z-10">
             {children}
           </div>
           <section id="contact">
