@@ -110,6 +110,7 @@ a{
 @font-face {
   font-family: TenTwenty;
   src: url("/typos/TEN TWENTY/tentwenty-regular-1.otf");
+  ascent-override: 90%;
 }
 @font-face {
   font-family: TenTwentyThin;

@@ -94,7 +94,7 @@ function GamePlanCard({
             <div
               className="absolute transition-opacity duration-300"
               style={{
-                top: item.fields["TITRE METIER"].length > 13 ? '80%' : '50%',
+                top: item.fields["TITRE METIER"].length > 13 ? '55%' : '50%',
                 left: `${labelLeft}px`,
                 rotate: '-12deg',
                 willChange: 'transform',

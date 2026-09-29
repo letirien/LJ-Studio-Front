@@ -461,7 +461,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
             )}
 
           </div>
-          <div className="flex flex-wrap w-full px-[3vw] relative z-3 pb-12 mt-[-45vh] md:-mt-[20vh]">
+          <div className="flex flex-wrap w-full px-[3vw] relative z-3 pb-12 mt-[-40vh] md:-mt-[20vh]">
 
             <div className="flex md:w-2/3 flex-wrap flex-col gap-6 justify-between items-center lg:flex-row xl:pr-[3vw] flex-1">
               <div className="flex-1">
