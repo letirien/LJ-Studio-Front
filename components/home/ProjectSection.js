@@ -251,7 +251,7 @@ export default function ProjectSection({ projects, home }) {
   }, [isReady, ScrollTrigger, lenis, projects]);
 
   return (
-    <div ref={scrollWrapperRef} className="relative min-h-[150dvh]">
+    <div ref={scrollWrapperRef} className="relative min-h-[150svh]">
       <section
         id="work"
         ref={sectionRef}
