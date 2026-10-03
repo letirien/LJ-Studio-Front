@@ -17,8 +17,11 @@
     }
 
     .navContent {
+        background-color transparent;
         display: grid;
         width: 100%;
+        position: relative;
+        z-index: 4;
     }
 
     .navLayer {
@@ -59,6 +62,8 @@
     }
 
     .logo img {
+        position: relative;
+        z-index: 5;
         flex-shrink: 0;
         max-width: none !important;
     }
