@@ -148,18 +148,13 @@ function App({ Component, pageProps }) {
               <ViewportHeightSync />
               <LenisGSAPSync />
               <Cursor key="cursor" />
-              <Navbar />
+              <Navbar showBrowserChromeTopBar={showBrowserChromeBars} />
               <AnimatePresence mode="wait" initial={false}>
                 <Component key={router.asPath} {...pageProps} />
               </AnimatePresence>
               <CustomCursor key="custom-cursor" />
               {showBrowserChromeBars && (
                 <>
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none fixed inset-x-0 top-0 z-[20] h-[12px] sm:hidden"
-                    style={{ backgroundColor: 'var(--browser-chrome-top-color, #000000)' }}
-                  />
                   <div
                     aria-hidden="true"
                     className="pointer-events-none fixed inset-x-0 bottom-[-8px] z-[20] h-[12px] sm:hidden"

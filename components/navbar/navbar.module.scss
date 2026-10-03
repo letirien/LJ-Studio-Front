@@ -3,6 +3,19 @@
     position: fixed; 
     z-index: 30;
 
+    .browserChromeTop {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 2;
+        height: 12px;
+        pointer-events: none;
+        background-color: var(--browser-chrome-top-color, #000000);
+
+        @media (min-width: 640px) {
+            display: none;
+        }
+    }
+
     .navContent {
         display: grid;
         width: 100%;

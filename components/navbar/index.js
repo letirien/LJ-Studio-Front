@@ -4,7 +4,7 @@ import Image from 'next/image';
 import SideMenu from '../home/SideMenu';
 import { useMediaQuery } from '../../lib/useMediaQuery.js';
 
-export default function Navbar() {
+export default function Navbar({ showBrowserChromeTopBar = false }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -126,6 +126,9 @@ export default function Navbar() {
   return (
     <>
       <div id={styles.navbar} className="mainContainer pt-2 sm:pt-[4vh] px-[3vw]" aria-label="Main Navigation">
+        {showBrowserChromeTopBar && (
+          <div aria-hidden="true" className={styles.browserChromeTop} />
+        )}
         <div className={styles.navContent}>
           {/* White layer */}
           <div className={styles.navLayer}>
