@@ -134,7 +134,7 @@ export default function Navbar({ showBrowserChromeTopBar = false }) {
           <div className={styles.navLayer}>
             <div className={`${styles.logo} ${styles.white}`} style={{ width: isMobile ? logoSize:  logoContainerSize }}>
               <div ref={whiteLogoRef}>
-                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" />
+                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" style={{ height: "auto" }} />
               </div>
             </div>
             {menuBarsWhite}
@@ -144,7 +144,7 @@ export default function Navbar({ showBrowserChromeTopBar = false }) {
           <div className={styles.navLayer}>
             <div className={`${styles.logo} ${styles.dark}`} style={{ width: isMobile ? logoSize:  logoContainerSize }}>
               <div ref={darkLogoRef}>
-                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" />
+                <Image width={logoSize} height={logoSize} src="/images/LOGO.svg" alt="LJ Studio Logo" style={{ height: "auto" }} />
               </div>
             </div>
             {menuBarsBlack}

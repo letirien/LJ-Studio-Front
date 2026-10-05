@@ -1,10 +1,6 @@
 
 
 import styles from "../layout.module.scss";
-import Image from "next/image";
-import utilStyles from "../../styles/utils.module.css";
-import Link from "next/link";
-import RoundedIcon from "../RoundedIcon";
 import { Clock } from "../clock";
 import dynamic from "next/dynamic";
 import React, { useEffect, useRef, useMemo, useState } from "react";
@@ -22,6 +18,13 @@ export function Header({ headerImages }) {
     const lenis = useLenis();
 
     const imagesArray = useMemo(() => headerImages.map(img => img.fields.IMAGE[0].url), [headerImages]);
+    const mobileObjectPositions = useMemo(
+        () => headerImages.map(img => {
+            const position = img.fields["Position mobile"]?.trim().toLowerCase();
+            return position === "left" || position === "right" ? position : "center";
+        }),
+        [headerImages]
+    );
     const webglRef = useRef(null);
     const webglApiRef = useRef(null);
     const headerRef = useRef(null);
@@ -88,6 +91,7 @@ export function Header({ headerImages }) {
                 <WebGLImageTransition
                     ref={webglRef}
                     images={imagesArray}
+                    mobileObjectPositions={mobileObjectPositions}
                     transitionDuration={1.2}
                     intensity={0.35}
                     autoplay={true}

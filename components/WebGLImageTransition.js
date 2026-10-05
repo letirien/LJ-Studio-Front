@@ -4,6 +4,13 @@ import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } f
 import * as THREE from "three";
 import gsap from "gsap";
 
+const getMobilePosition = (position, isMobile) => {
+  if (!isMobile) return 0.0;
+  if (position === "left") return 1.0;
+  if (position === "right") return -1.0;
+  return 0.0;
+};
+
 function WebGLImageTransitionDemo5Internal({
   images,
   transitionDuration = 1.0,
@@ -12,6 +19,7 @@ function WebGLImageTransitionDemo5Internal({
   autoplayDelay = 3000,
   pauseOnHover = true,
   className,
+  mobileObjectPositions = [],
   onLoadProgress
 }, ref) {
   const [isReady, setIsReady] = useState(false);
@@ -48,20 +56,24 @@ function WebGLImageTransitionDemo5Internal({
     uniform sampler2D texture1;
     uniform sampler2D texture2;
     uniform vec4 resolution;
+    uniform float mobilePosition1;
+    uniform float mobilePosition2;
 
     varying vec2 vUv;
 
     void main() {
-      vec2 newUV = (vUv - vec2(0.5)) * resolution.zw + vec2(0.5);
+      vec2 centeredUV = (vUv - vec2(0.5)) * resolution.zw + vec2(0.5);
+      vec2 uv1 = centeredUV + vec2(mobilePosition1 * (resolution.z - 1.0) * 0.5, 0.0);
+      vec2 uv2 = centeredUV + vec2(mobilePosition2 * (resolution.z - 1.0) * 0.5, 0.0);
 
-      vec4 d1 = texture2D(texture1, newUV);
-      vec4 d2 = texture2D(texture2, newUV);
+      vec4 d1 = texture2D(texture1, uv1);
+      vec4 d2 = texture2D(texture2, uv2);
 
       float displace1 = (d1.r + d1.g + d1.b) * 0.33;
       float displace2 = (d2.r + d2.g + d2.b) * 0.33;
 
-      vec4 t1 = texture2D(texture1, vec2(newUV.x, newUV.y + progress * (displace2 * intensity)));
-      vec4 t2 = texture2D(texture2, vec2(newUV.x, newUV.y + (1.0 - progress) * (displace1 * intensity)));
+      vec4 t1 = texture2D(texture1, vec2(uv1.x, uv1.y + progress * (displace2 * intensity)));
+      vec4 t2 = texture2D(texture2, vec2(uv2.x, uv2.y + (1.0 - progress) * (displace1 * intensity)));
 
       gl_FragColor = mix(t1, t2, progress);
     }
@@ -156,6 +168,10 @@ function WebGLImageTransitionDemo5Internal({
         if (isNaN(savedIndex) || savedIndex >= images.length) savedIndex = 0;
       } catch {}
       currentIndexRef.current = savedIndex;
+      const isMobileViewport = window.matchMedia("(max-width: 760px)").matches;
+      const getMobilePositionAt = (index) =>
+        getMobilePosition(mobileObjectPositions[index], isMobileViewport);
+      const nextIndex = (savedIndex + 1) % loaded.length;
 
       const uniforms = {
         time:        { value: 0.0 },
@@ -170,7 +186,9 @@ function WebGLImageTransitionDemo5Internal({
         radius:      { value: 0.0 },
         texture1:    { value: loaded[savedIndex]},
         texture2:    { value: loaded[(savedIndex + 1) % loaded.length] },
-        resolution:  { value: new THREE.Vector4() }
+        resolution:  { value: new THREE.Vector4() },
+        mobilePosition1: { value: getMobilePositionAt(savedIndex) },
+        mobilePosition2: { value: getMobilePositionAt(nextIndex) }
       };
 
       const material = new THREE.ShaderMaterial({
@@ -206,6 +224,13 @@ function WebGLImageTransitionDemo5Internal({
         }
 
         material.uniforms.resolution.value.set(w, h, a1, a2);
+        const isMobile = window.matchMedia("(max-width: 760px)").matches;
+        const currentIndex = currentIndexRef.current;
+        const nextIndex = (currentIndex + 1) % texturesRef.current.length;
+        material.uniforms.mobilePosition1.value =
+          getMobilePosition(mobileObjectPositions[currentIndex], isMobile);
+        material.uniforms.mobilePosition2.value =
+          getMobilePosition(mobileObjectPositions[nextIndex], isMobile);
 
         const dist = camera.position.z;
         const planeHeight = 1.0;
@@ -258,7 +283,7 @@ function WebGLImageTransitionDemo5Internal({
     } catch (e) {
       console.error("[WebGLImageTransitionDemo5] init error:", e);
     }
-  }, [images.join("|"), intensity]);
+  }, [images.join("|"), intensity, mobileObjectPositions.join("|")]);
 
 
   const next = () => {
@@ -289,6 +314,11 @@ function WebGLImageTransitionDemo5Internal({
         
         const followingIndex = (nextIndex + 1) % count;
         material.uniforms.texture2.value = texturesRef.current[followingIndex];
+        const isMobile = window.matchMedia("(max-width: 760px)").matches;
+        material.uniforms.mobilePosition1.value =
+          getMobilePosition(mobileObjectPositions[nextIndex], isMobile);
+        material.uniforms.mobilePosition2.value =
+          getMobilePosition(mobileObjectPositions[followingIndex], isMobile);
         
         isRunningRef.current = false;
       }

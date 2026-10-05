@@ -23,12 +23,9 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const menuLinksRef = useRef([]);
   const socialsRef = useRef([]);
   const sideTextRef = useRef(null);
-  const sideTextRefMob = useRef(null);
   const linkTextRefs = useRef([]);
   const tlRef = useRef(null);
   const wordmarkRef = useRef(null);
-  const wordmarkRefMob = useRef(null);
-  const hideMenuTimerRef = useRef(null);
   const isMobile = useMediaQuery("(max-width: 639px)");
   useViewportLock(isOpen);
 
@@ -77,6 +74,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
     const tl = gsapInstance.timeline({
       defaults: { ease: "menu", duration: 0.7 },
       paused: true, // important !
+      onReverseComplete: () => setIsMenuVisible(false),
     });
 
     // on prépare tout "fermé"
@@ -113,18 +111,6 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
         { opacity: 0 },
         { opacity: 1, duration: 0.5 },
         "-=0.5"
-      )
-      .fromTo(
-        sideTextRefMob.current,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: 0.5 },
-        "-=0.3"
-      )
-      .fromTo(
-        wordmarkRefMob.current,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: 0.5 },
-        "-=0.4"
       );
 
     tlRef.current = tl;
@@ -136,28 +122,20 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   useEffect(() => {
     setIsOpen(initialIsOpen);
     if (initialIsOpen) {
-      clearTimeout(hideMenuTimerRef.current);
       setIsMenuVisible(true);
-    } else {
-      hideMenuTimerRef.current = setTimeout(() => setIsMenuVisible(false), 650);
     }
-
-    return () => clearTimeout(hideMenuTimerRef.current);
   }, [initialIsOpen]);
 
   // Jouer ou inverser la timeline selon l’état
   useEffect(() => {
     if (!tlRef.current) return;
     if (isOpen) {
-      clearTimeout(hideMenuTimerRef.current);
       setIsMenuVisible(true);
       tlRef.current.timeScale(0.7);
       tlRef.current.play();
     } else {
       tlRef.current.timeScale(1.2);
       tlRef.current.reverse();
-      clearTimeout(hideMenuTimerRef.current);
-      hideMenuTimerRef.current = setTimeout(() => setIsMenuVisible(false), 650);
     }
   }, [isOpen]);
 
@@ -360,14 +338,6 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
           </button>
         </div>
 
-        {/* <div ref={sideTextRefMob} className="w-full flex justify-center gap-6 xl:hidden">
-          <p className="uppercase roboto text-[8pt] text-black/55">
-            creative studio - french accent
-          </p>
-          <div ref={wordmarkRefMob} className="xl:hidden">
-            <Image src={"/images/LJSTD_WORDMARK.svg"} alt="LJ Studio wordmark" width={100} height={24}/>
-          </div>
-        </div> */}
       </div>
     </>
   );
