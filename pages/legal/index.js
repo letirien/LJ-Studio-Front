@@ -7,6 +7,17 @@ export default function Legal() {
       <Head>
         <title>Legal Notice & Privacy Policy — LJ Studio</title>
         <meta name="description" content="Legal notice and privacy policy for LJ Studio website." />
+        <link rel="canonical" href="https://ljstudio.xyz/legal" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ljstudio.xyz/legal" />
+        <meta property="og:title" content="Legal Notice & Privacy Policy — LJ Studio" />
+        <meta property="og:description" content="Legal notice and privacy policy for LJ Studio website." />
+        <meta property="og:image" content="https://ljstudio.xyz/images/HEADER.webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ljstudio.xyz/legal" />
+        <meta name="twitter:title" content="Legal Notice & Privacy Policy — LJ Studio" />
+        <meta name="twitter:description" content="Legal notice and privacy policy for LJ Studio website." />
+        <meta name="twitter:image" content="https://ljstudio.xyz/images/HEADER.webp" />
       </Head>
 
       <div className="bg-black text-white min-h-screen px-6 sm:px-16 lg:px-32 pt-40 pb-24 mx-auto max-w-7xl">

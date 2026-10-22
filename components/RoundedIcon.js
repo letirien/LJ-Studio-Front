@@ -125,7 +125,7 @@ export default function RoundedIcon({
             ) : (
               <Image
                 src={backgroundSrc}
-                alt="Decorative background"
+                alt=""
                 fill
                 sizes="120px"
                 style={{ objectFit: "contain", ...blackBgStyle }}
@@ -177,7 +177,7 @@ export default function RoundedIcon({
       <div ref={circularRef} style={circularStyle}>
         <Image
           src={circularSrc}
-          alt="Circular decorative text"
+          alt=""
           fill
           sizes="130px"
           style={{ objectFit: "contain", ...invertStyle }}

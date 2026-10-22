@@ -8,7 +8,7 @@ import gsap from 'gsap';
 import dynamic from 'next/dynamic';
 import CustomCursor from "../components/CustomCursor";
 import Navbar from '../components/navbar';
-import { LoadingProvider } from '../lib/LoadingManager';
+import { LoadingProvider, useLoading } from '../lib/LoadingManager';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import CookieBanner from '../components/CookieConsent';
 import { SiteReadyProvider } from '../lib/SiteReadyContext';
@@ -105,6 +105,18 @@ function LenisGSAPSync() {
   return null;
 }
 
+function RouteLoadingReset() {
+  const router = useRouter();
+  const { reset } = useLoading();
+
+  useEffect(() => {
+    router.events.on('routeChangeStart', reset);
+    return () => router.events.off('routeChangeStart', reset);
+  }, [router, reset]);
+
+  return null;
+}
+
 function App({ Component, pageProps }) {
   const router = useRouter();
   const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
@@ -137,13 +149,13 @@ function App({ Component, pageProps }) {
   return (
       <>
         <Head>
-          <meta name="robots" content="noindex, nofollow" />
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         </Head>
         {analyticsEnabled && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
         <SiteReadyProvider>
           <CookieBanner onConsentChange={handleConsentChange} />
           <LoadingProvider>
+            <RouteLoadingReset />
             <ReactLenis root options={lenisOptions}>
               <ViewportHeightSync />
               <LenisGSAPSync />

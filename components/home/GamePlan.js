@@ -124,7 +124,7 @@ function GamePlanCard({
           onMouseLeave={() => setShowGif(null)}
           className={`w-full h-auto object-cover`}
           src={showGif === index && item.fields.GIF ? item.fields.GIF[0].url : item.fields.Image[0].url}
-          alt={item.fields.Image[0].filename || 'Game plan image'}
+          alt={item.fields["TITRE METIER"] || 'Studio service artwork'}
           width={item.fields.Image[0].width || 0}
           height={item.fields.Image[0].height || 0}
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}

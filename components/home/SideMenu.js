@@ -10,11 +10,16 @@ import Image from "next/image";
 import { useMediaQuery } from "../../lib/useMediaQuery";
 import { useViewportLock } from "../../lib/useViewportLock";
 import { PRIMARY_COLOR, startBrowserChromeOverride } from "../../lib/browserChrome";
+import { useRouter } from "next/router";
+import { useLenis } from "lenis/react";
 
 export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [isMenuVisible, setIsMenuVisible] = useState(initialIsOpen);
   const [gsapInstance, setGsapInstance] = useState(null);
+  const router = useRouter();
+  const lenis = useLenis();
+  const pendingSectionRef = useRef(null);
 
   const menuContainerRef = useRef(null);
   const menuBgBlockRef1 = useRef(null);
@@ -28,6 +33,29 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
   const wordmarkRef = useRef(null);
   const isMobile = useMediaQuery("(max-width: 639px)");
   useViewportLock(isOpen);
+
+  useEffect(() => {
+    if (isOpen || !pendingSectionRef.current) return undefined;
+
+    const sectionId = pendingSectionRef.current;
+    pendingSectionRef.current = null;
+    const frameId = requestAnimationFrame(() => {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+
+      if (lenis) {
+        lenis.scrollTo(section, {
+          duration: 1.5,
+          force: true,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+      } else {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [isOpen, lenis]);
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -171,20 +199,16 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
     }
   };
 
-  const scrollToSection = (e, sectionId) => {
+  const scrollToSection = async (e, sectionId) => {
     e.preventDefault();
-    handleToggle()
-    const element = document.getElementById(sectionId);
-    if (!element) return;
+    handleToggle();
 
-    if (window.lenis) {
-      window.lenis.scrollTo(element, {
-        duration: 1.5,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-      });
-    } else {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (router.pathname !== "/") {
+      await router.push(`/#${sectionId}`, undefined, { scroll: false });
+      return;
     }
+
+    pendingSectionRef.current = sectionId;
   };
 
   // Fermeture avec ESC
@@ -230,7 +254,7 @@ export const SideMenu = ({ isOpen: initialIsOpen, onToggle }) => {
               <div className="relative overflow-hidden" key={i}>
                 <a
                   ref={(el) => (menuLinksRef.current[i] = el)}
-                  href={`#${label.toLowerCase()}`}
+                  href={`/#${label.toLowerCase()}`}
                   onClick={(e) => scrollToSection(e, label.toLowerCase())}
                   className="hardbopBlack block relative w-min text-[21vw] sm:text-[8vw] 2xl:text-[6vw] hover:text-white"
                   onMouseEnter={() => handleLinkHover(i, true)}

@@ -28,6 +28,7 @@ export default function Custom404() {
     <Layout skipIntro>
       <Head>
         <title>404 — LJ Studio</title>
+        <meta name="robots" content="noindex, nofollow" />
       </Head>
 
       <div className="bg-black text-white h-screen flex items-center justify-center relative overflow-hidden">

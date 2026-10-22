@@ -478,7 +478,7 @@ export default function PixelPlayIcon({ size = 80, onClick }) {
       <div style={circularStyle}>
         <Image
           src={circularSrc}
-          alt="circular text decoration"
+          alt=""
           fill
           sizes="80px"
           style={{ objectFit: "contain" }}

@@ -16,7 +16,7 @@ export const HighlightText = ({
   custom = 0,
   className = '',
   initial = "hidden",
-  animate,
+  animate = "visible",
   variants,
   fadedValue = 0.2,
   staggerValue = 0.1,

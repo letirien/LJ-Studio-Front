@@ -195,7 +195,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <meta property="og:url" content="https://ljstudio.xyz/" />
           <meta property="og:title" content="LJ STUDIO™ - SPORT DESIGN" />
           <meta property="og:description" content="Designing the language of sport through visual identities, art direction and content for teams, brands, events and federations." />
-          {/* <meta property="og:image" content="https://ljstudio.xyz/og-image.jpg" /> */}
+          <meta property="og:image" content="https://ljstudio.xyz/images/HEADER.webp" />
+          <meta property="og:image:alt" content="LJ Studio sports design and football visual identity artwork" />
           <meta property="og:site_name" content="LJ STUDIO" />
           <meta property="og:locale" content="en_US" />
 
@@ -204,7 +205,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
           <meta name="twitter:url" content="https://ljstudio.xyz/" />
           <meta name="twitter:title" content="LJ STUDIO™ - SPORT DESIGN" />
           <meta name="twitter:description" content="Designing the language of sport through visual identities, art direction and content for teams, brands, events and federations." />
-          {/* <meta name="twitter:image" content="https://ljstudio.xyz/og-image.jpg" /> */}
+          <meta name="twitter:image" content="https://ljstudio.xyz/images/HEADER.webp" />
+          <meta name="twitter:image:alt" content="LJ Studio sports design and football visual identity artwork" />
 
           {/* Additional SEO */}
           <link rel="canonical" href="https://ljstudio.xyz/" />
@@ -279,7 +281,7 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                 className="relative"
                 staggerValue={.05}         // Délai entre chaque caractère     
               >
-                 TROUGH CREATIVE
+                 THROUGH CREATIVE
                 <div className="absolute right-[22.5%] bottom-[-50%] hidden sm:block xl:hidden">
                   <RoundedIcon icon="" size={60} rotationFactor={0.45} />
                 </div>
@@ -438,7 +440,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                   objectFit: 'cover',
                   objectPosition: isMobile ? '10% top' :'top left'
                 }}
-                alt="Client highlight background"
+                alt=""
+                aria-hidden="true"
               />
             )}
             {/* Image déco superposée (n1) - parallax scaleY au scroll */}
@@ -455,7 +458,8 @@ export default function Home({ projects, gamePlan, logoClients, sliderImages, he
                     objectFit: 'cover',
                     objectPosition: isMobile ? '10% top': 'top left'
                   }}
-                  alt="Client highlight people decoration"
+                  alt=""
+                  aria-hidden="true"
                 />
               </motion.div>
             )}

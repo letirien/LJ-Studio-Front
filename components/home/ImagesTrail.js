@@ -323,10 +323,10 @@ export const ImagesTrails = ({ speed = 1, images}) => {
       <div className="trail-wrap">
         <div className="trail-list">
           {images && images.map((item, index) => (
-            <div key={index} data-trail="item" className="trail-item">
+            <div key={index} data-trail="item" className="trail-item" aria-hidden="true">
               <img
                 src={item.fields.IMAGE[0].url}
-                alt={item.fields.IMAGE[0].alt || `Image d'archive ${index + 1}`}
+                alt=""
                 // fill={true}
                 className="trail-item__img"
               />
